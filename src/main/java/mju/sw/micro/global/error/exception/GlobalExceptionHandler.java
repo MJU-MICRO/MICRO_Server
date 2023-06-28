@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponse> handleBindException(MethodArgumentNotValidException e) {
-		BindingResult bindingResult = e.getBindingResult();
+	public ResponseEntity<ErrorResponse> handleBindException(MethodArgumentNotValidException exception) {
+		BindingResult bindingResult = exception.getBindingResult();
 		StringBuilder builder = new StringBuilder();
 
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -29,5 +29,5 @@ public class GlobalExceptionHandler {
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, builder.toString());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
-	
+
 }
