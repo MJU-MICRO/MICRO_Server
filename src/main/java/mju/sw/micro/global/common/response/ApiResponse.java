@@ -37,4 +37,7 @@ public class ApiResponse<T> {
 		return of(status, status.name(), data);
 	}
 
+	public static <T> ApiResponse<T> ok(T data) {
+		return of(HttpStatus.OK, data);
+	}
 }
