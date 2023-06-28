@@ -18,8 +18,8 @@ public class SampleController {
 	private final SampleService sampleService;
 
 	@PostMapping("/api/sample")
-	public ApiResponse saveSample(@Valid @RequestBody SampleCreateRequest request) {
-		Sample savedSample = sampleService.saveSample(request.toServiceRequest());
+	public ApiResponse createSample(@Valid @RequestBody SampleCreateRequest request) {
+		Sample savedSample = sampleService.createSample(request.toServiceRequest());
 		return ApiResponse.ok(savedSample);
 	}
 

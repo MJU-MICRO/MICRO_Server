@@ -1,0 +1,9 @@
+### 샘플 신규 생성
+POST localhost:8000/api/sample
+Content-Type: application/json
+
+{
+  "title": "이름",
+  "content": "내용",
+  "price": 5000
+}

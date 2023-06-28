@@ -20,6 +20,14 @@ public class SampleCreateServiceRequest {
 		this.price = price;
 	}
 
+	public static SampleCreateServiceRequest of(String title, String content, int price) {
+		return SampleCreateServiceRequest.builder()
+			.title(title)
+			.content(content)
+			.price(price)
+			.build();
+	}
+
 	public Sample toEntity() {
 		return Sample.builder()
 			.title(title)
@@ -27,5 +35,5 @@ public class SampleCreateServiceRequest {
 			.price(price)
 			.build();
 	}
-	
+
 }

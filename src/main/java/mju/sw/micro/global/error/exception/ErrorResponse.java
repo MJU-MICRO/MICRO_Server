@@ -1,12 +1,17 @@
 package mju.sw.micro.global.error.exception;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 
+	@JsonProperty("error_code")
 	private ErrorCode errorCode;
 	private String detail;
 
@@ -22,5 +27,5 @@ public class ErrorResponse {
 			.detail(detail)
 			.build();
 	}
-	
+
 }
