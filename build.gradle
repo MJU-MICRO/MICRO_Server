@@ -3,6 +3,12 @@ plugins {
     id 'org.springframework.boot' version '3.1.1'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+
+    // editor config 플러그인
+    id 'org.ec4j.editorconfig' version '0.0.3'
+
+    // checkstyle 플러그인
+    id 'checkstyle'
 }
 
 group = 'mju.sw'
@@ -11,6 +17,22 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = '17'
 }
+
+editorconfig {
+    excludes = ['build']
+}
+
+checkstyle {
+    maxWarnings = 0
+    configFile = file("${rootDir}/naver-checkstyle-rules.xml")
+    configProperties = ["suppressionFile": "${rootDir}/naver-checkstyle-suppressions.xml"]
+    toolVersion = "9.2"
+}
+
+check.dependsOn editorconfigCheck
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
 configurations {
     compileOnly {
