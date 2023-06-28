@@ -1,4 +1,4 @@
-package mju.sw.micro_server;
+package mju.sw.micro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

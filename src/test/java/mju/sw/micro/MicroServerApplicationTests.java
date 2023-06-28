@@ -1,4 +1,4 @@
-package mju.sw.micro_server;
+package mju.sw.micro;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
