@@ -14,15 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(SpringExtension.class)
 @Transactional
 @SpringBootTest
-@ActiveProfiles("prod")
+@ActiveProfiles("test")
 public class ConfigEnvironmentTest {
 
 	@Value("${spring.config.activate.on-profile}")
 	String profile;
 
-	@DisplayName("profile을 prod로 실행했을 때 application-prod.yml이 불러와지는지 확인한다.")
+	@DisplayName("profile을 test로 설정했을 때 application-test.yml이 불러와지는지 확인한다.")
 	@Test
-	void test() {
-		assertThat(profile).isEqualTo("prod");
+	void profileVerification() {
+		assertThat(profile).isEqualTo("test");
 	}
+
 }
