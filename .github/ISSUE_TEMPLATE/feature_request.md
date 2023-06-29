@@ -1,20 +1,54 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
-
----
-
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+name: "기능 레포트"
+description: "Thank you for reporting a bug!"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        개발 요구사항 레포트
+  - type: dropdown
+    id: Domain
+    attributes:
+      label: Domain
+      description: 어떤 Domain에 관련된 Issue입니까?
+      options:
+        - member
+        - club
+    validations:
+      required: true
+  - type: textarea
+    id: what-need
+    attributes:
+      label: 어떠한 기능이 필요한가요?
+      description: 어떠한 기능이 필요한가요?
+      placeholder: 어떠한 기능이 필요한가요!
+      value: "Projects Card도 생성해주세요!"
+    validations:
+      required: true
+  - type: textarea
+    id: consideration
+    attributes:
+      label: 고려사항
+      description: 개발시 고려해야 할 사항
+  - type: textarea
+    id: todoList
+    attributes:
+      label: 할일목록
+      description: 할일목록을 작성해주세요!
+      placeholder: 할일목록을 작성해주세요!
+      value: "- [ ] TODO"
+  - type: checkboxes
+    id: priority
+    attributes:
+      label: Priority Label Setting
+      description: Priority Label 지정하셨나요?
+      options:
+        - label: Yes!
+          required: true
+  - type: checkboxes
+    id: projects
+    attributes:
+      label: Projects Card
+      description: Project Card도 지정해주세요
+      options:
+      - label: Yes!
+        required: true
