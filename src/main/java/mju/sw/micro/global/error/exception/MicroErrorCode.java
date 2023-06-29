@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum ErrorCode {
+public enum MicroErrorCode {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
 	NOT_FOUND(HttpStatus.NOT_FOUND),
 	FORBIDDEN(HttpStatus.FORBIDDEN),
@@ -17,7 +17,7 @@ public enum ErrorCode {
 
 	private final String errorCode = "M-" + "0".repeat(Math.max(4-String.valueOf(this.ordinal() + 1).length(), 0)) + (this.ordinal() + 1);
 
-	ErrorCode(HttpStatus httpStatus) {
+	MicroErrorCode(HttpStatus httpStatus) {
 		this.httpStatus = httpStatus;
 		this.errorMessage = "";
 	}

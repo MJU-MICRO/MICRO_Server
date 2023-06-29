@@ -1,4 +1,4 @@
-package mju.sw.micro.domain.sample.domain;
+package mju.sw.micro.domain.sample.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

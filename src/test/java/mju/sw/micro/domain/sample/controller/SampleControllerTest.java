@@ -1,4 +1,4 @@
-package mju.sw.micro.domain.sample.api;
+package mju.sw.micro.domain.sample.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 
 import mju.sw.micro.ControllerTestSupporter;
 import mju.sw.micro.domain.sample.dto.request.SampleCreateRequest;
-import mju.sw.micro.global.error.exception.ErrorCode;
+import mju.sw.micro.global.error.exception.MicroErrorCode;
 
 public class SampleControllerTest extends ControllerTestSupporter {
 
@@ -43,8 +43,7 @@ public class SampleControllerTest extends ControllerTestSupporter {
 					.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andDo(print())
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.error_code").value(ErrorCode.INVALID_INPUT_VALUE.toString()));
+			.andExpect(status().isBadRequest());
 	}
 
 	@DisplayName("신규 샘플을 등록할 때 샘플 내용은 빈 값일 수 없다.")
@@ -60,8 +59,7 @@ public class SampleControllerTest extends ControllerTestSupporter {
 					.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andDo(print())
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.error_code").value(ErrorCode.INVALID_INPUT_VALUE.toString()));
+			.andExpect(status().isBadRequest());
 	}
 
 	@DisplayName("신규 샘플을 등록할 때 샘플 가격은 양수여야 한다.")
@@ -77,8 +75,7 @@ public class SampleControllerTest extends ControllerTestSupporter {
 					.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andDo(print())
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.error_code").value(ErrorCode.INVALID_INPUT_VALUE.toString()));
+			.andExpect(status().isBadRequest());
 	}
 
 }

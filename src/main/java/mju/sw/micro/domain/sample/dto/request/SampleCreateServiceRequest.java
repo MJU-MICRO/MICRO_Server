@@ -3,7 +3,7 @@ package mju.sw.micro.domain.sample.dto.request;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import mju.sw.micro.domain.sample.domain.Sample;
+import mju.sw.micro.domain.sample.entity.Sample;
 
 @Getter
 @NoArgsConstructor

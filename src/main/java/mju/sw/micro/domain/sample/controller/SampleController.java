@@ -1,4 +1,4 @@
-package mju.sw.micro.domain.sample.api;
+package mju.sw.micro.domain.sample.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import mju.sw.micro.domain.sample.application.SampleService;
-import mju.sw.micro.domain.sample.domain.Sample;
+import mju.sw.micro.domain.sample.service.SampleService;
+import mju.sw.micro.domain.sample.entity.Sample;
 import mju.sw.micro.domain.sample.dto.request.SampleCreateRequest;
 import mju.sw.micro.global.common.response.ApiResponse;
 

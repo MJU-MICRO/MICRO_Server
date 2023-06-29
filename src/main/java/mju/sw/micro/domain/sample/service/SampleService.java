@@ -1,11 +1,11 @@
-package mju.sw.micro.domain.sample.application;
+package mju.sw.micro.domain.sample.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import mju.sw.micro.domain.sample.dao.SampleRepository;
-import mju.sw.micro.domain.sample.domain.Sample;
+import mju.sw.micro.domain.sample.repository.SampleRepository;
+import mju.sw.micro.domain.sample.entity.Sample;
 import mju.sw.micro.domain.sample.dto.request.SampleCreateServiceRequest;
 
 @Service

@@ -1,4 +1,4 @@
-package mju.sw.micro.domain.sample.application;
+package mju.sw.micro.domain.sample.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import mju.sw.micro.IntegrationTestSupporter;
-import mju.sw.micro.domain.sample.dao.SampleRepository;
-import mju.sw.micro.domain.sample.domain.Sample;
+import mju.sw.micro.domain.sample.repository.SampleRepository;
+import mju.sw.micro.domain.sample.entity.Sample;
 import mju.sw.micro.domain.sample.dto.request.SampleCreateServiceRequest;
 
 class SampleServiceTest extends IntegrationTestSupporter {

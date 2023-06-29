@@ -7,8 +7,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mju.sw.micro.domain.sample.api.SampleController;
-import mju.sw.micro.domain.sample.application.SampleService;
+import mju.sw.micro.domain.sample.controller.SampleController;
+import mju.sw.micro.domain.sample.service.SampleService;
 
 @WebMvcTest(controllers = {SampleController.class
 })
