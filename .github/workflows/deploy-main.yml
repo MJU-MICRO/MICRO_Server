@@ -29,15 +29,15 @@ jobs:
                 - name: PROFILE
                   value: prod
                 - name: MICRO_DB_HOST
-                  value: svc.sel4.cloudtype.app
+                  value: ${{ secrets.MICRO_DB_HOST}}
                 - name: MICRO_DB_PORT
-                  value: "30477"
+                  value: ${{ secrets.MICRO_DB_PORT}}
                 - name: MICRO_DB_NAME
-                  value: micro
+                  value: ${{ secrets.MICRO_DB_NAME}}
                 - name: MICRO_USER_NAME
-                  value: root
+                  value: ${{ secrets.MICRO_USER_NAME}}
                 - name: MICRO_PASSWORD
-                  value: micro
+                  value: ${{ secrets.MICRO_PASSWORD}}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
