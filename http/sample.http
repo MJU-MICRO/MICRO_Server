@@ -1,9 +1,9 @@
-### 샘플 신규 생성
-POST localhost:8000/api/sample
+### 샘플 신규 등록
+POST https://port-0-micro-7xwyjq992lljgcvipx.sel4.cloudtype.app/api/sample
 Content-Type: application/json
 
 {
-  "title": "이름",
+  "title": "hi",
   "content": "내용",
   "price": 5000
 }
