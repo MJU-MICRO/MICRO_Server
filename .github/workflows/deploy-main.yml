@@ -1,0 +1,44 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: kimyubi/micro_database
+          stage: main
+          yaml: |
+            name: micro
+            app: java@17
+            options:
+              ports: "8081"
+              env:
+                - name: PROFILE
+                  value: prod
+                - name: MICRO_DB_HOST
+                  value: svc.sel4.cloudtype.app
+                - name: MICRO_DB_PORT
+                  value: "30477"
+                - name: MICRO_DB_NAME
+                  value: micro
+                - name: MICRO_USER_NAME
+                  value: root
+                - name: MICRO_PASSWORD
+                  value: micro
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
