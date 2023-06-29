@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mariadb://${MICRO_DB_HOST}:${MICRO_DB_PORT}/${MICRO_DB_NAME}?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MICRO_USER_NAME}
+    password: ${MICRO_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+    defer-datasource-initialization: true
+
+server:
+  port: 8081
