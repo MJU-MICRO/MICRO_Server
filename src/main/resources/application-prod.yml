@@ -5,7 +5,7 @@ spring:
 
   datasource:
     url: jdbc:mariadb://${MICRO_DB_HOST}:${MICRO_DB_PORT}/${MICRO_DB_NAME}?useSSL=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
     username: ${MICRO_USER_NAME}
     password: ${MICRO_PASSWORD}
 
