@@ -11,8 +11,8 @@ body:
       label: Domain
       description: 어떤 Domain에 관련된 Issue입니까?
       options:
-        - SSO
-        - Payment
+        - member
+        - club
         - ETC
     validations:
       required: true
