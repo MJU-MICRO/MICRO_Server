@@ -21,7 +21,7 @@ public class SampleController {
 	private final SampleService sampleService;
 
 	@PostMapping("/sample")
-	public ApiResponse createSample(@Valid @RequestBody SampleCreateRequest request) {
+	public ApiResponse<Sample> createSample(@Valid @RequestBody SampleCreateRequest request) {
 		Sample savedSample = sampleService.createSample(request.toServiceRequest());
 		return ApiResponse.ok(savedSample);
 	}
