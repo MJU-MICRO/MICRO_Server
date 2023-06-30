@@ -37,7 +37,7 @@ check.dependsOn editorconfigCheck
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
-// Sonar Cloud
+// sonar Cloud
 sonarqube {
     properties {
         property "sonar.projectKey", "MJU-MICRO_MICRO_Server"
