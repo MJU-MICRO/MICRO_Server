@@ -31,6 +31,8 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Grant execute permisson for gradlew
+        run: chmod +x gradlew
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}  # Needed to get PR information, if any
