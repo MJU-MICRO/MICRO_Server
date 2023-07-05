@@ -8,16 +8,17 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mju.sw.micro.domain.sample.api.SampleController;
+import mju.sw.micro.domain.club.api.ClubRecruitmentApi;
+import mju.sw.micro.domain.club.application.ClubRecruitmentService;
+import mju.sw.micro.domain.sample.api.SampleApi;
 import mju.sw.micro.domain.sample.application.SampleService;
 
-@WebMvcTest(controllers = {SampleController.class
+@WebMvcTest(controllers = {
+	SampleApi.class,
+	ClubRecruitmentApi.class
 })
 @ActiveProfiles("test")
-public abstract class ControllerTestSupporter {
-
-	@MockBean
-	protected SampleService sampleService;
+public abstract class ApiTestSupporter {
 
 	@Autowired
 	protected MockMvc mockMvc;
@@ -25,4 +26,9 @@ public abstract class ControllerTestSupporter {
 	@Autowired
 	protected ObjectMapper objectMapper;
 
+	@MockBean
+	protected SampleService sampleService;
+
+	@MockBean
+	protected ClubRecruitmentService clubRecruitmentService;
 }

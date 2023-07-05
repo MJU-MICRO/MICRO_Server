@@ -14,7 +14,7 @@ public class SampleCreateRequest {
 	private String title;
 	@NotBlank(message = "샘플 내용은 필수 값입니다.")
 	private String content;
-	@Positive(message = "샘플 가격은 필수 값입니다.")
+	@Positive(message = "샘플 가격은 양수여야 합니다.")
 	private int price;
 
 	@Builder

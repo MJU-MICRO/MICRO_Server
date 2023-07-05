@@ -1,12 +1,13 @@
 package mju.sw.micro.domain.sample.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.sample.domain.Sample;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SampleCreateServiceRequest {
 
 	private String title;
