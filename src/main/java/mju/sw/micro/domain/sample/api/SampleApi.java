@@ -16,7 +16,7 @@ import mju.sw.micro.global.common.response.ApiResponse;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class SampleController {
+public class SampleApi {
 
 	private final SampleService sampleService;
 

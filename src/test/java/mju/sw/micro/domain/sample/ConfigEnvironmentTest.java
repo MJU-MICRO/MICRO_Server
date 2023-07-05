@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest
 @ActiveProfiles("test")
-public class ConfigEnvironmentTest {
+class ConfigEnvironmentTest {
 
 	@Value("${spring.config.activate.on-profile}")
 	String profile;

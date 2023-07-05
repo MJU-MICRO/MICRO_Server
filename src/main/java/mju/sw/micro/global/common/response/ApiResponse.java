@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import mju.sw.micro.global.error.exception.ErrorCode;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,5 +40,17 @@ public class ApiResponse<T> {
 
 	public static <T> ApiResponse<T> ok(T data) {
 		return of(HttpStatus.OK, data);
+	}
+
+	public static <T> ApiResponse<T> ok(String message) {
+		return of(HttpStatus.OK, message, null);
+	}
+
+	public static <T> ApiResponse<T> withError(ErrorCode errorCode, T data) {
+		return new ApiResponse<>(errorCode.getStatus(), errorCode.getMessage(), data);
+	}
+
+	public static <T> ApiResponse<T> withError(ErrorCode errorCode) {
+		return withError(errorCode, null);
 	}
 }
