@@ -7,7 +7,9 @@ import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.domain.user.dto.request.EmailSendRequestDto;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
 import mju.sw.micro.domain.user.dto.request.CodeVerifyRequestDto;
+import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.constants.EmailConstants.VerifyEmailConstants;
+import mju.sw.micro.global.error.exception.ErrorCode;
 import mju.sw.micro.global.utils.CodeUtil;
 import mju.sw.micro.global.utils.MailUtil;
 //import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class UserService {
 
 	private final UserRepository userRepository;
@@ -26,7 +28,7 @@ public class UserService {
 //	private final PasswordEncoder encoder;
 
 
-	public void sendEmailAndSaveCode(EmailSendRequestDto dto) {
+	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		if (redisUtil.existData(dto.getEmail())) {
 			redisUtil.deleteData(dto.getEmail());
 		}
@@ -34,23 +36,24 @@ public class UserService {
 		mailUtil.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE,
 			VerifyEmailConstants.EMAIL_CONTENT_HTML, code);
 		redisUtil.setDataExpire(dto.getEmail(), code, 60 * 5L);
+		return ApiResponse.ok("이메일을 성공적으로 보냈습니다.");
 	}
 
-	public boolean verifyCode(CodeVerifyRequestDto dto) {
+	public ApiResponse<Boolean> verifyCode(CodeVerifyRequestDto dto) {
 		String emailCode = redisUtil.getData(dto.getEmail());
 		if (emailCode == null) {
-			return false;
+			return ApiResponse.ok(false);
 		}
-		return redisUtil.getData(dto.getEmail()).equals(dto.getCode());
+		return ApiResponse.ok(redisUtil.getData(dto.getEmail()).equals(dto.getCode()));
 	}
-
-	public void signUp(SignUpRequestDto dto) {
+	@Transactional
+	public ApiResponse<String> signUp(SignUpRequestDto dto) {
 		if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
-			throw new IllegalArgumentException();
+			return ApiResponse.withError(ErrorCode.INVALID_EMAIL);
 		}
-		boolean isVerified = verifyCode(CodeVerifyRequestDto.of(dto.getEmail(), dto.getCode()));
+		boolean isVerified = verifyCode(CodeVerifyRequestDto.of(dto.getEmail(), dto.getCode())).getData();
 		if (!isVerified) {
-			throw new IllegalArgumentException();
+			return ApiResponse.withError(ErrorCode.INVALID_CODE);
 		}
 
 		User user = User.builder()
@@ -67,6 +70,7 @@ public class UserService {
 			.build();
 		user.addRole(Role.USER);
 		userRepository.save(user);
+		return ApiResponse.ok("회원가입에 성공했습니다.");
 	}
 
 }
