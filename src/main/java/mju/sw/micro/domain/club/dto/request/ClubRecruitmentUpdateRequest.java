@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
-public record ClubRecruitmentCreateRequest(
-	@Schema(description = "모집 공고 제목 (빈 문자열 허용 x)")
+public record ClubRecruitmentUpdateRequest(
+	@Schema(description = "모집 공고 제목")
 	@NotBlank(message = "모집 공고의 제목은 필수 값입니다.")
 	String title,
 
@@ -18,10 +18,14 @@ public record ClubRecruitmentCreateRequest(
 	@JsonProperty("club_id")
 	@Schema(description = "모집 공고를 게시하는 학생 단체의 식별자 (0 이하의 값 허용 x)")
 	@Positive(message = "모집 공고를 게시하는 학생 단체의 식별자는 양수여야 합니다.")
-	Long clubId
-) {
+	Long clubId,
 
-	public ClubRecruitmentCreateServiceRequest toServiceRequest() {
-		return new ClubRecruitmentCreateServiceRequest(title, content, clubId);
+	@JsonProperty("recruitment_id")
+	@Schema(description = "모집 공고의 식별자 (0 이하의 값 허용 x)")
+	@Positive(message = "모집 공고의 식별자는 양수여야 합니다.")
+	Long recruitmentId
+) {
+	public ClubRecruitmentUpdateServiceRequest toServiceRequest() {
+		return new ClubRecruitmentUpdateServiceRequest(title, content, clubId, recruitmentId);
 	}
 }

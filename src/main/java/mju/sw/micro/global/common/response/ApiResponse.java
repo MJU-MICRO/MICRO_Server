@@ -12,7 +12,7 @@ import mju.sw.micro.global.error.exception.ErrorCode;
 public class ApiResponse<T> {
 
 	// API 상태 코드
-	private int statusCode;
+	private int code;
 
 	// API 상태
 	private HttpStatus status;
@@ -24,7 +24,7 @@ public class ApiResponse<T> {
 	private T data;
 
 	private ApiResponse(HttpStatus status, String message, T data) {
-		this.statusCode = status.value();
+		this.code = status.value();
 		this.status = status;
 		this.message = message;
 		this.data = data;

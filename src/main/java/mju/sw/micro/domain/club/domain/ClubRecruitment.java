@@ -1,6 +1,7 @@
 package mju.sw.micro.domain.club.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
+import mju.sw.micro.domain.club.dto.request.ClubRecruitmentUpdateServiceRequest;
 
 @Entity
 @Getter
@@ -24,7 +26,7 @@ public class ClubRecruitment extends BaseEntity {
 
 	private String content;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Club club;
 
 	@Builder
@@ -39,5 +41,10 @@ public class ClubRecruitment extends BaseEntity {
 
 	public void setClub(Club club) {
 		this.club = club;
+	}
+
+	public void update(ClubRecruitmentUpdateServiceRequest request) {
+		this.title = request.title();
+		this.content = request.content();
 	}
 }
