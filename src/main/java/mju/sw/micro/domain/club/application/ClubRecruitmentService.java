@@ -23,8 +23,6 @@ public class ClubRecruitmentService {
 	private final ClubRepository clubRepository;
 	private final ClubRecruitmentRepository recruitmentRepository;
 
-	// TODO: @AuthenticationPrincipal을 통해 꺼내온 User의 식별자와 Club에서 꺼내온 User의 식별자가 다르면 권한 x => 에러 반환 메소드(checkClubPresident) 구현
-
 	@Transactional
 	public ApiResponse<String> createClubRecruitment(ClubRecruitmentCreateServiceRequest request) {
 		Optional<Club> optionalClub = clubRepository.findById(request.clubId());
