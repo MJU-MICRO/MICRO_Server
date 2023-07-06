@@ -93,6 +93,15 @@ dependencies {
 
     // h2 (테스트 db)
     implementation 'com.h2database:h2'
+
+    //email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
