@@ -28,7 +28,7 @@ public class User extends BaseEntity {
 	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
-	private int phoneNumber;
+	private String phoneNumber;
 	@Column(nullable = false, unique = true)
 	private String nickName;
 	@Column(nullable = false, unique = true)
@@ -36,7 +36,7 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
-	private int interest;
+	private String interest;
 	@Column(nullable = false)
 	private String major;
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -47,23 +47,20 @@ public class User extends BaseEntity {
 	private Boolean notification;
 
 	@Builder
-	public User (Long id, String name, String email, int phoneNumber, int interest,
+	public User (String name, String email, String phoneNumber, String interest,
 		String introduction, String nickName, String studentId, String major,
-		Boolean activated, String password, String imageUrl, Boolean notification) {
-		User user = new User();
-		user.id = id;
-		user.name = name;
-		user.email = email;
-		user.phoneNumber = phoneNumber;
-		user.interest = interest;
-		user.introduction = introduction;
-		user.nickName = nickName;
-		user.studentId = studentId;
-		user.major = major;
-		user.activated = activated;
-		user.password = password;
-		user.imageUrl = imageUrl;
-		user.notification = notification;
+		String password, Boolean notification) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.nickName = nickName;
+		this.studentId = studentId;
+		this.major = major;
+		this.interest = interest;
+		this.phoneNumber = phoneNumber;
+		this.introduction = introduction;
+		this.notification = notification;
+		this.activated = false;
 	}
 
 
