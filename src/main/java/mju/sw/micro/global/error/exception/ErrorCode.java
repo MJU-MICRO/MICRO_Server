@@ -14,6 +14,7 @@ public enum ErrorCode {
 
 	// Club
 	INVALID_CLUB_ID(HttpStatus.BAD_REQUEST, "Request Body를 통해 전달된 학생 단체의 식별자가 유효하지 않습니다."),
+	INVALID_CLUB_RECRUITMENT_ID(HttpStatus.BAD_REQUEST, "Request Body를 통해 전달된 학생 단체 모집 공고의 식별자가 유효하지 않습니다."),
 
 	//User
 	INVALID_EMAIL(HttpStatus.UNAUTHORIZED, "등록되지 않은 이메일 입니다."),

@@ -1,5 +1,6 @@
 package mju.sw.micro;
 
+import mju.sw.micro.domain.user.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,4 +21,7 @@ public abstract class IntegrationTestSupporter {
 
 	@Autowired
 	protected ClubRecruitmentRepository recruitmentRepository;
+	@Autowired
+	protected UserRepository userRepository;
+
 }

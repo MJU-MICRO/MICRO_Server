@@ -42,7 +42,7 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
-	private Boolean activated;
+	private Boolean activated = false;
 	private String imageUrl;
 	private Boolean notification;
 
@@ -60,9 +60,26 @@ public class User extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
-		this.activated = false;
+//		this.imageUrl = null;
 	}
 
+	public static User createUser(String name, String email, String phoneNumber,
+		String interest, String introduction, String nickName, String studentId,
+		String major, String password, Boolean notification) {
+		return User.builder()
+			.name(name)
+			.email(email)
+			.phoneNumber(phoneNumber)
+			.interest(interest)
+			.introduction(introduction)
+			.nickName(nickName)
+			.studentId(studentId)
+			.major(major)
+			.password(password)
+			.notification(notification)
+//			.imageUrl(null)
+			.build();
+	}
 
 	public void addRole(Role role) {
 		UserRole userRole = new UserRole();
