@@ -10,6 +10,7 @@ public final class EmailConstants {
 			"Please enter the verification code below to complete the sign-up.<br>" +
 			"CODE : <strong> %s </strong>" +
 			"<div>";
+		public static final Long EMAIL_TOKEN_EXPIRATION_TIME = 60 * 5L;
 	}
 
 }

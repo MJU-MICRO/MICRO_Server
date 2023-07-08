@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
 
 @Entity
+@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -42,14 +44,14 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
-	private Boolean activated = false;
+	private boolean activated;
 	private String imageUrl;
-	private Boolean notification;
+	private boolean notification;
 
 	@Builder
 	public User (String name, String email, String phoneNumber, String interest,
 		String introduction, String nickName, String studentId, String major,
-		String password, Boolean notification) {
+		String password, boolean notification, boolean activated) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -60,12 +62,13 @@ public class User extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
+		this.activated = activated;
 //		this.imageUrl = null;
 	}
 
 	public static User createUser(String name, String email, String phoneNumber,
 		String interest, String introduction, String nickName, String studentId,
-		String major, String password, Boolean notification) {
+		String major, String password, boolean notification, boolean activated) {
 		return User.builder()
 			.name(name)
 			.email(email)
@@ -77,6 +80,7 @@ public class User extends BaseEntity {
 			.major(major)
 			.password(password)
 			.notification(notification)
+			.activated(activated)
 //			.imageUrl(null)
 			.build();
 	}
