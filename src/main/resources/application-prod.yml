@@ -1,8 +1,11 @@
 spring:
+  data:
+    redis:
+      host: ${MICRO_REDIS_HOST}
+      port: ${MICRO_REDIS_PORT}
   config:
     activate:
       on-profile: prod
-
   datasource:
     url: jdbc:mariadb://${MICRO_DB_HOST}:${MICRO_DB_PORT}/${MICRO_DB_NAME}?useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
