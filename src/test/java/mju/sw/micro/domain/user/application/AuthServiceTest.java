@@ -1,5 +1,7 @@
 package mju.sw.micro.domain.user.application;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,25 +43,25 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		userRepository.deleteAll();
 	}
 
-	// @DisplayName("회원 가입을 성공한다.")
-	// @Test
-	// void signUp() {
-	// 	//given
-	// 	Token token = Token.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
-	// 		MockConstants.MOCK_TOKEN_EXPIRATION_TIME);
-	// 	tokenRedisRepository.save(token);
-	// 	// when
-	// 	ApiResponse<String> response = authService.signUp(signUpRequestDto);
-	// 	Optional<User> optionalUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL);
-	// 	Assertions.assertTrue(optionalUser.isPresent(), "회원가입에 실패했습니다.");
-	// 	User user = optionalUser.get();
-	// 	// then
-	// 	Assertions.assertEquals(MockConstants.MOCK_USER_EMAIL, user.getEmail());
-	// 	Assertions.assertEquals(MockConstants.MOCK_USER_NAME, user.getName());
-	// 	Assertions.assertEquals(MockConstants.MOCK_PHONE_NUMBER, user.getPhoneNumber());
-	// 	Assertions.assertEquals(response.getMessage(), "회원가입에 성공했습니다.");
-	//
-	// }
+	@DisplayName("회원 가입을 성공한다.")
+	@Test
+	void signUp() {
+		//given
+		Token token = Token.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
+			MockConstants.MOCK_TOKEN_EXPIRATION_TIME);
+		tokenRedisRepository.save(token);
+		// when
+		ApiResponse<String> response = authService.signUp(signUpRequestDto);
+		Optional<User> optionalUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL);
+		Assertions.assertTrue(optionalUser.isPresent(), "회원가입에 실패했습니다.");
+		User user = optionalUser.get();
+		// then
+		Assertions.assertEquals(MockConstants.MOCK_USER_EMAIL, user.getEmail());
+		Assertions.assertEquals(MockConstants.MOCK_USER_NAME, user.getName());
+		Assertions.assertEquals(MockConstants.MOCK_PHONE_NUMBER, user.getPhoneNumber());
+		Assertions.assertEquals("회원가입에 성공했습니다.", response.getMessage());
+
+	}
 
 	@DisplayName("이미 가입한 회원이어서 회원가입을 실패한다.")
 	@Test
@@ -70,7 +72,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		// when
 		ApiResponse<String> response = authService.signUp(signUpRequestDto);
 		// then
-		Assertions.assertEquals(response.getMessage(), "이미 가입된 이메일 입니다.");
+		Assertions.assertEquals("이미 가입된 이메일 입니다.", response.getMessage());
 	}
 
 	@DisplayName("이메일 인증 코드가 옳지 않아 회원가입을 실패한다.")
@@ -89,7 +91,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		// when
 		ApiResponse<String> response = authService.signUp(dto);
 		// then
-		Assertions.assertEquals(response.getMessage(), "인증 코드가 유효하지 않습니다.");
+		Assertions.assertEquals("인증 코드가 유효하지 않습니다.", response.getMessage());
 	}
 
 }

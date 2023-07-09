@@ -28,15 +28,14 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final MailUtil mailUtil;
 	private final TokenRedisRepository tokenRedisRepository;
-	//	private final PasswordEncoder encoder;
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		Optional<Token> optionalToken = tokenRedisRepository.findByEmail(dto.getEmail());
 		optionalToken.ifPresent(token -> tokenRedisRepository.deleteById(token.getId()));
 
 		String code = CodeUtil.generateRandomCode();
-		mailUtil.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE,
-			VerifyEmailConstants.EMAIL_CONTENT_HTML, code);
+		mailUtil.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE, VerifyEmailConstants.EMAIL_CONTENT_HTML,
+			code);
 		Token token = Token.of(dto.getEmail(), code, VerifyEmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
 		tokenRedisRepository.save(token);
 		return ApiResponse.ok("이메일을 성공적으로 보냈습니다.");
@@ -44,8 +43,7 @@ public class AuthService {
 
 	public ApiResponse<Boolean> verifyCode(CodeVerifyRequestDto dto) {
 		Optional<Token> optionalToken = tokenRedisRepository.findByEmail(dto.getEmail());
-		return optionalToken.map(
-				token -> ApiResponse.ok(token.getVerificationCode().equals(dto.getCode())))
+		return optionalToken.map(token -> ApiResponse.ok(token.getVerificationCode().equals(dto.getCode())))
 			.orElseGet(() -> ApiResponse.withError(ErrorCode.INVALID_CODE, false));
 	}
 

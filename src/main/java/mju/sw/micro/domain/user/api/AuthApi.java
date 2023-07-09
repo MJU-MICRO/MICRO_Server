@@ -42,10 +42,8 @@ public class AuthApi {
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse<String> signUp(
-		@Validated @RequestBody SignUpRequestDto dto) {
+	public ApiResponse<String> signUp(@Validated @RequestBody SignUpRequestDto dto) {
 		return authService.signUp(dto);
-		//TODO: s3 연동 후 이미지 업로드 기능 추가
 	}
 
 }
