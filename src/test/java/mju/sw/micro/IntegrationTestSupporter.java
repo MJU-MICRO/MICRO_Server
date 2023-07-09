@@ -7,6 +7,9 @@ import org.springframework.test.context.ActiveProfiles;
 import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
 import mju.sw.micro.domain.club.dao.ClubRepository;
+import mju.sw.micro.domain.user.application.AuthService;
+import mju.sw.micro.domain.user.dao.TokenRedisRepository;
+import mju.sw.micro.domain.user.dao.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -20,4 +23,11 @@ public abstract class IntegrationTestSupporter {
 
 	@Autowired
 	protected ClubRecruitmentRepository recruitmentRepository;
+	@Autowired
+	protected UserRepository userRepository;
+	@Autowired
+	protected AuthService authService;
+	@Autowired
+	protected TokenRedisRepository tokenRedisRepository;
+
 }
