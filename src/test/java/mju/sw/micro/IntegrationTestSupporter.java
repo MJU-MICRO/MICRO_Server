@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import mju.sw.micro.domain.club.application.ClubRecruitmentDeleteService;
 import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
 import mju.sw.micro.domain.club.dao.ClubRepository;
@@ -17,6 +18,9 @@ public abstract class IntegrationTestSupporter {
 
 	@Autowired
 	protected ClubRecruitmentService clubRecruitmentService;
+
+	@Autowired
+	protected ClubRecruitmentDeleteService clubRecruitmentdeleteService;
 
 	@Autowired
 	protected ClubRepository clubRepository;

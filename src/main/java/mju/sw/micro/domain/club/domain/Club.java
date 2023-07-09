@@ -9,6 +9,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,7 +45,7 @@ public class Club extends BaseEntity {
 	private String interests;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<ClubRecruitment> recruitmentList = new LinkedList<>();
 
 	@Builder
@@ -64,10 +65,13 @@ public class Club extends BaseEntity {
 		this.recruitmentList.clear();
 	}
 
+	public void clearRecruitments(ClubRecruitment recruitment) {
+		recruitment.clearClub();
+		this.recruitmentList.remove(recruitment);
+	}
+
 	public void addRecruitment(ClubRecruitment recruitment) {
 		this.recruitmentList.add(recruitment);
 		recruitment.setClub(this);
 	}
-
-	// TODO : 학생 단체 로고 이미지 처리(S3 / DB 저장), 단체 회장 연관 관계
 }
