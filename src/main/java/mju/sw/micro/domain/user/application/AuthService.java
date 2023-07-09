@@ -1,6 +1,10 @@
 package mju.sw.micro.domain.user.application;
 
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.dao.TokenRedisRepository;
 import mju.sw.micro.domain.user.dao.UserRepository;
@@ -15,8 +19,6 @@ import mju.sw.micro.global.constants.EmailConstants.VerifyEmailConstants;
 import mju.sw.micro.global.error.exception.ErrorCode;
 import mju.sw.micro.global.utils.CodeUtil;
 import mju.sw.micro.global.utils.MailUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +28,7 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final MailUtil mailUtil;
 	private final TokenRedisRepository tokenRedisRepository;
-//	private final PasswordEncoder encoder;
-
+	//	private final PasswordEncoder encoder;
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		Optional<Token> optionalToken = tokenRedisRepository.findByEmail(dto.getEmail());

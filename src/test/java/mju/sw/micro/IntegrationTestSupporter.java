@@ -1,8 +1,5 @@
 package mju.sw.micro;
 
-import mju.sw.micro.domain.user.application.AuthService;
-import mju.sw.micro.domain.user.dao.TokenRedisRepository;
-import mju.sw.micro.domain.user.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -10,6 +7,9 @@ import org.springframework.test.context.ActiveProfiles;
 import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
 import mju.sw.micro.domain.club.dao.ClubRepository;
+import mju.sw.micro.domain.user.application.AuthService;
+import mju.sw.micro.domain.user.dao.TokenRedisRepository;
+import mju.sw.micro.domain.user.dao.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")

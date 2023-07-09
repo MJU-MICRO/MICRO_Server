@@ -1,5 +1,8 @@
 package mju.sw.micro.domain.user.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,9 +50,8 @@ public class User extends BaseEntity {
 	private boolean notification;
 
 	@Builder
-	public User (String name, String email, String phoneNumber, String interest,
-		String introduction, String nickName, String studentId, String major,
-		String password, boolean notification, boolean activated) {
+	public User(String name, String email, String phoneNumber, String interest, String introduction, String nickName,
+		String studentId, String major, String password, boolean notification, boolean activated) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -63,12 +63,11 @@ public class User extends BaseEntity {
 		this.introduction = introduction;
 		this.notification = notification;
 		this.activated = activated;
-//		this.imageUrl = null;
+		//		this.imageUrl = null;
 	}
 
-	public static User createUser(String name, String email, String phoneNumber,
-		String interest, String introduction, String nickName, String studentId,
-		String major, String password, boolean notification, boolean activated) {
+	public static User createUser(String name, String email, String phoneNumber, String interest, String introduction,
+		String nickName, String studentId, String major, String password, boolean notification, boolean activated) {
 		return User.builder()
 			.name(name)
 			.email(email)
@@ -81,13 +80,13 @@ public class User extends BaseEntity {
 			.password(password)
 			.notification(notification)
 			.activated(activated)
-//			.imageUrl(null)
+			//			.imageUrl(null)
 			.build();
 	}
 
 	public void addRole(Role role) {
 		UserRole userRole = new UserRole();
-		userRole.associate(this,role);
+		userRole.associate(this, role);
 		userRoles.add(userRole);
 	}
 }

@@ -29,7 +29,7 @@ public class UserRole extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	public void associate(User user,Role role) {
+	public void associate(User user, Role role) {
 		this.user = user;
 		this.role = role;
 	}
