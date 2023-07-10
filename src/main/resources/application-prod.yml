@@ -3,6 +3,7 @@ spring:
     redis:
       host: ${MICRO_REDIS_HOST}
       port: ${MICRO_REDIS_PORT}
+      password: ${MICRO_REDIS_PASSWORD}
   config:
     activate:
       on-profile: prod
