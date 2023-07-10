@@ -15,7 +15,7 @@ import mju.sw.micro.domain.club.dto.request.ClubRecruitmentCreateRequest;
 import mju.sw.micro.domain.club.dto.request.ClubRecruitmentUpdateRequest;
 import mju.sw.micro.global.common.response.ApiResponse;
 
-@Tag(name = "동아리 / 학회 모집공고 API", description = "동아리 및 학회의 모집공고를 등록, 수정, 삭제합니다.")
+@Tag(name = "동아리 / 학회 모집공고 API", description = "동아리 및 학회의 모집공고를 등록, 수정")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -35,5 +35,4 @@ public class ClubRecruitmentApi {
 	public ApiResponse<String> updateClubRecruitment(@Valid @RequestBody ClubRecruitmentUpdateRequest request) {
 		return recruitmentService.updateClubRecruitment(request.toServiceRequest());
 	}
-
 }
