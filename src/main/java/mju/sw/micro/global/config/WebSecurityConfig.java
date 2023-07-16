@@ -14,6 +14,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.domain.Role;
+import mju.sw.micro.global.security.EntryPointUnauthorizedHandler;
+import mju.sw.micro.global.security.MicroAccessDeniedHandler;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtService;
 
@@ -22,6 +24,8 @@ import mju.sw.micro.global.security.jwt.JwtService;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final JwtService jwtService;
+	private final EntryPointUnauthorizedHandler unauthorizedHandler;
+	private final MicroAccessDeniedHandler deniedHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,6 +35,7 @@ public class WebSecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.sessionManagement(
 				sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(
 				authorizeHttpRequests -> authorizeHttpRequests
 					.requestMatchers(new AntPathRequestMatcher("/"))
@@ -43,8 +48,10 @@ public class WebSecurityConfig {
 					.hasRole(Role.ROLE_PRESIDENT.getKey())
 					.anyRequest()
 					.authenticated())
-			.addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
-		//TODO: 인증이 필요한 uri에 게스트가 접근하면 처리할 동작을 정의한 핸들러와, 인증된 사용자가 인가되지 않은 페이지에 접근할 때 처리할 핸들러 추가
+			.exceptionHandling(
+				exceptionHandling -> exceptionHandling
+					.authenticationEntryPoint(unauthorizedHandler)
+					.accessDeniedHandler(deniedHandler));
 		return http.build();
 	}
 

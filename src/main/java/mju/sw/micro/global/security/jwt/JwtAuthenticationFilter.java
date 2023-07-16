@@ -2,6 +2,7 @@ package mju.sw.micro.global.security.jwt;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +23,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
-		String token = jwtService.getToken(request);
-		if (token == null) {
+		Optional<String> optionalToken = jwtService.extractToken(request);
+		if (optionalToken.isEmpty()) {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		String token = optionalToken.get();
 		if (!jwtService.isTokenValid(token)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		if (!jwtService.isAccessToken(token)) {
 			filterChain.doFilter(request, response);
 			return;
 		}

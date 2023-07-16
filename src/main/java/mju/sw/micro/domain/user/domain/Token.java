@@ -1,6 +1,7 @@
 package mju.sw.micro.domain.user.domain;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
@@ -19,7 +20,7 @@ public class Token implements Serializable {
 	private String verificationCode;
 	@Indexed
 	private String refreshToken;
-	@TimeToLive
+	@TimeToLive(unit = TimeUnit.MILLISECONDS)
 	private Long expiration;
 	private String expirationDate;
 

@@ -11,5 +11,5 @@ public class MockConstants {
 	public static final String MOCK_USER_NICKNAME = "FooFoo";
 	public static final String MOCK_STUDENT_ID = "60000000";
 	public static final String MOCK_MAJOR = "Application SW";
-	public static final long MOCK_TOKEN_EXPIRATION_TIME = 60 * 5L;
+	public static final long MOCK_TOKEN_EXPIRATION_TIME = 60 * 5L * 1000;
 }

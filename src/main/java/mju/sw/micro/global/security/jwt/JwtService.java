@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,9 +63,10 @@ public class JwtService {
 			.asString());
 	}
 
-	// Authorization Header를 통해 토큰을 가져온다.
-	public String getToken(HttpServletRequest request) {
-		return request.getHeader("Authorization");
+	public Optional<String> extractToken(HttpServletRequest request) {
+		return Optional.ofNullable(request.getHeader(JwtConstants.HEADER))
+			.filter(token -> token.startsWith(JwtConstants.PREFIX_BEARER))
+			.map(token -> token.replace(JwtConstants.PREFIX_BEARER, ""));
 	}
 
 	// 토큰 검증
@@ -74,6 +76,18 @@ public class JwtService {
 			return true;
 		} catch (Exception e) {
 			log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean isAccessToken(String token) {
+		try {
+			JWT.require(Algorithm.HMAC512(secretKey))
+				.withSubject(JwtConstants.ACCESS_TOKEN_SUBJECT)
+				.build()
+				.verify(token);
+			return true;
+		} catch (JWTVerificationException e) {
 			return false;
 		}
 	}
