@@ -22,6 +22,8 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MariaDB103Dialect
     defer-datasource-initialization: true
-
+jwt:
+  secret:
+    key: ${MICRO_JWT_SECRET_KEY}
 server:
   port: 8081

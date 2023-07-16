@@ -105,7 +105,10 @@ dependencies {
     testImplementation "org.testcontainers:junit-jupiter:1.17.6"
 
     //security
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //jwt
+    implementation 'com.auth0:java-jwt:4.2.1'
+
 }
 
 tasks.named('test') {

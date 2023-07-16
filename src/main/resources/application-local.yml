@@ -22,6 +22,8 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
-
+jwt:
+  secret:
+    key: ddsdDASDmdsDASD.dASDAWawmdaDawdawdakandaslnalskkDASDASDWAgoqwgp
 server:
   port: 8000
