@@ -1,7 +1,6 @@
 package mju.sw.micro.global.security.jwt;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mju.sw.micro.domain.user.domain.User;
-import mju.sw.micro.domain.user.domain.UserRole;
 import mju.sw.micro.global.constants.JwtConstants;
 import mju.sw.micro.global.security.MicroUserDetailService;
 
@@ -31,14 +29,12 @@ public class JwtService {
 	private String secretKey;
 	private final MicroUserDetailService userDetailsService;
 
-	public String createAccessToken(String email, List<UserRole> roles) {
+	public String createAccessToken(String email) {
 		Date now = new Date();
-		List<String> roleNames = roles.stream().map(user -> user.getRole().getKey()).toList();
 		return JWT.create()
 			.withSubject(JwtConstants.ACCESS_TOKEN_SUBJECT)
 			.withExpiresAt(new Date(now.getTime() + JwtConstants.ACCESS_TOKEN_EXPIRATION_TIME))
 			.withClaim(JwtConstants.CLAIM_EMAIL, email)
-			.withClaim(JwtConstants.CLAIM_ROLE, roleNames)
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
@@ -66,8 +62,8 @@ public class JwtService {
 			.asString());
 	}
 
-	// Authorization Header를 통해 인증을 한다.
-	public String resolveToken(HttpServletRequest request) {
+	// Authorization Header를 통해 토큰을 가져온다.
+	public String getToken(HttpServletRequest request) {
 		return request.getHeader("Authorization");
 	}
 
@@ -86,7 +82,7 @@ public class JwtService {
 		final String access = "access";
 		final String refresh = "refresh";
 
-		String accessToken = this.createAccessToken(user.getEmail(), user.getUserRoles());
+		String accessToken = this.createAccessToken(user.getEmail());
 		response.addHeader(access, JwtConstants.PREFIX_BEARER + accessToken);
 		String refreshToken = null;
 		if (isAutoLogin) {

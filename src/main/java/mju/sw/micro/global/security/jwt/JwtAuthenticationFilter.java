@@ -20,22 +20,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtService jwtService;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
-		String token = jwtService.resolveToken(request);
-
-		if (token != null && jwtService.isTokenValid(token)) {
-			// check access token
-			token = token.split(" ")[1].trim();
-
-			Authentication authentication = jwtService.getAuthentication(token);
-			if (authentication != null && hasBannedRole(authentication.getAuthorities())) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is banned");
-				return;
-			}
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+		throws ServletException, IOException {
+		String token = jwtService.getToken(request);
+		if (token == null) {
+			filterChain.doFilter(request, response);
+			return;
 		}
-
+		if (!jwtService.isTokenValid(token)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		Authentication authentication = jwtService.getAuthentication(token);
+		if (authentication == null || hasBannedRole(authentication.getAuthorities())) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is banned");
+			return;
+		}
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
 	}
 

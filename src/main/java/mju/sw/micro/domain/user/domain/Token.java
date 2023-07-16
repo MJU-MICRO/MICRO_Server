@@ -17,14 +17,27 @@ public class Token implements Serializable {
 	@Indexed
 	private String email;
 	private String verificationCode;
+	@Indexed
+	private String refreshToken;
 	@TimeToLive
 	private Long expiration;
+	private String expirationDate;
 
-	public static Token of(String email, String verificationCode, Long expiration) {
+	public static Token of(String email, String verificationCode, Long expiration, String expirationDate) {
 		Token token = new Token();
 		token.email = email;
 		token.verificationCode = verificationCode;
 		token.expiration = expiration;
+		token.expirationDate = expirationDate;
+		return token;
+	}
+
+	public static Token of(String email, Long expiration, String refreshToken, String expirationDate) {
+		Token token = new Token();
+		token.email = email;
+		token.refreshToken = refreshToken;
+		token.expiration = expiration;
+		token.expirationDate = expirationDate;
 		return token;
 	}
 }
