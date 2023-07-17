@@ -17,6 +17,7 @@ import mju.sw.micro.global.config.TestContainerConfig;
 import mju.sw.micro.global.utils.CodeUtil;
 import mju.sw.micro.global.utils.MockConstants;
 import mju.sw.micro.global.utils.MockFactory;
+import mju.sw.micro.global.utils.TimeUtil;
 
 @ExtendWith(TestContainerConfig.class)
 @TestPropertySource(locations = "classpath:application-test.yml")
@@ -78,7 +79,8 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	void signUpWithWrongVerificationCode() {
 		//given
 		Token token = Token.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
-			MockConstants.MOCK_TOKEN_EXPIRATION_TIME);
+			MockConstants.MOCK_TOKEN_EXPIRATION_TIME,
+			TimeUtil.generateExpiration(MockConstants.MOCK_TOKEN_EXPIRATION_TIME));
 		tokenRedisRepository.save(token);
 		SignUpRequestDto dto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL,
 			MockConstants.MOCK_USER_PASSWORD,

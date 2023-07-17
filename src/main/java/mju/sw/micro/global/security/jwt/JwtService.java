@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.constants.JwtConstants;
 import mju.sw.micro.global.security.MicroUserDetailService;
 
@@ -92,17 +91,14 @@ public class JwtService {
 		}
 	}
 
-	public String createTokensAndAddHeaders(User user, boolean isAutoLogin, HttpServletResponse response) {
-		final String access = "access";
-		final String refresh = "refresh";
+	public String createTokensAndAddHeaders(String email, HttpServletResponse response) {
+		final String ACCESS = "access";
+		final String REFRESH = "refresh";
 
-		String accessToken = this.createAccessToken(user.getEmail());
-		response.addHeader(access, JwtConstants.PREFIX_BEARER + accessToken);
-		String refreshToken = null;
-		if (isAutoLogin) {
-			refreshToken = this.createRefreshToken(user.getEmail());
-			response.addHeader(refresh, refreshToken);
-		}
+		String accessToken = this.createAccessToken(email);
+		response.addHeader(ACCESS, accessToken);
+		String refreshToken = this.createRefreshToken(email);
+		response.addHeader(REFRESH, refreshToken);
 		return refreshToken;
 	}
 }

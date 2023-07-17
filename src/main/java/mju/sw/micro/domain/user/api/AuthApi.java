@@ -16,6 +16,7 @@ import mju.sw.micro.domain.user.application.AuthService;
 import mju.sw.micro.domain.user.dto.request.CodeVerifyRequestDto;
 import mju.sw.micro.domain.user.dto.request.EmailSendRequestDto;
 import mju.sw.micro.domain.user.dto.request.LoginRequestDto;
+import mju.sw.micro.domain.user.dto.request.RefreshTokenRequestDto;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
 import mju.sw.micro.global.common.response.ApiResponse;
 
@@ -53,5 +54,13 @@ public class AuthApi {
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<String> login(@Validated @RequestBody LoginRequestDto dto, HttpServletResponse response) {
 		return authService.login(dto, response);
+	}
+
+	@Operation(summary = "refresh token 검증 및 액세스, 리프레쉬 토큰 재발급")
+	@PostMapping("/refresh")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<String> refreshJwtTokens(HttpServletResponse response,
+		@Validated @RequestBody RefreshTokenRequestDto dto) {
+		return authService.refreshJwtTokens(dto, response);
 	}
 }

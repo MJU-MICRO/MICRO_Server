@@ -21,8 +21,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtService jwtService;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-		throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
 		Optional<String> optionalToken = jwtService.extractToken(request);
 		if (optionalToken.isEmpty()) {
 			filterChain.doFilter(request, response);
@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		String token = optionalToken.get();
 		if (!jwtService.isTokenValid(token)) {
-			filterChain.doFilter(request, response);
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
 			return;
 		}
 		if (!jwtService.isAccessToken(token)) {
@@ -39,7 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		Authentication authentication = jwtService.getAuthentication(token);
 		if (authentication == null || hasBannedRole(authentication.getAuthorities())) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is banned");
 			return;
 		}
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -47,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private boolean hasBannedRole(Collection<? extends GrantedAuthority> authorities) {
-		return authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.ROLE_BANNED.name()));
+		return authorities.stream().anyMatch(authority -> authority.getAuthority().equals(Role.ROLE_BANNED.name()));
 	}
 }

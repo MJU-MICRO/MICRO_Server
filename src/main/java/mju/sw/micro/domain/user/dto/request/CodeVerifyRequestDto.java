@@ -13,12 +13,12 @@ public class CodeVerifyRequestDto {
 	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@mju\\.ac\\.kr$", message = "이메일 도메인이 허용되지 않습니다.")
 	String email;
 	@NotBlank
-	String code;
+	String emailCode;
 
-	public static CodeVerifyRequestDto of(String email, String code) {
+	public static CodeVerifyRequestDto of(String email, String emailCode) {
 		CodeVerifyRequestDto dto = new CodeVerifyRequestDto();
 		dto.email = email;
-		dto.code = code;
+		dto.emailCode = emailCode;
 		return dto;
 	}
 }

@@ -9,6 +9,5 @@ public enum Role {
 
 	ROLE_GUEST("GUEST"), ROLE_USER("USER"), ROLE_BANNED("BANNED"),
 	ROLE_PRESIDENT("PRESIDENT"), ROLE_ADMIN("ADMIN");
-
 	private final String key;
 }

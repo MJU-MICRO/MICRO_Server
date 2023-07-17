@@ -15,9 +15,6 @@ public class MicroAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 		AccessDeniedException accessDeniedException) throws IOException {
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().write("권한이 없는 사용자입니다.");
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getLocalizedMessage());
 	}
 }

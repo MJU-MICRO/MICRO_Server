@@ -12,29 +12,19 @@ import lombok.Getter;
 
 @Getter
 @RedisHash(value = "token")
-public class Token implements Serializable {
+public class RefreshToken implements Serializable {
 	@Id
 	private String id;
 	@Indexed
 	private String email;
-	private String verificationCode;
 	@Indexed
 	private String refreshToken;
 	@TimeToLive(unit = TimeUnit.MILLISECONDS)
 	private Long expiration;
 	private String expirationDate;
 
-	public static Token of(String email, String verificationCode, Long expiration, String expirationDate) {
-		Token token = new Token();
-		token.email = email;
-		token.verificationCode = verificationCode;
-		token.expiration = expiration;
-		token.expirationDate = expirationDate;
-		return token;
-	}
-
-	public static Token of(String email, Long expiration, String refreshToken, String expirationDate) {
-		Token token = new Token();
+	public static RefreshToken of(String email, Long expiration, String refreshToken, String expirationDate) {
+		RefreshToken token = new RefreshToken();
 		token.email = email;
 		token.refreshToken = refreshToken;
 		token.expiration = expiration;
