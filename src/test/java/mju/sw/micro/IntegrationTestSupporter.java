@@ -9,7 +9,7 @@ import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
 import mju.sw.micro.domain.club.dao.ClubRepository;
 import mju.sw.micro.domain.user.application.AuthService;
-import mju.sw.micro.domain.user.dao.TokenRedisRepository;
+import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
 import mju.sw.micro.domain.user.dao.UserRepository;
 
 @SpringBootTest
@@ -32,6 +32,6 @@ public abstract class IntegrationTestSupporter {
 	@Autowired
 	protected AuthService authService;
 	@Autowired
-	protected TokenRedisRepository tokenRedisRepository;
+	protected EmailCodeRedisRepository emailCodeRedisRepository;
 
 }

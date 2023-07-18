@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.TestPropertySource;
 
 import mju.sw.micro.IntegrationTestSupporter;
-import mju.sw.micro.domain.user.domain.Token;
+import mju.sw.micro.domain.user.domain.EmailCode;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
 import mju.sw.micro.global.common.response.ApiResponse;
@@ -29,10 +29,8 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	@BeforeEach
 	void setUp() {
 		verificationCode = CodeUtil.generateRandomCode();
-		signUpRequestDto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL,
-			MockConstants.MOCK_USER_PASSWORD,
-			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME,
-			MockConstants.MOCK_STUDENT_ID,
+		signUpRequestDto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL, MockConstants.MOCK_USER_PASSWORD,
+			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME, MockConstants.MOCK_STUDENT_ID,
 			MockConstants.MOCK_MAJOR, MockConstants.MOCK_INTEREST, MockConstants.MOCK_PHONE_NUMBER,
 			MockConstants.MOCK_INTRODUCTION, false, verificationCode);
 	}
@@ -46,9 +44,10 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	// @Test
 	// void signUp() {
 	// 	//given
-	// 	Token token = Token.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
-	// 		MockConstants.MOCK_TOKEN_EXPIRATION_TIME);
-	// 	tokenRedisRepository.save(token);
+	// 	EmailCode emailCode = EmailCode.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
+	// 		MockConstants.MOCK_TOKEN_EXPIRATION_TIME,
+	// 		TimeUtil.generateExpiration(MockConstants.MOCK_TOKEN_EXPIRATION_TIME));
+	// 	emailCodeRedisRepository.save(emailCode);
 	// 	// when
 	// 	ApiResponse<String> response = authService.signUp(signUpRequestDto);
 	// 	Optional<User> optionalUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL);
@@ -78,20 +77,18 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	@Test
 	void signUpWithWrongVerificationCode() {
 		//given
-		Token token = Token.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
+		EmailCode emailCode = EmailCode.of(MockConstants.MOCK_USER_EMAIL, verificationCode,
 			MockConstants.MOCK_TOKEN_EXPIRATION_TIME,
 			TimeUtil.generateExpiration(MockConstants.MOCK_TOKEN_EXPIRATION_TIME));
-		tokenRedisRepository.save(token);
-		SignUpRequestDto dto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL,
-			MockConstants.MOCK_USER_PASSWORD,
-			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME,
-			MockConstants.MOCK_STUDENT_ID,
+		emailCodeRedisRepository.save(emailCode);
+		SignUpRequestDto dto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL, MockConstants.MOCK_USER_PASSWORD,
+			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME, MockConstants.MOCK_STUDENT_ID,
 			MockConstants.MOCK_MAJOR, MockConstants.MOCK_INTEREST, MockConstants.MOCK_PHONE_NUMBER,
 			MockConstants.MOCK_INTRODUCTION, false, "wrongCode");
 		// when
 		ApiResponse<String> response = authService.signUp(dto);
 		// then
-		Assertions.assertEquals("인증 코드가 유효하지 않습니다.", response.getMessage());
+		Assertions.assertEquals("인증 토큰이 유효하지 않습니다.", response.getMessage());
 	}
 
 }
