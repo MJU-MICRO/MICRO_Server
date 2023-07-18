@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
+import mju.sw.micro.domain.user.dao.BlackListTokenRedisRepository;
 import mju.sw.micro.domain.user.domain.Role;
 import mju.sw.micro.global.security.EntryPointUnauthorizedHandler;
 import mju.sw.micro.global.security.MicroAccessDeniedHandler;
@@ -26,6 +27,7 @@ public class WebSecurityConfig {
 	private final JwtService jwtService;
 	private final EntryPointUnauthorizedHandler unauthorizedHandler;
 	private final MicroAccessDeniedHandler deniedHandler;
+	private final BlackListTokenRedisRepository blackListTokenRedisRepository;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,7 +37,8 @@ public class WebSecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.sessionManagement(
 				sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new JwtAuthenticationFilter(jwtService, blackListTokenRedisRepository),
+				UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(
 				authorizeHttpRequests -> authorizeHttpRequests
 					.requestMatchers(new AntPathRequestMatcher("/"))

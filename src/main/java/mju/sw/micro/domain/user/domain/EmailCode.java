@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
-@RedisHash(value = "token")
+@RedisHash(value = "emailCode")
 public class EmailCode implements Serializable {
 	@Id
 	private String id;
@@ -23,11 +23,11 @@ public class EmailCode implements Serializable {
 	private String expirationDate;
 
 	public static EmailCode of(String email, String verificationCode, Long expiration, String expirationDate) {
-		EmailCode token = new EmailCode();
-		token.email = email;
-		token.verificationCode = verificationCode;
-		token.expiration = expiration;
-		token.expirationDate = expirationDate;
-		return token;
+		EmailCode emailCode = new EmailCode();
+		emailCode.email = email;
+		emailCode.verificationCode = verificationCode;
+		emailCode.expiration = expiration;
+		emailCode.expirationDate = expirationDate;
+		return emailCode;
 	}
 }

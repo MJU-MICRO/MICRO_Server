@@ -92,6 +92,9 @@ public class AuthService {
 	}
 
 	public ApiResponse<String> login(LoginRequestDto dto, HttpServletResponse response) {
+		Optional<RefreshToken> optionalRefreshToken = refreshTokenRedisRepository.findByEmail(dto.getEmail());
+		optionalRefreshToken.ifPresent(token -> refreshTokenRedisRepository.deleteById(token.getId()));
+
 		Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.AUTH_NOT_FOUND);
@@ -101,12 +104,9 @@ public class AuthService {
 			return ApiResponse.withError(ErrorCode.INVALID_PASSWORD);
 		}
 		String refreshToken = jwtService.createTokensAndAddHeaders(user.getEmail(), response);
-		if (refreshToken != null) {
-			String expirationDate = TimeUtil.generateExpiration(JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME);
-			refreshTokenRedisRepository.save(
-				RefreshToken.of(user.getEmail(), JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME, refreshToken,
-					expirationDate));
-		}
+		String expirationDate = TimeUtil.generateExpiration(JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME);
+		refreshTokenRedisRepository.save(
+			RefreshToken.of(user.getEmail(), JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME, refreshToken, expirationDate));
 		return ApiResponse.ok("로그인에 성공했습니다.");
 	}
 
@@ -120,10 +120,10 @@ public class AuthService {
 		}
 		RefreshToken refreshToken = optionalToken.get();
 		String reIssuedRefreshToken = jwtService.createTokensAndAddHeaders(refreshToken.getEmail(), response);
+		refreshTokenRedisRepository.delete(refreshToken);
 		refreshTokenRedisRepository.save(
 			RefreshToken.of(refreshToken.getEmail(), JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME,
 				reIssuedRefreshToken, TimeUtil.generateExpiration(JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME)));
-		refreshTokenRedisRepository.delete(refreshToken);
 		return ApiResponse.ok("토큰 재발급에 성공했습니다.");
 	}
 }

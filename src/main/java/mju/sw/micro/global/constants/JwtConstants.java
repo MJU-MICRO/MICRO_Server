@@ -9,5 +9,7 @@ public final class JwtConstants {
 	public static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60L * 24 * 30 * 1000;
 	public static final String CLAIM_EMAIL = "email";
 	public static final String PREFIX_BEARER = "Bearer ";
+	public static final String ACCESS_KEY = "access";
+	public static final String REFRESH_KEY = "refresh";
 
 }

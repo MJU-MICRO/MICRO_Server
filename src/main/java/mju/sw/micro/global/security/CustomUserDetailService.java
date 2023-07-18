@@ -11,13 +11,13 @@ import mju.sw.micro.domain.user.domain.User;
 
 @Service
 @RequiredArgsConstructor
-public class MicroUserDetailService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new UsernameNotFoundException("Invalid authentication!"));
-		return new MicroUserDetails(user);
+		return new CustomUserDetails(user);
 	}
 }

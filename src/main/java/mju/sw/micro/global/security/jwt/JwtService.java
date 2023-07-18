@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
@@ -18,16 +17,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mju.sw.micro.global.constants.JwtConstants;
-import mju.sw.micro.global.security.MicroUserDetailService;
+import mju.sw.micro.global.security.CustomUserDetailService;
+import mju.sw.micro.global.security.CustomUserDetails;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtService {
-
 	@Value("${jwt.secret.key}")
 	private String secretKey;
-	private final MicroUserDetailService userDetailsService;
+	private final CustomUserDetailService userDetailsService;
 
 	public String createAccessToken(String email) {
 		Date now = new Date();
@@ -38,11 +37,10 @@ public class JwtService {
 			.sign(Algorithm.HMAC512(secretKey));
 	}
 
-	public String createRefreshToken(String email) {
+	public String createRefreshToken() {
 		Date now = new Date();
 		return JWT.create()
 			.withSubject(JwtConstants.REFRESH_TOKEN_SUBJECT)
-			.withClaim(JwtConstants.CLAIM_EMAIL, email)
 			.withExpiresAt(new Date(now.getTime() + JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME))
 			.sign(Algorithm.HMAC512(secretKey));
 	}
@@ -50,8 +48,8 @@ public class JwtService {
 	// Spring Security 인증과정에서 권한확인을 위한 기능
 	public Authentication getAuthentication(String accessToken) {
 		String email = extractEmail(accessToken).orElseThrow(() -> new IllegalArgumentException("액세스 토큰이 유효하지 않습니다."));
-		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+		CustomUserDetails customUserDetails = (CustomUserDetails)userDetailsService.loadUserByUsername(email);
+		return new UsernamePasswordAuthenticationToken(customUserDetails, "", customUserDetails.getAuthorities());
 	}
 
 	public Optional<String> extractEmail(String accessToken) {
@@ -62,7 +60,7 @@ public class JwtService {
 			.asString());
 	}
 
-	public Optional<String> extractToken(HttpServletRequest request) {
+	public Optional<String> resolveToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getHeader(JwtConstants.HEADER))
 			.filter(token -> token.startsWith(JwtConstants.PREFIX_BEARER))
 			.map(token -> token.replace(JwtConstants.PREFIX_BEARER, ""));
@@ -91,14 +89,21 @@ public class JwtService {
 		}
 	}
 
-	public String createTokensAndAddHeaders(String email, HttpServletResponse response) {
-		final String ACCESS = "access";
-		final String REFRESH = "refresh";
+	public Long getExpirationTime(String token) {
+		Date now = new Date();
+		long expiration = JWT.require(Algorithm.HMAC512(secretKey))
+			.build()
+			.verify(token)
+			.getExpiresAt()
+			.getTime();
+		return expiration - now.getTime();
+	}
 
+	public String createTokensAndAddHeaders(String email, HttpServletResponse response) {
 		String accessToken = this.createAccessToken(email);
-		response.addHeader(ACCESS, accessToken);
-		String refreshToken = this.createRefreshToken(email);
-		response.addHeader(REFRESH, refreshToken);
+		response.addHeader(JwtConstants.ACCESS_KEY, accessToken);
+		String refreshToken = this.createRefreshToken();
+		response.addHeader(JwtConstants.REFRESH_KEY, refreshToken);
 		return refreshToken;
 	}
 }

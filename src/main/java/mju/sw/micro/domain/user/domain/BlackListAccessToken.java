@@ -11,22 +11,19 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
-@RedisHash(value = "refreshToken")
-public class RefreshToken implements Serializable {
+@RedisHash(value = "blacklistAccessToken")
+public class BlackListAccessToken implements Serializable {
 	@Id
 	private String id;
 	@Indexed
-	private String email;
-	@Indexed
-	private String refreshToken;
+	private String blackListAccessToken;
 	@TimeToLive(unit = TimeUnit.MILLISECONDS)
 	private Long expiration;
 	private String expirationDate;
 
-	public static RefreshToken of(String email, Long expiration, String refreshToken, String expirationDate) {
-		RefreshToken token = new RefreshToken();
-		token.email = email;
-		token.refreshToken = refreshToken;
+	public static BlackListAccessToken of(Long expiration, String blackListAccessToken, String expirationDate) {
+		BlackListAccessToken token = new BlackListAccessToken();
+		token.blackListAccessToken = blackListAccessToken;
 		token.expiration = expiration;
 		token.expirationDate = expirationDate;
 		return token;
