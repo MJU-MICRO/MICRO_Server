@@ -13,35 +13,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
-import mju.sw.micro.domain.user.dao.BlackListTokenRedisRepository;
 import mju.sw.micro.domain.user.domain.Role;
-import mju.sw.micro.global.security.EntryPointUnauthorizedHandler;
 import mju.sw.micro.global.security.MicroAccessDeniedHandler;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
-import mju.sw.micro.global.security.jwt.JwtService;
+import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-	private final JwtService jwtService;
-	private final EntryPointUnauthorizedHandler unauthorizedHandler;
-	private final MicroAccessDeniedHandler deniedHandler;
-	private final BlackListTokenRedisRepository blackListTokenRedisRepository;
+	private final MicroAccessDeniedHandler accessDeniedHandler;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final JwtExceptionFilter jwtExceptionFilter;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-			.httpBasic(AbstractHttpConfigurer::disable)
+		http.httpBasic(AbstractHttpConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.sessionManagement(
 				sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new JwtAuthenticationFilter(jwtService, blackListTokenRedisRepository),
-				UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
-				authorizeHttpRequests -> authorizeHttpRequests
-					.requestMatchers(new AntPathRequestMatcher("/"))
+				authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()
@@ -51,10 +46,7 @@ public class WebSecurityConfig {
 					.hasRole(Role.ROLE_PRESIDENT.getKey())
 					.anyRequest()
 					.authenticated())
-			.exceptionHandling(
-				exceptionHandling -> exceptionHandling
-					.authenticationEntryPoint(unauthorizedHandler)
-					.accessDeniedHandler(deniedHandler));
+			.exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(accessDeniedHandler));
 		return http.build();
 	}
 
