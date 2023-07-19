@@ -46,13 +46,12 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
-	private boolean activated;
 	private String imageUrl;
 	private boolean notification;
 
 	@Builder
 	public User(String name, String email, String phoneNumber, String interest, String introduction, String nickName,
-		String studentId, String major, String password, boolean notification, boolean activated) {
+		String studentId, String major, String password, boolean notification) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -63,7 +62,6 @@ public class User extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
-		this.activated = activated;
 		//		this.imageUrl = null;
 	}
 
@@ -80,7 +78,6 @@ public class User extends BaseEntity {
 			.major(major)
 			.password(password)
 			.notification(notification)
-			.activated(activated)
 			//			.imageUrl(null)
 			.build();
 	}

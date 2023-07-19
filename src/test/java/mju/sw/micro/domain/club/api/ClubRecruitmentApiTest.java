@@ -1,6 +1,7 @@
 package mju.sw.micro.domain.club.api;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -14,10 +15,12 @@ import mju.sw.micro.domain.club.dto.request.ClubRecruitmentCreateRequest;
 import mju.sw.micro.domain.club.dto.request.ClubRecruitmentCreateServiceRequest;
 import mju.sw.micro.domain.club.dto.request.ClubRecruitmentUpdateRequest;
 import mju.sw.micro.global.common.response.ApiResponse;
+import mju.sw.micro.global.security.WithMockCustomUser;
 
 class ClubRecruitmentApiTest extends ApiTestSupporter {
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 등록한다.")
+	@WithMockCustomUser
 	@Test
 	void createClubRecruitment() throws Exception {
 		// Given
@@ -32,6 +35,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 				post("/api/recruitment")
 					.content(objectMapper.writeValueAsString(request))
 					.contentType(MediaType.APPLICATION_JSON)
+					.with(csrf())
 			)
 			.andDo(print())
 			.andExpect(status().isOk())
@@ -39,6 +43,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고을 등록할 때, 제목은 필수 값이다.")
+	@WithMockCustomUser
 	@Test
 	void createClubRecruitmentWithEmptyTitle() throws Exception {
 		// Given
@@ -57,6 +62,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 등록할 때, 내용은 필수 값이다.")
+	@WithMockCustomUser
 	@Test
 	void createClubRecruitmentWithEmptyContent() throws Exception {
 		// Given
@@ -75,6 +81,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 등록할 때, 모집 공고를 게시하는 학생 단체의 식별자는 양수여야한다.")
+	@WithMockCustomUser
 	@Test
 	void createClubRecruitmentWithNegativeClubId() throws Exception {
 		// Given
@@ -93,6 +100,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 수정한다.")
+	@WithMockCustomUser
 	@Test
 	void updateClubRecruitment() throws Exception {
 		// Given
@@ -115,6 +123,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 수정할 때, 제목은 필수 값이다.")
+	@WithMockCustomUser
 	@Test
 	void updateClubRecruitmentWithEmptyTitle() throws Exception {
 		// Given
@@ -133,6 +142,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고을 수정할 때, 내용은 필수 값이다.")
+	@WithMockCustomUser
 	@Test
 	void updateClubRecruitmentWithEmptyContent() throws Exception {
 		// Given
@@ -151,6 +161,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 수정할 때, 모집 공고를 게시하는 학생 단체의 식별자는 양수여야한다.")
+	@WithMockCustomUser
 	@Test
 	void updateClubRecruitmentWithNegativeClubId() throws Exception {
 		// Given
@@ -169,6 +180,7 @@ class ClubRecruitmentApiTest extends ApiTestSupporter {
 	}
 
 	@DisplayName("신규 학생단체(동아리/학회) 모집 공고를 수정할 때, 모집 공고의 식별자는 양수여야한다.")
+	@WithMockCustomUser
 	@Test
 	void deleteClubRecruitmentWithNegativeClubId() throws Exception {
 		// Given

@@ -81,7 +81,6 @@ public class AuthService {
 			.phoneNumber(dto.getPhoneNumber())
 			.introduction(dto.getIntroduction())
 			.notification(dto.getNotification())
-			.activated(false)
 			.build();
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);
