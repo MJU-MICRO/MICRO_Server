@@ -30,7 +30,7 @@ public class UserService {
 		if (!jwtService.isTokenValid(accessToken)) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN);
 		}
-		Optional<RefreshToken> optionalToken = refreshTokenRedisRepository.findByEmail(userDetails.getEmail());
+		Optional<RefreshToken> optionalToken = refreshTokenRedisRepository.findById(userDetails.getEmail());
 		if (optionalToken.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.TOKEN_NOT_FOUND);
 		}

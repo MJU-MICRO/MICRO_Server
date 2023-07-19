@@ -9,7 +9,5 @@ import mju.sw.micro.domain.user.domain.RefreshToken;
 
 @EnableRedisRepositories
 public interface RefreshTokenRedisRepository extends CrudRepository<RefreshToken, String> {
-	Optional<RefreshToken> findByEmail(String email);
-
 	Optional<RefreshToken> findByRefreshToken(String refreshToken);
 }

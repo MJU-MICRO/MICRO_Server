@@ -42,9 +42,6 @@ public class AuthService {
 	private final JwtService jwtService;
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
-		Optional<EmailCode> optionalEmailCode = emailCodeRedisRepository.findByEmail(dto.getEmail());
-		optionalEmailCode.ifPresent(emailCode -> emailCodeRedisRepository.deleteById(emailCode.getId()));
-
 		String emailCode = CodeUtil.generateRandomCode();
 		mailUtil.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE, VerifyEmailConstants.EMAIL_CONTENT_HTML,
 			emailCode);
@@ -56,7 +53,7 @@ public class AuthService {
 	}
 
 	public ApiResponse<Boolean> verifyCode(CodeVerifyRequestDto dto) {
-		Optional<EmailCode> optionalEmailCode = emailCodeRedisRepository.findByEmail(dto.getEmail());
+		Optional<EmailCode> optionalEmailCode = emailCodeRedisRepository.findById(dto.getEmail());
 		if (optionalEmailCode.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN, false);
 		}
@@ -92,9 +89,6 @@ public class AuthService {
 	}
 
 	public ApiResponse<String> login(LoginRequestDto dto, HttpServletResponse response) {
-		Optional<RefreshToken> optionalRefreshToken = refreshTokenRedisRepository.findByEmail(dto.getEmail());
-		optionalRefreshToken.ifPresent(token -> refreshTokenRedisRepository.deleteById(token.getId()));
-
 		Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.AUTH_NOT_FOUND);
