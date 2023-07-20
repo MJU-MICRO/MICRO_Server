@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,16 +43,15 @@ public class User extends BaseEntity {
 	private String interest;
 	@Column(nullable = false)
 	private String major;
-	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
-	private boolean activated;
 	private String imageUrl;
 	private boolean notification;
 
 	@Builder
 	public User(String name, String email, String phoneNumber, String interest, String introduction, String nickName,
-		String studentId, String major, String password, boolean notification, boolean activated) {
+		String studentId, String major, String password, boolean notification) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -62,12 +62,11 @@ public class User extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
-		this.activated = activated;
 		//		this.imageUrl = null;
 	}
 
 	public static User createUser(String name, String email, String phoneNumber, String interest, String introduction,
-		String nickName, String studentId, String major, String password, boolean notification, boolean activated) {
+		String nickName, String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)
@@ -79,7 +78,6 @@ public class User extends BaseEntity {
 			.major(major)
 			.password(password)
 			.notification(notification)
-			.activated(activated)
 			//			.imageUrl(null)
 			.build();
 	}

@@ -14,12 +14,16 @@ import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.application.AuthService;
 import mju.sw.micro.domain.user.dto.request.CodeVerifyRequestDto;
 import mju.sw.micro.domain.user.dto.request.EmailSendRequestDto;
+import mju.sw.micro.domain.user.dto.request.LoginRequestDto;
+import mju.sw.micro.domain.user.dto.request.RefreshTokenRequestDto;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
+import mju.sw.micro.domain.user.dto.response.LoginResponseDto;
+import mju.sw.micro.domain.user.dto.response.RefreshTokenResponseDto;
 import mju.sw.micro.global.common.response.ApiResponse;
 
 @Tag(name = "인증 API", description = "이메일 송신, 이메일 인증, 회원 가입, 로그인을 합니다.")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthApi {
 
@@ -33,7 +37,7 @@ public class AuthApi {
 	}
 
 	@Operation(summary = "이메일 인증 코드 검증")
-	@PostMapping("/email/auth")
+	@PostMapping("/email/verify")
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<Boolean> verifyCode(@Validated @RequestBody CodeVerifyRequestDto dto) {
 		return authService.verifyCode(dto);
@@ -46,4 +50,17 @@ public class AuthApi {
 		return authService.signUp(dto);
 	}
 
+	@Operation(summary = "로그인")
+	@PostMapping("/login")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<LoginResponseDto> login(@Validated @RequestBody LoginRequestDto dto) {
+		return authService.login(dto);
+	}
+
+	@Operation(summary = "refresh token 검증 및 액세스, 리프레쉬 토큰 재발급")
+	@PostMapping("/refresh")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<RefreshTokenResponseDto> reissueJwtTokens(@Validated @RequestBody RefreshTokenRequestDto dto) {
+		return authService.reissueJwtTokens(dto);
+	}
 }

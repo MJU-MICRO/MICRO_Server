@@ -6,19 +6,20 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 @Getter
-public class CodeVerifyRequestDto {
+public class LoginRequestDto {
 
 	@NotBlank
 	@Email
 	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@mju\\.ac\\.kr$", message = "이메일 도메인이 허용되지 않습니다.")
-	String email;
+	private String email;
 	@NotBlank
-	String emailCode;
+	private String password;
 
-	public static CodeVerifyRequestDto of(String email, String emailCode) {
-		CodeVerifyRequestDto dto = new CodeVerifyRequestDto();
+	public static LoginRequestDto of(String email, String password) {
+		LoginRequestDto dto = new LoginRequestDto();
 		dto.email = email;
-		dto.emailCode = emailCode;
+		dto.password = password;
 		return dto;
 	}
+
 }
