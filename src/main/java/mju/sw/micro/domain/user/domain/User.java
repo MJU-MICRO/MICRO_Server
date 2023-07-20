@@ -66,7 +66,7 @@ public class User extends BaseEntity {
 	}
 
 	public static User createUser(String name, String email, String phoneNumber, String interest, String introduction,
-		String nickName, String studentId, String major, String password, boolean notification, boolean activated) {
+		String nickName, String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)

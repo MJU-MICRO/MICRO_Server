@@ -46,6 +46,10 @@ public class ApiResponse<T> {
 		return of(HttpStatus.OK, message, null);
 	}
 
+	public static <T> ApiResponse<T> ok(String message, T data) {
+		return of(HttpStatus.OK, message, data);
+	}
+
 	public static <T> ApiResponse<T> withError(ErrorCode errorCode, T data) {
 		return new ApiResponse<>(errorCode.getStatus(), errorCode.getMessage(), data);
 	}

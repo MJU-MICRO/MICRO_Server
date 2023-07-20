@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
 import mju.sw.micro.domain.user.dao.RefreshTokenRedisRepository;
@@ -20,6 +19,8 @@ import mju.sw.micro.domain.user.dto.request.EmailSendRequestDto;
 import mju.sw.micro.domain.user.dto.request.LoginRequestDto;
 import mju.sw.micro.domain.user.dto.request.RefreshTokenRequestDto;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
+import mju.sw.micro.domain.user.dto.response.LoginResponseDto;
+import mju.sw.micro.domain.user.dto.response.RefreshTokenResponseDto;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.constants.EmailConstants.VerifyEmailConstants;
 import mju.sw.micro.global.constants.JwtConstants;
@@ -87,7 +88,7 @@ public class AuthService {
 		return ApiResponse.ok("회원가입에 성공했습니다.");
 	}
 
-	public ApiResponse<String> login(LoginRequestDto dto, HttpServletResponse response) {
+	public ApiResponse<LoginResponseDto> login(LoginRequestDto dto) {
 		Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.AUTH_NOT_FOUND);
@@ -96,14 +97,15 @@ public class AuthService {
 		if (!encoder.matches(dto.getPassword(), user.getPassword())) {
 			return ApiResponse.withError(ErrorCode.INVALID_PASSWORD);
 		}
-		String refreshToken = jwtService.createTokensAndAddHeaders(user.getEmail(), response);
+		String accessToken = jwtService.createAccessToken(dto.getEmail());
+		String refreshToken = jwtService.createRefreshToken();
 		String expirationDate = TimeUtil.generateExpiration(JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME);
 		refreshTokenRedisRepository.save(
 			RefreshToken.of(user.getEmail(), JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME, refreshToken, expirationDate));
-		return ApiResponse.ok("로그인에 성공했습니다.");
+		return ApiResponse.ok("로그인에 성공했습니다.", LoginResponseDto.of(accessToken, refreshToken));
 	}
 
-	public ApiResponse<String> refreshJwtTokens(RefreshTokenRequestDto dto, HttpServletResponse response) {
+	public ApiResponse<RefreshTokenResponseDto> reissueJwtTokens(RefreshTokenRequestDto dto) {
 		if (!jwtService.isTokenValid(dto.getRefreshToken())) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN);
 		}
@@ -112,11 +114,12 @@ public class AuthService {
 			return ApiResponse.withError(ErrorCode.TOKEN_NOT_FOUND);
 		}
 		RefreshToken refreshToken = optionalToken.get();
-		String reIssuedRefreshToken = jwtService.createTokensAndAddHeaders(refreshToken.getEmail(), response);
+		String reIssuedAccessToken = jwtService.createAccessToken(refreshToken.getEmail());
+		String reIssuedRefreshToken = jwtService.createRefreshToken();
 		refreshTokenRedisRepository.delete(refreshToken);
 		refreshTokenRedisRepository.save(
 			RefreshToken.of(refreshToken.getEmail(), JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME,
 				reIssuedRefreshToken, TimeUtil.generateExpiration(JwtConstants.REFRESH_TOKEN_EXPIRATION_TIME)));
-		return ApiResponse.ok("토큰 재발급에 성공했습니다.");
+		return ApiResponse.ok("토큰 재발급에 성공했습니다.", RefreshTokenResponseDto.of(reIssuedAccessToken, reIssuedRefreshToken));
 	}
 }
