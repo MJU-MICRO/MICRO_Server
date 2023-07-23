@@ -21,13 +21,13 @@ import mju.sw.micro.domain.user.dto.request.RefreshTokenRequestDto;
 import mju.sw.micro.domain.user.dto.request.SignUpRequestDto;
 import mju.sw.micro.domain.user.dto.response.LoginResponseDto;
 import mju.sw.micro.domain.user.dto.response.RefreshTokenResponseDto;
+import mju.sw.micro.global.adapter.MailService;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.constants.EmailConstants.VerifyEmailConstants;
 import mju.sw.micro.global.constants.JwtConstants;
 import mju.sw.micro.global.error.exception.ErrorCode;
 import mju.sw.micro.global.security.jwt.JwtService;
 import mju.sw.micro.global.utils.CodeUtil;
-import mju.sw.micro.global.utils.MailUtil;
 import mju.sw.micro.global.utils.TimeUtil;
 
 @Service
@@ -36,7 +36,7 @@ import mju.sw.micro.global.utils.TimeUtil;
 public class AuthService {
 
 	private final UserRepository userRepository;
-	private final MailUtil mailUtil;
+	private final MailService mailService;
 	private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 	private final EmailCodeRedisRepository emailCodeRedisRepository;
 	private final PasswordEncoder encoder;
@@ -44,7 +44,8 @@ public class AuthService {
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		String emailCode = CodeUtil.generateRandomCode();
-		mailUtil.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE, VerifyEmailConstants.EMAIL_CONTENT_HTML,
+		mailService.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE,
+			VerifyEmailConstants.EMAIL_CONTENT_HTML,
 			emailCode);
 		String expirationDate = TimeUtil.generateExpiration(VerifyEmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
 		EmailCode code = EmailCode.of(dto.getEmail(), emailCode, VerifyEmailConstants.EMAIL_TOKEN_EXPIRATION_TIME,
