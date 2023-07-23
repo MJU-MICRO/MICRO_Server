@@ -23,7 +23,7 @@ import mju.sw.micro.domain.user.dto.response.LoginResponseDto;
 import mju.sw.micro.domain.user.dto.response.RefreshTokenResponseDto;
 import mju.sw.micro.global.adapter.MailService;
 import mju.sw.micro.global.common.response.ApiResponse;
-import mju.sw.micro.global.constants.EmailConstants.VerifyEmailConstants;
+import mju.sw.micro.global.constants.EmailConstants;
 import mju.sw.micro.global.constants.JwtConstants;
 import mju.sw.micro.global.error.exception.ErrorCode;
 import mju.sw.micro.global.security.jwt.JwtService;
@@ -44,11 +44,11 @@ public class AuthService {
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		String emailCode = CodeUtil.generateRandomCode();
-		mailService.sendMessage(dto.getEmail(), VerifyEmailConstants.EMAIL_TITLE,
-			VerifyEmailConstants.EMAIL_CONTENT_HTML,
+		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_TITLE,
+			EmailConstants.EMAIL_CONTENT_HTML,
 			emailCode);
-		String expirationDate = TimeUtil.generateExpiration(VerifyEmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
-		EmailCode code = EmailCode.of(dto.getEmail(), emailCode, VerifyEmailConstants.EMAIL_TOKEN_EXPIRATION_TIME,
+		String expirationDate = TimeUtil.generateExpiration(EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
+		EmailCode code = EmailCode.of(dto.getEmail(), emailCode, EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME,
 			expirationDate);
 		emailCodeRedisRepository.save(code);
 		return ApiResponse.ok("이메일을 성공적으로 보냈습니다.");

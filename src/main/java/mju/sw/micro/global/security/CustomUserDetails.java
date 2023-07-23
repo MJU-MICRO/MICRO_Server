@@ -1,7 +1,6 @@
 package mju.sw.micro.global.security;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +15,7 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 		return user.getUserRoles()
 			.stream()
 			.map(userRole -> new SimpleGrantedAuthority(userRole.getRole().name()))
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	//user field 추가 가능
