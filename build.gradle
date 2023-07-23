@@ -111,6 +111,9 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
+    //s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {

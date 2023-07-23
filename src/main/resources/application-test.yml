@@ -31,3 +31,10 @@ jwt:
   sql:
     init:
       mode: never
+aws:
+  s3:
+    access-key: test-access-key
+    secret-key: test-secret-key
+    region: ap-northeast-2
+    bucket: test-bucket
+    path: test-path
