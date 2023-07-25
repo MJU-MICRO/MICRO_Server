@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimeUtil {
+	private TimeUtil() {
+	}
+
 	public static String generateExpiration(long seconds) {
 		long currentTimeMillis = System.currentTimeMillis();
 		long expirationMillis = currentTimeMillis + (seconds);

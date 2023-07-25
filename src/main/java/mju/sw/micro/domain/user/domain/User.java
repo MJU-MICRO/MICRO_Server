@@ -51,7 +51,7 @@ public class User extends BaseEntity {
 
 	@Builder
 	public User(String name, String email, String phoneNumber, String interest, String introduction, String nickName,
-		String studentId, String major, String password, boolean notification) {
+		String studentId, String major, String password, boolean notification, String imageUrl) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -62,7 +62,7 @@ public class User extends BaseEntity {
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
-		//		this.imageUrl = null;
+		this.imageUrl = imageUrl;
 	}
 
 	public static User createUser(String name, String email, String phoneNumber, String interest, String introduction,

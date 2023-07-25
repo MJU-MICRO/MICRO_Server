@@ -68,7 +68,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		User user = MockFactory.createMockUser();
 		userRepository.save(user);
 		// when
-		ApiResponse<String> response = authService.signUp(signUpRequestDto);
+		ApiResponse<String> response = authService.signUp(signUpRequestDto, null);
 		// then
 		Assertions.assertEquals("이미 가입된 이메일 입니다.", response.getMessage());
 	}
@@ -86,7 +86,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 			MockConstants.MOCK_MAJOR, MockConstants.MOCK_INTEREST, MockConstants.MOCK_PHONE_NUMBER,
 			MockConstants.MOCK_INTRODUCTION, false, "wrongCode");
 		// when
-		ApiResponse<String> response = authService.signUp(dto);
+		ApiResponse<String> response = authService.signUp(dto, null);
 		// then
 		Assertions.assertEquals("인증 토큰이 유효하지 않습니다.", response.getMessage());
 	}

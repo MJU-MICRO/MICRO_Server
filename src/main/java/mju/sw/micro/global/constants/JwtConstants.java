@@ -1,6 +1,8 @@
 package mju.sw.micro.global.constants;
 
 public final class JwtConstants {
+	private JwtConstants() {
+	}
 
 	public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 	public static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
