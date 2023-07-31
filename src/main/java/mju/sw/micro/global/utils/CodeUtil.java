@@ -4,6 +4,9 @@ import java.security.SecureRandom;
 
 public class CodeUtil {
 
+	private CodeUtil() {
+	}
+
 	public static String generateRandomCode() {
 		SecureRandom random = new SecureRandom();
 		StringBuilder key = new StringBuilder();
