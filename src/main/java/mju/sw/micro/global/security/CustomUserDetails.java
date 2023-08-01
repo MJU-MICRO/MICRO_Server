@@ -78,4 +78,7 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 	public boolean isEnabled() {
 		return true;
 	}
+
+	public Long getUserId() {return user.getId();}
+
 }
