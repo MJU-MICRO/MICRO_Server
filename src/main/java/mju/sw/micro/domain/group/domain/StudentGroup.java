@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import mju.sw.micro.domain.group.dto.StudentGroupRequestDto;
 import mju.sw.micro.global.security.CustomUserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
+@Table(name = "student_groups")
 @Getter
 public class StudentGroup {
 	@Id
@@ -23,10 +25,10 @@ public class StudentGroup {
 	private String[] relatedTag;
 	private String[] activityTitle;
 	private String[] activityContent;
-	private boolean isRecruit = false;
-	private boolean isApprove = false;
+	private boolean isRecruit;
+	private boolean isApprove;
 	@Column(nullable = false)
-	private Campus campus;
+	private String campus;
 	@Column(nullable = false)
 	private String largeCategory;
 	@Column(nullable = false)
@@ -36,10 +38,10 @@ public class StudentGroup {
 	@Column(nullable = false)
 	private String subCategory;
 
-	public StudentGroup(StudentGroupRequestDto requestDto, CustomUserDetails userDetails) {
+	public StudentGroup(StudentGroupRequestDto requestDto, CustomUserDetails userDetails, String imageUrl) {
 		this.presidentId = userDetails.getUserId();
 		this.groupName = requestDto.getGroupName();
-		this.logoImageUrl = requestDto.getLogoImageUrl();
+		this.logoImageUrl = imageUrl;
 		this.establishedYear = requestDto.getEstablishedYear();
 		this.numOfMember = requestDto.getNumOfMember();
 		this.introduction = requestDto.getIntroduction();
