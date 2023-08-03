@@ -18,8 +18,10 @@ import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.domain.user.dto.request.LogoutRequestDto;
 import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
 import mju.sw.micro.domain.user.dto.response.UserInfoResponseDto;
+import mju.sw.micro.global.adapter.MailService;
 import mju.sw.micro.global.adapter.S3Uploader;
 import mju.sw.micro.global.common.response.ApiResponse;
+import mju.sw.micro.global.constants.EmailConstants;
 import mju.sw.micro.global.error.exception.ErrorCode;
 import mju.sw.micro.global.security.CustomUserDetails;
 import mju.sw.micro.global.security.jwt.JwtService;
@@ -35,6 +37,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;
 	private final S3Uploader s3Uploader;
+	private final MailService mailService;
 
 	public ApiResponse<String> logout(LogoutRequestDto dto, CustomUserDetails userDetails) {
 		String accessToken = dto.getAccessToken();
@@ -95,6 +98,19 @@ public class UserService {
 		}
 		user.updateUser(dto);
 		return ApiResponse.ok("회원 정보 수정 완료");
+	}
+
+	@Transactional
+	public ApiResponse<Void> deleteUser(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		userRepository.delete(user);
+		mailService.sendMessage(user.getEmail(), EmailConstants.EMAIL_WITHDRAWAL_TITLE,
+			EmailConstants.EMAIL_WITHDRAWAL_CONTENT_HTML, user.getEmail());
+		return ApiResponse.ok("회원 탈퇴 완료");
 	}
 
 	private ApiResponse<String> uploadImage(MultipartFile multipartFile) {

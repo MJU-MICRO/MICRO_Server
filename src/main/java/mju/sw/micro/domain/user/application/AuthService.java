@@ -49,8 +49,8 @@ public class AuthService {
 
 	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		String emailCode = CodeUtil.generateRandomCode();
-		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_TITLE,
-			EmailConstants.EMAIL_CONTENT_HTML,
+		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_SIGN_UP_TITLE,
+			EmailConstants.EMAIL_SIGN_UP_CONTENT_HTML,
 			emailCode);
 		String expirationDate = TimeUtil.generateExpiration(EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
 		EmailCode code = EmailCode.of(dto.getEmail(), emailCode, EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME,
