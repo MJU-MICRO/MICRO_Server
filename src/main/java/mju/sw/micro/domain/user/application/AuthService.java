@@ -84,11 +84,10 @@ public class AuthService {
 			.nickName(dto.getNickName())
 			.studentId(dto.getStudentId())
 			.major(dto.getMajor())
-			.interest(dto.getInterest())
 			.phoneNumber(dto.getPhoneNumber())
 			.introduction(dto.getIntroduction())
 			.notification(dto.getNotification())
-			.imageUrl(imageUrl)
+			.profileImageUrl(imageUrl)
 			.build();
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);
