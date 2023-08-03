@@ -4,14 +4,23 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import mju.sw.micro.IntegrationTestSupporter;
 import mju.sw.micro.domain.user.domain.User;
+import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
 import mju.sw.micro.domain.user.dto.response.UserInfoResponseDto;
 import mju.sw.micro.global.common.response.ApiResponse;
+import mju.sw.micro.global.utils.MockConstants;
 import mju.sw.micro.global.utils.MockFactory;
 
 class UserServiceTest extends IntegrationTestSupporter {
+	private final String updatePassword = "testPassword";
+	private final String updatePhoneNumber = "010-9876-5432";
+	private final String updateName = "testName";
+	private final String updateMajor = "testMajor";
+	private final String updateNickName = "testNickName";
+	private final String updateIntroduction = "testIntroduction";
 
 	@AfterEach
 	void tearDown() {
@@ -20,7 +29,7 @@ class UserServiceTest extends IntegrationTestSupporter {
 
 	@DisplayName("회원 정보를 가져온다.")
 	@Test
-	void getUserInfoTest() {
+	void getUserInfo() {
 		// given
 		User user = MockFactory.createMockUser();
 		userRepository.save(user);
@@ -35,5 +44,78 @@ class UserServiceTest extends IntegrationTestSupporter {
 		Assertions.assertEquals(user.getMajor(), userInfoResponseDto.getMajor());
 		Assertions.assertEquals(user.getIntroduction(), userInfoResponseDto.getIntroduction());
 
+	}
+
+	@DisplayName("존재하지 않는 이메일을 입력하여 회원 정보를 가져오지 못한다.")
+	@Test
+	void getUserInfoWithInvalidEmail() {
+		// given
+		User user = MockFactory.createMockUser();
+		userRepository.save(user);
+		//when
+		ApiResponse<UserInfoResponseDto> userResponse = userService.getUserInfo("invalidEmail");
+		// then
+		HttpStatus status = userResponse.getStatus();
+		Assertions.assertEquals(HttpStatus.NOT_FOUND, status);
+	}
+
+	@DisplayName("회원 정보를 수정한다")
+	@Test
+	void modifyUserInfo() {
+		// given
+		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
+			false);
+		userRepository.save(user);
+		//when
+		UserModifyRequestDto dto = new UserModifyRequestDto(MockConstants.MOCK_USER_PASSWORD, updatePassword,
+			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
+		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, user.getEmail());
+		User updatedUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL).get();
+		// then
+		Assertions.assertEquals(HttpStatus.OK, userResponse.getStatus());
+		Assertions.assertEquals("회원 정보 수정 완료", userResponse.getMessage());
+		Assertions.assertEquals(updatePhoneNumber, updatedUser.getPhoneNumber());
+		Assertions.assertEquals(updateMajor, updatedUser.getMajor());
+		Assertions.assertEquals(updateNickName, updatedUser.getNickName());
+		Assertions.assertEquals(updateIntroduction, updatedUser.getIntroduction());
+		Assertions.assertEquals(updateName, updatedUser.getName());
+	}
+
+	@DisplayName("존재하지 않는 이메일을 입력하여 회원 정보를 수정하지 못한다.")
+	@Test
+	void modifyUserInfoWithInvalidEmail() {
+		// given
+		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
+			false);
+		userRepository.save(user);
+		//when
+		UserModifyRequestDto dto = new UserModifyRequestDto(MockConstants.MOCK_USER_PASSWORD, updatePassword,
+			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
+		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, "InvalidEmail");
+		// then
+		Assertions.assertEquals(HttpStatus.NOT_FOUND, userResponse.getStatus());
+		Assertions.assertEquals("요청한 리소스를 찾을 수 없습니다.", userResponse.getMessage());
+	}
+
+	@DisplayName("틀린 비밀번호를 입력하여 회원 정보를 수정하지 못한다.")
+	@Test
+	void modifyUserInfoWithInvalidPassword() {
+		// given
+		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
+			false);
+		userRepository.save(user);
+		//when
+		UserModifyRequestDto dto = new UserModifyRequestDto("InvalidPassword", updatePassword,
+			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
+		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, user.getEmail());
+		// then
+		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, userResponse.getStatus());
+		Assertions.assertEquals("인증이 필요한 접근입니다.", userResponse.getMessage());
 	}
 }
