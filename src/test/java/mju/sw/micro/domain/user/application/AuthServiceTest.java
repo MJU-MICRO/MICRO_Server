@@ -36,7 +36,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	}
 
 	@AfterEach
-	void deleteUser() {
+	void tearDown() {
 		userRepository.deleteAll();
 	}
 
@@ -49,7 +49,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 	// 		TimeUtil.generateExpiration(MockConstants.MOCK_TOKEN_EXPIRATION_TIME));
 	// 	emailCodeRedisRepository.save(emailCode);
 	// 	// when
-	// 	ApiResponse<String> response = authService.signUp(signUpRequestDto);
+	// 	ApiResponse<String> response = authService.signUp(signUpRequestDto, null);
 	// 	Optional<User> optionalUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL);
 	// 	Assertions.assertTrue(optionalUser.isPresent(), "회원가입에 실패했습니다.");
 	// 	User user = optionalUser.get();

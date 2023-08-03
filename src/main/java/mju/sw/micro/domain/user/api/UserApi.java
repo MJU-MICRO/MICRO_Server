@@ -3,6 +3,7 @@ package mju.sw.micro.domain.user.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,5 +58,12 @@ public class UserApi {
 		@RequestPart(value = "file", required = false) MultipartFile imageFile,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.modifyUserInfo(dto, imageFile, userDetails.getEmail());
+	}
+
+	@Operation(summary = "회원 탈퇴")
+	@DeleteMapping("/my")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<Void> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+		return userService.deleteUser(userDetails.getEmail());
 	}
 }
