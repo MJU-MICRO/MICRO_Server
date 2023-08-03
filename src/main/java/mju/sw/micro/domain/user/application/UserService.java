@@ -51,7 +51,7 @@ public class UserService {
 			return ApiResponse.withError(ErrorCode.NOT_FOUND);
 		}
 		User user = optionalUser.get();
-		return ApiResponse.ok(
+		return ApiResponse.ok("회원 정보 조회 완료",
 			UserInfoResponseDto.builder()
 				.profileImageUrl(user.getProfileImageUrl())
 				.name(user.getName())

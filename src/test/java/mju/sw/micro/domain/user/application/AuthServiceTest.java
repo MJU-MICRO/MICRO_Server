@@ -31,7 +31,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		verificationCode = CodeUtil.generateRandomCode();
 		signUpRequestDto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL, MockConstants.MOCK_USER_PASSWORD,
 			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME, MockConstants.MOCK_STUDENT_ID,
-			MockConstants.MOCK_MAJOR, MockConstants.MOCK_INTEREST, MockConstants.MOCK_PHONE_NUMBER,
+			MockConstants.MOCK_MAJOR, MockConstants.MOCK_PHONE_NUMBER,
 			MockConstants.MOCK_INTRODUCTION, false, verificationCode);
 	}
 
@@ -83,7 +83,7 @@ class AuthServiceTest extends IntegrationTestSupporter {
 		emailCodeRedisRepository.save(emailCode);
 		SignUpRequestDto dto = SignUpRequestDto.of(MockConstants.MOCK_USER_EMAIL, MockConstants.MOCK_USER_PASSWORD,
 			MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_NICKNAME, MockConstants.MOCK_STUDENT_ID,
-			MockConstants.MOCK_MAJOR, MockConstants.MOCK_INTEREST, MockConstants.MOCK_PHONE_NUMBER,
+			MockConstants.MOCK_MAJOR, MockConstants.MOCK_PHONE_NUMBER,
 			MockConstants.MOCK_INTRODUCTION, false, "wrongCode");
 		// when
 		ApiResponse<String> response = authService.signUp(dto, null);
