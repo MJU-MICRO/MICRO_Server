@@ -76,7 +76,7 @@ public class AuthService {
 		if (!isVerified) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN);
 		}
-		String imageUrl = uploadImage(imageFile).getData();
+		String profileImageUrl = uploadImage(imageFile).getData();
 		User user = User.builder()
 			.email(dto.getEmail())
 			.password(encoder.encode(dto.getPassword()))
@@ -87,7 +87,7 @@ public class AuthService {
 			.phoneNumber(dto.getPhoneNumber())
 			.introduction(dto.getIntroduction())
 			.notification(dto.getNotification())
-			.profileImageUrl(imageUrl)
+			.profileImageUrl(profileImageUrl)
 			.build();
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);

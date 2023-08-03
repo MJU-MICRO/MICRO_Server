@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
+import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
 
 @Entity
 @Table(name = "users")
@@ -48,8 +49,8 @@ public class User extends BaseEntity {
 	private boolean notification;
 
 	@Builder
-	public User(String name, String email, String phoneNumber, String introduction, String nickName,
-		String studentId, String major, String password, boolean notification, String profileImageUrl) {
+	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,
+		String major, String password, boolean notification, String profileImageUrl) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -62,8 +63,8 @@ public class User extends BaseEntity {
 		this.profileImageUrl = profileImageUrl;
 	}
 
-	public static User createUser(String name, String email, String phoneNumber, String introduction,
-		String nickName, String studentId, String major, String password, boolean notification) {
+	public static User createUser(String name, String email, String phoneNumber, String introduction, String nickName,
+		String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)
@@ -82,5 +83,24 @@ public class User extends BaseEntity {
 		UserRole userRole = new UserRole();
 		userRole.associate(this, role);
 		userRoles.add(userRole);
+	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
+
+	public void updateUserProfile(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void updateUser(UserModifyRequestDto dto) {
+		this.phoneNumber = dto.getPhoneNumber();
+		this.name = dto.getName();
+		this.nickName = dto.getNickName();
+		this.major = dto.getMajor();
+	}
+
+	public void updateIntroduction(String updatedIntroduction) {
+		this.introduction = updatedIntroduction;
 	}
 }
