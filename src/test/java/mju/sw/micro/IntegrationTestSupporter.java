@@ -9,6 +9,7 @@ import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
 import mju.sw.micro.domain.club.dao.ClubRepository;
 import mju.sw.micro.domain.user.application.AuthService;
+import mju.sw.micro.domain.user.application.UserService;
 import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
 import mju.sw.micro.domain.user.dao.UserRepository;
 
@@ -29,6 +30,8 @@ public abstract class IntegrationTestSupporter {
 	protected ClubRecruitmentRepository recruitmentRepository;
 	@Autowired
 	protected UserRepository userRepository;
+	@Autowired
+	protected UserService userService;
 	@Autowired
 	protected AuthService authService;
 	@Autowired

@@ -23,7 +23,6 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
 			.studentId(customUser.studentId())
 			.nickName(customUser.nickName())
 			.introduction(customUser.introduction())
-			.interest(customUser.interest())
 			.password(customUser.password())
 			.build();
 		user.addRole(customUser.role());
