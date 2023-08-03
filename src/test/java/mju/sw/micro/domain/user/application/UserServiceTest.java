@@ -1,5 +1,7 @@
 package mju.sw.micro.domain.user.application;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -117,5 +119,33 @@ class UserServiceTest extends IntegrationTestSupporter {
 		// then
 		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, userResponse.getStatus());
 		Assertions.assertEquals("인증이 필요한 접근입니다.", userResponse.getMessage());
+	}
+
+	@DisplayName("회원 탈퇴를 한다.")
+	@Test
+	void deleteUser() {
+		// given
+		User user = MockFactory.createMockUser();
+		userRepository.save(user);
+		//when
+		ApiResponse<Void> userResponse = userService.deleteUser(user.getEmail());
+		Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+		// then
+		Assertions.assertEquals(HttpStatus.OK, userResponse.getStatus());
+		Assertions.assertEquals("회원 탈퇴 완료", userResponse.getMessage());
+		Assertions.assertTrue(optionalUser.isEmpty());
+	}
+
+	@DisplayName("잘못된 이메일을 입력하여 회원 탈퇴를 실패한다.")
+	@Test
+	void deleteUserWithInvalidEmail() {
+		// given
+		User user = MockFactory.createMockUser();
+		userRepository.save(user);
+		//when
+		ApiResponse<Void> userResponse = userService.deleteUser("invalidEmail");
+		// then
+		Assertions.assertEquals(HttpStatus.NOT_FOUND, userResponse.getStatus());
+		Assertions.assertEquals("요청한 리소스를 찾을 수 없습니다.", userResponse.getMessage());
 	}
 }
