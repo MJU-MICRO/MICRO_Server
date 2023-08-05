@@ -47,7 +47,7 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final S3Uploader s3Uploader;
 
-	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
+	public ApiResponse<Void> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		String emailCode = CodeUtil.generateRandomCode();
 		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_SIGN_UP_TITLE,
 			EmailConstants.EMAIL_SIGN_UP_CONTENT_HTML,
@@ -68,7 +68,7 @@ public class AuthService {
 	}
 
 	@Transactional
-	public ApiResponse<String> signUp(SignUpRequestDto dto, MultipartFile imageFile) {
+	public ApiResponse<Void> signUp(SignUpRequestDto dto, MultipartFile imageFile) {
 		if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
 			return ApiResponse.withError(ErrorCode.ALREADY_SIGN_UP_EMAIL);
 		}

@@ -34,12 +34,11 @@ public class UserApi {
 	/**
 	 * 로그아웃, AuthApi에 로그아웃을 두지 않은 이유는 로그아웃 할 때는 UserDetails를 이용하기 때문에 토큰이 필요함
 	 * 필터에서 api/auth는 anonymous로 설정되어 있어서 액세스 토큰이 있으면 권한이 있는 사용자이기 때문에 UnAuthorized 됨
-	 *
 	 */
 	@Operation(summary = "로그아웃")
 	@PostMapping("/logout")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<String> logout(@Validated @RequestBody LogoutRequestDto dto,
+	public ApiResponse<Void> logout(@Validated @RequestBody LogoutRequestDto dto,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.logout(dto, userDetails);
 	}

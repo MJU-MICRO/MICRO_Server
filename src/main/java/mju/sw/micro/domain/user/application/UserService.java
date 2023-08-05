@@ -39,7 +39,7 @@ public class UserService {
 	private final S3Uploader s3Uploader;
 	private final MailService mailService;
 
-	public ApiResponse<String> logout(LogoutRequestDto dto, CustomUserDetails userDetails) {
+	public ApiResponse<Void> logout(LogoutRequestDto dto, CustomUserDetails userDetails) {
 		String accessToken = dto.getAccessToken();
 		if (!jwtService.isTokenValid(accessToken)) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN);
