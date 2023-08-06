@@ -38,3 +38,6 @@ aws:
     region: ap-northeast-2
     bucket: test-bucket
     path: test-path
+app:
+  origin:
+    url: test-origin-url

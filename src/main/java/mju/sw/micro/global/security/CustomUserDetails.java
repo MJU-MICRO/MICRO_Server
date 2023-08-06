@@ -80,4 +80,5 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 	}
 
 	public Long getUserId() {return user.getId();}
+
 }

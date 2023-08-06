@@ -37,7 +37,31 @@ jobs:
                 - name: MICRO_USER_NAME
                   value: ${{ secrets.MICRO_USER_NAME}}
                 - name: MICRO_PASSWORD
-                  value: ${{ secrets.MICRO_PASSWORD}}
+                  value: ${{ secrets.MICRO_PASSWORD}}          
+                - name: MICRO_REDIS_HOST
+                  value: ${{ secrets.MICRO_REDIS_HOST}}
+                - name: MICRO_REDIS_PORT
+                  value: ${{ secrets.MICRO_REDIS_PORT}}
+                - name: MICRO_REDIS_PASSWORD
+                  value: ${{ secrets.MICRO_REDIS_PASSWORD}}
+                - name: MICRO_JWT_SECRET_KEY
+                  value: ${{ secrets.MICRO_JWT_SECRET_KEY}}
+                - name: MAIL_USERNAME
+                  value: ${{ secrets.MAIL.USERNAME}}
+                - name: MAIL_PASSWORD
+                  value: ${{ secrets.MAIL.PASSWORD}}
+                - name: AWS_S3_ACCESS_KEY
+                  value: ${{ secrets.AWS_S3_ACCESS_KEY}}
+                - name: AWS_S3_SECRET_KEY
+                  value: ${{ secrets.AWS_S3_SECRET_KEY}}
+                - name: AWS_S3_REGION
+                  value: ${{ secrets.AWS_S3_REGION}}
+                - name: AWS_S3_BUCKET
+                  value: ${{ secrets.AWS_S3_BUCKET}}
+                - name: AWS_S3_PATH
+                  value: ${{ secrets.AWS_S3_PATH}}
+                - name: ORIGIN_URL
+                  value: ${{ secrets.ORIGIN_URL}}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
