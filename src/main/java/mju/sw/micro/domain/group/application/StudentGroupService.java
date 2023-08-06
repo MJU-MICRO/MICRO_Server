@@ -119,6 +119,8 @@ public class StudentGroupService {
 			Long presidentId = studentGroup.get().getPresidentId();
 			if (presidentId.equals(userDetails.getUserId())) {
 				studentGroupDao.deleteById(groupId);
+			} else {
+//				return ApiResponse.withError("해당 단체를 삭제할 권한이 없습니다");
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);
