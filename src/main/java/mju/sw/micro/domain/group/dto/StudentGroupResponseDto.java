@@ -1,32 +1,29 @@
 package mju.sw.micro.domain.group.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import mju.sw.micro.domain.group.domain.Campus;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-public class StudentGroupRequestDto {
-	@NotBlank
+@Setter
+public class StudentGroupResponseDto {
+	private Long id;
 	private String groupName;
+	private Long presidentId;
 	private String logoImageUrl;
 	private int establishedYear;
 	private String numOfMember;
-	@NotBlank
 	private String introduction;
 	private List<String> relationMajor;
 	private List<String> relatedTag;
 	private List<String> activityTitle;
 	private List<String> activityContent;
-	@NotBlank
+	private boolean isRecruit;
+	private boolean isApprove;
 	private String campus;
-	@NotBlank
 	private String largeCategory;
-	@NotBlank
 	private String mediumCategory;
-	@NotBlank
 	private String smallCategory;
-	@NotBlank
 	private String subCategory;
 }
