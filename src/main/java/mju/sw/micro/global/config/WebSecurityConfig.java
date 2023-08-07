@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,10 +19,11 @@ import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final MicroAccessDeniedHandler accessDeniedHandler;
+
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtExceptionFilter jwtExceptionFilter;
 	private final CorsConfig corsConfig;
@@ -38,7 +39,10 @@ public class WebSecurityConfig {
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
-				authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/"))
+				authorizeHttpRequests -> authorizeHttpRequests
+					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
+					.permitAll()
+					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()
@@ -54,6 +58,6 @@ public class WebSecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 }

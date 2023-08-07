@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
+import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
 
 @Entity
 @Table(name = "users")
@@ -40,45 +41,41 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
-	private String interest;
-	@Column(nullable = false)
 	private String major;
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
-	private String imageUrl;
+	private String profileImageUrl;
 	private boolean notification;
 
 	@Builder
-	public User(String name, String email, String phoneNumber, String interest, String introduction, String nickName,
-		String studentId, String major, String password, boolean notification, String imageUrl) {
+	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,
+		String major, String password, boolean notification, String profileImageUrl) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.nickName = nickName;
 		this.studentId = studentId;
 		this.major = major;
-		this.interest = interest;
 		this.phoneNumber = phoneNumber;
 		this.introduction = introduction;
 		this.notification = notification;
-		this.imageUrl = imageUrl;
+		this.profileImageUrl = profileImageUrl;
 	}
 
-	public static User createUser(String name, String email, String phoneNumber, String interest, String introduction,
-		String nickName, String studentId, String major, String password, boolean notification) {
+	public static User createUser(String name, String email, String phoneNumber, String introduction, String nickName,
+		String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)
 			.phoneNumber(phoneNumber)
-			.interest(interest)
 			.introduction(introduction)
 			.nickName(nickName)
 			.studentId(studentId)
 			.major(major)
 			.password(password)
 			.notification(notification)
-			//			.imageUrl(null)
+			.profileImageUrl(null)
 			.build();
 	}
 
@@ -86,5 +83,24 @@ public class User extends BaseEntity {
 		UserRole userRole = new UserRole();
 		userRole.associate(this, role);
 		userRoles.add(userRole);
+	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
+
+	public void updateUserProfile(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void updateUser(UserModifyRequestDto dto) {
+		this.phoneNumber = dto.getPhoneNumber();
+		this.name = dto.getName();
+		this.nickName = dto.getNickName();
+		this.major = dto.getMajor();
+	}
+
+	public void updateIntroduction(String updatedIntroduction) {
+		this.introduction = updatedIntroduction;
 	}
 }

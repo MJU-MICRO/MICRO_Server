@@ -47,10 +47,10 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final S3Uploader s3Uploader;
 
-	public ApiResponse<String> sendEmailAndSaveCode(EmailSendRequestDto dto) {
+	public ApiResponse<Void> sendEmailAndSaveCode(EmailSendRequestDto dto) {
 		String emailCode = CodeUtil.generateRandomCode();
-		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_TITLE,
-			EmailConstants.EMAIL_CONTENT_HTML,
+		mailService.sendMessage(dto.getEmail(), EmailConstants.EMAIL_SIGN_UP_TITLE,
+			EmailConstants.EMAIL_SIGN_UP_CONTENT_HTML,
 			emailCode);
 		String expirationDate = TimeUtil.generateExpiration(EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME);
 		EmailCode code = EmailCode.of(dto.getEmail(), emailCode, EmailConstants.EMAIL_TOKEN_EXPIRATION_TIME,
@@ -68,7 +68,7 @@ public class AuthService {
 	}
 
 	@Transactional
-	public ApiResponse<String> signUp(SignUpRequestDto dto, MultipartFile imageFile) {
+	public ApiResponse<Void> signUp(SignUpRequestDto dto, MultipartFile imageFile) {
 		if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
 			return ApiResponse.withError(ErrorCode.ALREADY_SIGN_UP_EMAIL);
 		}
@@ -76,7 +76,7 @@ public class AuthService {
 		if (!isVerified) {
 			return ApiResponse.withError(ErrorCode.INVALID_TOKEN);
 		}
-		String imageUrl = uploadImage(imageFile).getData();
+		String profileImageUrl = uploadImage(imageFile).getData();
 		User user = User.builder()
 			.email(dto.getEmail())
 			.password(encoder.encode(dto.getPassword()))
@@ -84,11 +84,10 @@ public class AuthService {
 			.nickName(dto.getNickName())
 			.studentId(dto.getStudentId())
 			.major(dto.getMajor())
-			.interest(dto.getInterest())
 			.phoneNumber(dto.getPhoneNumber())
 			.introduction(dto.getIntroduction())
 			.notification(dto.getNotification())
-			.imageUrl(imageUrl)
+			.profileImageUrl(profileImageUrl)
 			.build();
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);
