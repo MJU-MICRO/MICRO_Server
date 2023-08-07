@@ -19,7 +19,7 @@ import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final MicroAccessDeniedHandler accessDeniedHandler;
@@ -43,6 +43,8 @@ public class WebSecurityConfig {
 					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
+					.permitAll()
+					.requestMatchers(new AntPathRequestMatcher("/api/sample/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()
