@@ -61,7 +61,6 @@ public class StudentGroup {
 	private String smallCategory;
 	@Column(nullable = false)
 	private String subCategory;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<GroupRecruitment> recruitmentList = new LinkedList<>();
