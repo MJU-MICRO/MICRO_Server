@@ -30,10 +30,6 @@ public class StudentGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long presidentId;
-
-	// 단체 회장 식별은 이메일로 하는게 좋을 것 같습니다.
-	private String presidentEmail;
-
 	@Column(nullable = false)
 	private String groupName;
 	private String logoImageUrl;
