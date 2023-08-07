@@ -34,7 +34,7 @@ public class AuthApi {
 	@Operation(summary = "이메일 송신 및 인증 코드 저장")
 	@PostMapping("/email")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<String> sendEmailAndSaveCode(@Validated @RequestBody EmailSendRequestDto dto) {
+	public ApiResponse<Void> sendEmailAndSaveCode(@Validated @RequestBody EmailSendRequestDto dto) {
 		return authService.sendEmailAndSaveCode(dto);
 	}
 
@@ -48,7 +48,7 @@ public class AuthApi {
 	@Operation(summary = "회원가입")
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse<String> signUp(@Validated @RequestPart("dto") SignUpRequestDto dto,
+	public ApiResponse<Void> signUp(@Validated @RequestPart("dto") SignUpRequestDto dto,
 		@RequestPart(value = "file", required = false) MultipartFile imageFile) {
 		return authService.signUp(dto, imageFile);
 	}

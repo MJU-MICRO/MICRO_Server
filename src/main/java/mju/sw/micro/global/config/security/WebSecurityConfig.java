@@ -1,4 +1,4 @@
-package mju.sw.micro.global.config.security;
+package mju.sw.micro.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -14,7 +14,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.domain.Role;
-import mju.sw.micro.global.config.CorsConfig;
 import mju.sw.micro.global.security.MicroAccessDeniedHandler;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
@@ -24,6 +23,7 @@ import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final MicroAccessDeniedHandler accessDeniedHandler;
+
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtExceptionFilter jwtExceptionFilter;
 	private final CorsConfig corsConfig;
@@ -39,8 +39,8 @@ public class WebSecurityConfig {
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
-				authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(
-						new AntPathRequestMatcher("/swagger-ui/**"))
+				authorizeHttpRequests -> authorizeHttpRequests
+					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
 					.permitAll()
@@ -58,6 +58,6 @@ public class WebSecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 }

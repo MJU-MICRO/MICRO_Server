@@ -35,11 +35,6 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 	}
 
 	@Override
-	public String getInterest() {
-		return user.getInterest();
-	}
-
-	@Override
 	public String getIntroduction() {
 		return user.getIntroduction();
 	}
@@ -79,6 +74,8 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 		return true;
 	}
 
-	public Long getUserId() {return user.getId();}
+	public Long getUserId() {
+		return user.getId();
+	}
 
 }

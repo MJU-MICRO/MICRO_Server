@@ -25,14 +25,12 @@ public class SignUpRequestDto {
 	@NotBlank
 	private String major;
 	@NotBlank
-	private String interest;
-	@NotBlank
 	private String phoneNumber;
 	private String introduction;
 	private Boolean notification;
 
 	public static SignUpRequestDto of(String email, String password, String name, String nickName, String studentId,
-		String major, String interest, String phoneNumber, String introduction,
+		String major, String phoneNumber, String introduction,
 		Boolean notification, String code) {
 		SignUpRequestDto dto = new SignUpRequestDto();
 		dto.email = email;
@@ -41,7 +39,6 @@ public class SignUpRequestDto {
 		dto.nickName = nickName;
 		dto.studentId = studentId;
 		dto.major = major;
-		dto.interest = interest;
 		dto.phoneNumber = phoneNumber;
 		dto.introduction = introduction;
 		dto.notification = notification;
