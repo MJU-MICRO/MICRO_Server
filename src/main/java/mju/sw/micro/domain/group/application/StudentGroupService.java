@@ -128,6 +128,32 @@ public class StudentGroupService {
 		return ApiResponse.ok("해당 단체를 삭제했습니다");
 	}
 
+	public ApiResponse<String> mandateGroupPresident(CustomUserDetails userDetails, Long groupId, Long userId) {
+		Optional<User> optionalUser = userRepository.findById(userDetails.getUserId());
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(NOT_FOUND);
+		}
+		Optional<StudentGroup> studentGroup = studentGroupDao.findById(groupId);
+		if (studentGroup.isPresent()) {
+			Long presidentId = studentGroup.get().getPresidentId();
+			if (presidentId.equals(userDetails.getUserId())) {
+				Optional<User> successor = userRepository.findById(userId);
+				if (successor.isEmpty()) {
+					return ApiResponse.withError(NOT_FOUND);
+				}
+				StudentGroup group = studentGroup.get();
+				group.setPresidentId(userId);
+				studentGroupDao.save(group);
+				successor.get().addRole(ROLE_PRESIDENT);
+			} else {
+//				return ApiResponse.withError("권한이 없습니다");
+			}
+		} else {
+			throw new NotFoundException("Group not found with id: " + groupId);
+		}
+		return ApiResponse.ok("회장 권한을 위임했습니다");
+	}
+
 	private ApiResponse<String> uploadImage(MultipartFile multipartFile) {
 		if (multipartFile == null) {
 			return ApiResponse.ok("이미지가 없습니다", null);

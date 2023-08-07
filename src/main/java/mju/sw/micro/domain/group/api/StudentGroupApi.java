@@ -46,14 +46,20 @@ public class StudentGroupApi {
 	}
 
 	@Operation(summary = "학생단체 승인/거부")
-	@PutMapping("/group/approve/{groupId}")
+	@PutMapping("/admin/group/approve/{groupId}")
 	public ApiResponse<String> approveGroup(@PathVariable Long groupId) {
 		return studentGroupService.approveGroup(groupId);
 	}
 
 	@Operation(summary = "학생단체 삭제")
-	@DeleteMapping("/group/delete/{groupId}")
+	@DeleteMapping("/president/group/delete/{groupId}")
 	public ApiResponse<String> deleteGroup(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId) {
 		return studentGroupService.deleteGroup(userDetails, groupId);
+	}
+
+	@Operation(summary = "회장 위임")
+	@PutMapping("/president/group/mandate/{groupId}/{userId}")
+	public ApiResponse<String> mandateGroupPresident(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId, @PathVariable Long userId) {
+		return studentGroupService.mandateGroupPresident(userDetails, groupId, userId);
 	}
 }
