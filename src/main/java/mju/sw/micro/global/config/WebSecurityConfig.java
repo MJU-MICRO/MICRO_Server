@@ -19,10 +19,11 @@ import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final MicroAccessDeniedHandler accessDeniedHandler;
+
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final JwtExceptionFilter jwtExceptionFilter;
 	private final CorsConfig corsConfig;
@@ -38,7 +39,10 @@ public class WebSecurityConfig {
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
-				authorizeHttpRequests -> authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/"))
+				authorizeHttpRequests -> authorizeHttpRequests
+					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
+					.permitAll()
+					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()
