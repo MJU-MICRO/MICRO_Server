@@ -1,10 +1,23 @@
 package mju.sw.micro.domain.group.domain;
 
-import jakarta.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import mju.sw.micro.domain.group.dto.StudentGroupRequestDto;
+import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.global.security.CustomUserDetails;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "student_groups")
@@ -14,6 +27,10 @@ public class StudentGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long presidentId;
+
+	// 단체 회장 식별은 이메일로 하는게 좋을 것 같습니다.
+	private String presidentEmail;
+	
 	@Column(nullable = false)
 	private String groupName;
 	private String logoImageUrl;
@@ -38,6 +55,10 @@ public class StudentGroup {
 	@Column(nullable = false)
 	private String subCategory;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<GroupRecruitment> recruitmentList = new LinkedList<>();
+
 	public StudentGroup(StudentGroupRequestDto requestDto, CustomUserDetails userDetails, String imageUrl) {
 		this.presidentId = userDetails.getUserId();
 		this.groupName = requestDto.getGroupName();
@@ -59,6 +80,16 @@ public class StudentGroup {
 	}
 
 	public StudentGroup() {
+	}
+
+	public void clearRecruitments() {
+		this.recruitmentList.forEach(GroupRecruitment::clearGroup);
+		this.recruitmentList.clear();
+	}
+
+	public void addRecruitment(GroupRecruitment recruitment) {
+		this.recruitmentList.add(recruitment);
+		recruitment.setGroup(this);
 	}
 }
 

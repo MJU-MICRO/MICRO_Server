@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import mju.sw.micro.domain.club.application.ClubRecruitmentDeleteService;
-import mju.sw.micro.domain.club.application.ClubRecruitmentService;
-import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
-import mju.sw.micro.domain.club.dao.ClubRepository;
+import mju.sw.micro.domain.recruitment.dao.GroupRecruitmentRepository;
 import mju.sw.micro.domain.user.application.AuthService;
 import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
 import mju.sw.micro.domain.user.dao.UserRepository;
@@ -16,17 +13,17 @@ import mju.sw.micro.domain.user.dao.UserRepository;
 @ActiveProfiles("test")
 public abstract class IntegrationTestSupporter {
 
-	@Autowired
+	/*@Autowired
 	protected ClubRecruitmentService clubRecruitmentService;
 
 	@Autowired
 	protected ClubRecruitmentDeleteService clubRecruitmentdeleteService;
 
 	@Autowired
-	protected ClubRepository clubRepository;
+	protected ClubRepository clubRepository;*/
 
 	@Autowired
-	protected ClubRecruitmentRepository recruitmentRepository;
+	protected GroupRecruitmentRepository recruitmentRepository;
 	@Autowired
 	protected UserRepository userRepository;
 	@Autowired

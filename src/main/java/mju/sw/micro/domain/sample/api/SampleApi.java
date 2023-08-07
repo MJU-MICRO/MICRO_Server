@@ -31,13 +31,4 @@ public class SampleApi {
 		return "Hello Micro Server!";
 	}
 
-	@GetMapping("/admin/hello")
-	public String helloAdmin() {
-		return "Hello Admin!";
-	}
-
-	@GetMapping("/president/hello")
-	public String helloPresident() {
-		return "Hello President!";
-	}
 }
