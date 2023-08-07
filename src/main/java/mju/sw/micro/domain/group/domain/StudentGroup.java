@@ -2,13 +2,17 @@ package mju.sw.micro.domain.group.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import mju.sw.micro.domain.group.dto.StudentGroupRequestDto;
 import mju.sw.micro.global.security.CustomUserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Entity
 @Table(name = "student_groups")
 @Getter
+@Setter
 public class StudentGroup {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +25,14 @@ public class StudentGroup {
 	private String numOfMember;
 	@Column(nullable = false)
 	private String introduction;
-	private String[] relationMajor;
-	private String[] relatedTag;
-	private String[] activityTitle;
-	private String[] activityContent;
+	@ElementCollection
+	private List<String> relationMajor;
+	@ElementCollection
+	private List<String> relatedTag;
+	@ElementCollection
+	private List<String> activityTitle;
+	@ElementCollection
+	private List<String> activityContent;
 	private boolean isRecruit;
 	private boolean isApprove;
 	@Column(nullable = false)
@@ -49,8 +57,8 @@ public class StudentGroup {
 		this.relatedTag = requestDto.getRelatedTag();
 		this.activityTitle = requestDto.getActivityTitle();
 		this.activityContent = requestDto.getActivityContent();
-		this.isRecruit = requestDto.isRecruit();
-		this.isApprove = requestDto.isApprove();
+		this.isRecruit = false;
+		this.isApprove = false;
 		this.campus = requestDto.getCampus();
 		this.largeCategory = requestDto.getLargeCategory();
 		this.mediumCategory = requestDto.getMediumCategory();
