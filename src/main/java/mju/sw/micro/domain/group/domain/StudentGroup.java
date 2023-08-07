@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,8 +21,6 @@ import mju.sw.micro.domain.group.dto.StudentGroupRequestDto;
 import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.global.security.CustomUserDetails;
 
-import java.util.List;
-
 @Entity
 @Table(name = "student_groups")
 @Getter
@@ -34,7 +33,7 @@ public class StudentGroup {
 
 	// 단체 회장 식별은 이메일로 하는게 좋을 것 같습니다.
 	private String presidentEmail;
-	
+
 	@Column(nullable = false)
 	private String groupName;
 	private String logoImageUrl;
