@@ -28,6 +28,9 @@ public class AdminService {
 			return ApiResponse.withError(ErrorCode.NOT_FOUND);
 		}
 		User user = optionalUser.get();
+		if (user.isAdmin()) {
+			return ApiResponse.withError(ErrorCode.BAD_REQUEST);
+		}
 		user.addRole(Role.ROLE_ADMIN);
 		return ApiResponse.ok("관리자 권한 등록에 성공했습니다.");
 	}
@@ -39,6 +42,9 @@ public class AdminService {
 			return ApiResponse.withError(ErrorCode.NOT_FOUND);
 		}
 		User user = optionalUser.get();
+		if (!user.isAdmin()) {
+			return ApiResponse.withError(ErrorCode.BAD_REQUEST);
+		}
 		user.deleteRole(Role.ROLE_ADMIN);
 		return ApiResponse.ok("관리자 권한 해지에 성공했습니다.");
 	}
