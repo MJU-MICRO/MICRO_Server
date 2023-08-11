@@ -25,4 +25,11 @@ public class AdminApi {
 	public ApiResponse<Void> registerAdmin(@Validated AdminRequestDto dto) {
 		return adminService.registerAdmin(dto.getEmail());
 	}
+
+	@Operation(summary = "관리자 해지")
+	@PostMapping("/revoke")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<Void> revokeAdmin(@Validated AdminRequestDto dto) {
+		return adminService.revokeAdmin(dto.getEmail());
+	}
 }
