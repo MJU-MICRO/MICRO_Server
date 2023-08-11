@@ -1,8 +1,11 @@
 package mju.sw.micro.domain.admin.api;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.admin.application.AdminService;
 import mju.sw.micro.domain.admin.dto.request.AdminRequestDto;
+import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.common.response.ApiResponse;
 
 @RestController
@@ -39,5 +43,12 @@ public class AdminApi {
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<Void> deleteUserByAdmin(@Validated AdminRequestDto dto) {
 		return adminService.deleteUserByAdmin(dto.getEmail());
+	}
+
+	@Operation(summary = "관리자 권한 계정 조회")
+	@GetMapping("/retrieve")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<List<User>> getUsersByAdminRole() {
+		return adminService.getUsersByAdminRole();
 	}
 }
