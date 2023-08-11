@@ -85,6 +85,10 @@ public class User extends BaseEntity {
 		userRoles.add(userRole);
 	}
 
+	public void deleteRole(Role role) {
+		userRoles.removeIf(userRole -> userRole.getRole().equals(role));
+	}
+
 	public void updatePassword(String password) {
 		this.password = password;
 	}
@@ -102,5 +106,10 @@ public class User extends BaseEntity {
 
 	public void updateIntroduction(String updatedIntroduction) {
 		this.introduction = updatedIntroduction;
+	}
+
+	public boolean isAdmin() {
+		return userRoles.stream()
+			.anyMatch(userRole -> userRole.getRole().equals(Role.ROLE_ADMIN));
 	}
 }
