@@ -13,6 +13,9 @@ public final class EmailConstants {
 	public static final String EMAIL_WITHDRAWAL_CONTENT_HTML =
 		"<div>" + "Thank you for using our services.<br>" + "Your membership withdrawal is complete. <br>"
 			+ "Your Withdrawal Email : <strong> %s </strong>" + "<div>";
+	public static final String ADMIN_EMAIL_WITHDRAWAL_CONTENT_HTML =
+		"<div>" + "Thank you for using our services.<br>" + "Your account was deleted by an administrator <br>"
+			+ "Your Withdrawal Email : <strong> %s </strong>" + "<div>";
 	public static final Long EMAIL_TOKEN_EXPIRATION_TIME = 60 * 5L * 1000;
 
 }
