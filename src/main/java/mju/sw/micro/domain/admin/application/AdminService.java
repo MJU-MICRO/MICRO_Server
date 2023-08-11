@@ -66,4 +66,9 @@ public class AdminService {
 	public ApiResponse<List<User>> getUsersByAdminRole() {
 		return ApiResponse.ok("관리자 권한을 가진 모든 계정을 조회했습니다.", userRepository.findAllUsersByAdminRole(Role.ROLE_ADMIN));
 	}
+
+	public ApiResponse<List<User>> getUsersWithoutAdminRole() {
+		return ApiResponse.ok("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.",
+			userRepository.findAllUsersWithoutAdminRole(Role.ROLE_ADMIN));
+	}
 }
