@@ -29,4 +29,16 @@ public class AdminService {
 		user.addRole(Role.ROLE_ADMIN);
 		return ApiResponse.ok("관리자 등록에 성공했습니다.");
 	}
+
+	@Transactional
+	public ApiResponse<Void> revokeAdmin(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		user.deleteRole(Role.ROLE_ADMIN);
+		return ApiResponse.ok("관리자 해지에 성공했습니다.");
+	}
+
 }
