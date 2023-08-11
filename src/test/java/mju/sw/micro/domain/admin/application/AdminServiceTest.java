@@ -151,6 +151,22 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		Assertions.assertThat(adminList).hasSize(1);
 		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
 		Assertions.assertThat(adminList.get(0).getMajor()).isEqualTo(MockConstants.MOCK_MAJOR);
+	}
 
+	@DisplayName("관리자 권한을 갖지 않은 모든 계정을 조회")
+	@Test
+	void getUsersWithoutAdminRole() {
+		// given
+		User user = MockFactory.createMockUser();
+		user.addRole(Role.ROLE_USER);
+		userRepository.save(user);
+		// when
+		ApiResponse<List<User>> response = adminService.getUsersWithoutAdminRole();
+		List<User> userList = response.getData();
+		// then
+		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.");
+		Assertions.assertThat(userList).hasSize(1);
+		Assertions.assertThat(userList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
+		Assertions.assertThat(userList.get(0).getMajor()).isEqualTo(MockConstants.MOCK_MAJOR);
 	}
 }
