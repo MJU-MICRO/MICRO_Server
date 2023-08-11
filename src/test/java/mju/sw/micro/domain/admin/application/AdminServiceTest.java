@@ -1,9 +1,10 @@
 package mju.sw.micro.domain.admin.application;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,14 @@ import mju.sw.micro.global.utils.MockConstants;
 import mju.sw.micro.global.utils.MockFactory;
 
 class AdminServiceTest extends IntegrationTestSupporter {
-
-	@AfterEach
-	void tearDown() {
+	@BeforeEach
+	void tearDownBefore() {
 		userRepository.deleteAll();
 	}
+	// @AfterEach
+	// void tearDown() {
+	// 	userRepository.deleteAll();
+	// }
 
 	@DisplayName("관리자 권한을 등록한다")
 	@Test
@@ -130,5 +134,23 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		ApiResponse<Void> userResponse = adminService.deleteUserByAdmin("invalidEmail");
 		// then
 		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@DisplayName("관리자 권한을 가진 모든 계정을 조회")
+	@Test
+	void getUsersByAdminRole() {
+		// given
+		User user = MockFactory.createMockUser();
+		user.addRole(Role.ROLE_ADMIN);
+		userRepository.save(user);
+		// when
+		ApiResponse<List<User>> response = adminService.getUsersByAdminRole();
+		List<User> adminList = response.getData();
+		// then
+		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 가진 모든 계정을 조회했습니다.");
+		Assertions.assertThat(adminList).hasSize(1);
+		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
+		Assertions.assertThat(adminList.get(0).getMajor()).isEqualTo(MockConstants.MOCK_MAJOR);
+
 	}
 }
