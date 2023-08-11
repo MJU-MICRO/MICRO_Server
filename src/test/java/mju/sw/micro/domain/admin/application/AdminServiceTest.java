@@ -50,6 +50,19 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
+	@DisplayName("관리자 권한 등록을 하기 전에 이미 관리자인 경우 등록을 실패한다")
+	@Test
+	void registerAdminWithAlreadyIsAdmin() {
+		// given
+		User user = MockFactory.createMockUser();
+		user.addRole(Role.ROLE_ADMIN);
+		userRepository.save(user);
+		// when
+		ApiResponse<Void> userResponse = adminService.registerAdmin(user.getEmail());
+		// then
+		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+
 	@DisplayName("관리자 권한을 해지한다")
 	@Test
 	void revokeAdmin() {
@@ -63,6 +76,19 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		// then
 		Assertions.assertThat(updatedUser.isAdmin()).isFalse();
 		Assertions.assertThat(userResponse.getMessage()).isEqualTo("관리자 권한 해지에 성공했습니다.");
+	}
+
+	@DisplayName("관리자 권한 해지를 하기 전에 이미 관리자가 아닌 경우 해지를 실패한다")
+	@Test
+	void revokeAdminWithAlreadyIsNotAdmin() {
+		// given
+		User user = MockFactory.createMockUser();
+		user.addRole(Role.ROLE_USER);
+		userRepository.save(user);
+		// when
+		ApiResponse<Void> userResponse = adminService.revokeAdmin(user.getEmail());
+		// then
+		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@DisplayName("존재하지 않는 이메일을 입력하여 관리자 권한 해지를 실패한다")
