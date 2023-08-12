@@ -39,7 +39,7 @@ public class AdminService {
 	@Transactional
 	public ApiResponse<Void> revokeAdmin(String adminEmail, String reqEmail) {
 		if (adminEmail.equals(reqEmail)) {
-			return ApiResponse.withError(ErrorCode.ADMIN_NOT_DELETE_MYSELF);
+			return ApiResponse.withError(ErrorCode.ADMIN_NOT_REVOKE_MYSELF);
 		}
 		Optional<User> optionalUser = userRepository.findByEmail(reqEmail);
 		if (optionalUser.isEmpty()) {
@@ -54,8 +54,11 @@ public class AdminService {
 	}
 
 	@Transactional
-	public ApiResponse<Void> deleteUserByAdmin(String email) {
-		Optional<User> optionalUser = userRepository.findByEmail(email);
+	public ApiResponse<Void> deleteUserByAdmin(String adminEmail, String reqEmail) {
+		if (adminEmail.equals(reqEmail)) {
+			return ApiResponse.withError(ErrorCode.ADMIN_NOT_DELETE_MYSELF);
+		}
+		Optional<User> optionalUser = userRepository.findByEmail(reqEmail);
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(ErrorCode.NOT_FOUND);
 		}

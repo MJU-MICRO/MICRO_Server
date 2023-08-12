@@ -45,8 +45,9 @@ public class AdminApi {
 	@Operation(summary = "관리자 권한으로 계정 삭제")
 	@DeleteMapping("/user/delete")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<Void> deleteUserByAdmin(@Validated @RequestBody AdminRequestDto dto) {
-		return adminService.deleteUserByAdmin(dto.getEmail());
+	public ApiResponse<Void> deleteUserByAdmin(@AuthenticationPrincipal CustomUserDetails userDetails,
+		@Validated @RequestBody AdminRequestDto dto) {
+		return adminService.deleteUserByAdmin(userDetails.getEmail(), dto.getEmail());
 	}
 
 	@Operation(summary = "관리자 권한 계정 조회")
