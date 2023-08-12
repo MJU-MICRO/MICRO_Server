@@ -21,10 +21,6 @@ class AdminServiceTest extends IntegrationTestSupporter {
 	void tearDownBefore() {
 		userRepository.deleteAll();
 	}
-	// @AfterEach
-	// void tearDown() {
-	// 	userRepository.deleteAll();
-	// }
 
 	@DisplayName("관리자 권한을 등록한다")
 	@Test
@@ -71,26 +67,34 @@ class AdminServiceTest extends IntegrationTestSupporter {
 	@Test
 	void revokeAdmin() {
 		// given
+		User adminUser = MockFactory.createMockAdminUser();
+		adminUser.addRole(Role.ROLE_ADMIN);
+		userRepository.save(adminUser);
+
 		User user = MockFactory.createMockUser();
 		user.addRole(Role.ROLE_ADMIN);
 		userRepository.save(user);
 		// when
-		ApiResponse<Void> userResponse = adminService.revokeAdmin(user.getEmail());
+		ApiResponse<Void> userResponse = adminService.revokeAdmin(adminUser.getEmail(), user.getEmail());
 		User updatedUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL).get();
 		// then
 		Assertions.assertThat(updatedUser.isAdmin()).isFalse();
 		Assertions.assertThat(userResponse.getMessage()).isEqualTo("관리자 권한 해지에 성공했습니다.");
 	}
 
-	@DisplayName("관리자 권한 해지를 하기 전에 이미 관리자가 아닌 경우 해지를 실패한다")
+	@DisplayName("관리자 권한 해지 전 이미 관리자가 아닌 경우 해지를 실패한다")
 	@Test
 	void revokeAdminWithAlreadyIsNotAdmin() {
 		// given
+		User adminUser = MockFactory.createMockAdminUser();
+		adminUser.addRole(Role.ROLE_ADMIN);
+		userRepository.save(adminUser);
+
 		User user = MockFactory.createMockUser();
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);
 		// when
-		ApiResponse<Void> userResponse = adminService.revokeAdmin(user.getEmail());
+		ApiResponse<Void> userResponse = adminService.revokeAdmin(adminUser.getEmail(), user.getEmail());
 		// then
 		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
@@ -99,13 +103,32 @@ class AdminServiceTest extends IntegrationTestSupporter {
 	@Test
 	void revokeAdminWithInvalidEmail() {
 		// given
+		User adminUser = MockFactory.createMockAdminUser();
+		adminUser.addRole(Role.ROLE_ADMIN);
+		userRepository.save(adminUser);
+
 		User user = MockFactory.createMockUser();
 		user.addRole(Role.ROLE_ADMIN);
 		userRepository.save(user);
 		// when
-		ApiResponse<Void> userResponse = adminService.revokeAdmin("invalidEmail");
+		ApiResponse<Void> userResponse = adminService.revokeAdmin(adminUser.getEmail(), "invalidEmail");
 		// then
 		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@DisplayName("관리자 자신은 자신의 계정 권한을 해지할 수 없다.")
+	@Test
+	void revokeAdminWithAdminCannotDeleteMyself() {
+		// given
+		User adminUser = MockFactory.createMockAdminUser();
+		adminUser.addRole(Role.ROLE_ADMIN);
+		userRepository.save(adminUser);
+		// when
+		ApiResponse<Void> userResponse = adminService.revokeAdmin(adminUser.getEmail(),
+			MockConstants.MOCK_ADMIN_USER_EMAIL);
+		// then
+		Assertions.assertThat(userResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+		Assertions.assertThat(userResponse.getMessage()).isEqualTo("관리자 자신의 계정은 삭제할 수 없습니다.");
 	}
 
 	@DisplayName("관리자가 계정을 삭제한다")
