@@ -29,14 +29,14 @@ public class AdminApi {
 
 	@Operation(summary = "관리자 권한 부여")
 	@PatchMapping("/register")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> registerAdmin(@Validated @RequestBody AdminRequestDto dto) {
 		return adminService.registerAdmin(dto.getEmail());
 	}
 
 	@Operation(summary = "관리자 권한 해지")
 	@PatchMapping("/revoke")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> revokeAdmin(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@Validated @RequestBody AdminRequestDto dto) {
 		return adminService.revokeAdmin(userDetails.getEmail(), dto.getEmail());
@@ -44,7 +44,7 @@ public class AdminApi {
 
 	@Operation(summary = "관리자 권한으로 계정 삭제")
 	@DeleteMapping("/user/delete")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> deleteUserByAdmin(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@Validated @RequestBody AdminRequestDto dto) {
 		return adminService.deleteUserByAdmin(userDetails.getEmail(), dto.getEmail());
