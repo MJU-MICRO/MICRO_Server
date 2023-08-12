@@ -25,6 +25,7 @@ public enum ErrorCode {
 
 	//User
 	ALREADY_SIGN_UP_EMAIL(HttpStatus.BAD_REQUEST, "이미 가입된 이메일 입니다."),
+	ADMIN_NOT_DELETE_MYSELF(HttpStatus.BAD_REQUEST, "관리자 자신의 계정은 삭제할 수 없습니다."),
 	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "인증 토큰이 유효하지 않습니다."),
 	AUTH_NOT_FOUND(HttpStatus.UNAUTHORIZED, "등록되지 않은 계정입니다."),
 	INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),

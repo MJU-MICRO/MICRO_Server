@@ -35,7 +35,7 @@ public class DBInitConfig {
 			final String adminPw = "testadmin";
 
 			try {
-				User user = User.createUser("testUser", "testuser@gmail.com", "010-0000-0000", "반갑습니다. 테스트 유저입니다",
+				User user = User.createUser("testUser", "testuser@mju.ac.kr", "010-0000-0000", "반갑습니다. 테스트 유저입니다",
 					"testuser", "testUserId", "소프트웨어", encoder.encode(userPw), false);
 				user.addRole(Role.ROLE_USER);
 				Field id = user.getClass().getDeclaredField("id");
@@ -46,7 +46,7 @@ public class DBInitConfig {
 				userRepository.save(user);
 
 				// Init Admin
-				User adminUser = User.createUser("testAdmin", "testadmin@gmail.com", "010-1234-6789",
+				User adminUser = User.createUser("testAdmin", "testadmin@mju.ac.kr", "010-1234-6789",
 					"반갑습니다. 테스트 관리자입니다",
 					"testadmin", "testAdminId", "데이터테크놀리지", encoder.encode(adminPw), false);
 				adminUser.addRole(Role.ROLE_USER);
