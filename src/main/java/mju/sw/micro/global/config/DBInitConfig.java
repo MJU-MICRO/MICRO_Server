@@ -45,6 +45,16 @@ public class DBInitConfig {
 
 				userRepository.save(user);
 
+				User user2 = User.createUser("testUser2", "testuser2@mju.ac.kr", "011-0000-0000", "반갑습니다. 테스트 유저입니다",
+					"testuser2", "testUserId2", "소프트웨어", encoder.encode(userPw), false);
+				user2.addRole(Role.ROLE_USER);
+				Field id2 = user.getClass().getDeclaredField("id");
+
+				id2.setAccessible(true);
+				id2.set(user, 5152161L);
+
+				userRepository.save(user2);
+
 				// Init Admin
 				User adminUser = User.createUser("testAdmin", "testadmin@mju.ac.kr", "010-1234-6789",
 					"반갑습니다. 테스트 관리자입니다",
@@ -57,6 +67,18 @@ public class DBInitConfig {
 				adminId.set(user, 15135181L);
 
 				userRepository.save(adminUser);
+
+				User adminUser2 = User.createUser("testAdmin2", "testadmin2@mju.ac.kr", "011-1234-6789",
+					"반갑습니다. 테스트 관리자입니다!",
+					"testadmin2", "testAdminId2", "데이터테크놀리지", encoder.encode(adminPw), false);
+				adminUser2.addRole(Role.ROLE_USER);
+				adminUser2.addRole(Role.ROLE_ADMIN);
+				Field adminId2 = adminUser2.getClass().getDeclaredField("id");
+
+				adminId2.setAccessible(true);
+				adminId2.set(user, 5123123L);
+
+				userRepository.save(adminUser2);
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.admin.application.AdminService;
 import mju.sw.micro.domain.admin.dto.request.AdminRequestDto;
+import mju.sw.micro.domain.admin.dto.response.AdminInfoResponseDto;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
@@ -53,7 +54,7 @@ public class AdminApi {
 	@Operation(summary = "관리자 권한 계정 조회")
 	@GetMapping("/retrieve")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<List<User>> getUsersByAdminRole() {
+	public ApiResponse<List<AdminInfoResponseDto>> getUsersByAdminRole() {
 		return adminService.getUsersByAdminRole();
 	}
 

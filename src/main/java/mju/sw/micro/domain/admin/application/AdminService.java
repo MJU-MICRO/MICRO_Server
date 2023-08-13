@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import mju.sw.micro.domain.admin.dto.response.AdminInfoResponseDto;
 import mju.sw.micro.domain.user.dao.UserRepository;
 import mju.sw.micro.domain.user.domain.Role;
 import mju.sw.micro.domain.user.domain.User;
@@ -69,8 +70,19 @@ public class AdminService {
 		return ApiResponse.ok("관리자가 회원을 삭제했습니다.");
 	}
 
-	public ApiResponse<List<User>> getUsersByAdminRole() {
-		return ApiResponse.ok("관리자 권한을 가진 모든 계정을 조회했습니다.", userRepository.findAllUsersByAdminRole(Role.ROLE_ADMIN));
+	public ApiResponse<List<AdminInfoResponseDto>> getUsersByAdminRole() {
+		List<User> adminList = userRepository.findAllUsersByAdminRole(Role.ROLE_ADMIN);
+		if (adminList.isEmpty()) {
+			return ApiResponse.ok("관리자 권한을 가진 계정이 없습니다.", List.of());
+		}
+		List<AdminInfoResponseDto> responseDtoList = adminList.stream()
+			.map(user -> new AdminInfoResponseDto(
+				user.getName(),
+				user.getCreatedDateTime().toLocalDate(),
+				user.getPhoneNumber(),
+				user.getEmail()))
+			.toList();
+		return ApiResponse.ok("관리자 권한을 가진 모든 계정을 조회했습니다.", responseDtoList);
 	}
 
 	public ApiResponse<List<User>> getUsersWithoutAdminRole() {

@@ -3,6 +3,8 @@ package mju.sw.micro.domain.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +44,7 @@ public class User extends BaseEntity {
 	private String password;
 	@Column(nullable = false)
 	private String major;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
