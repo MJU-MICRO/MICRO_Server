@@ -1,5 +1,6 @@
 package mju.sw.micro.domain.admin.application;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import mju.sw.micro.IntegrationTestSupporter;
+import mju.sw.micro.domain.admin.dto.response.AdminInfoResponseDto;
 import mju.sw.micro.domain.user.domain.Role;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.common.response.ApiResponse;
@@ -190,13 +192,25 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		user.addRole(Role.ROLE_ADMIN);
 		userRepository.save(user);
 		// when
-		ApiResponse<List<User>> response = adminService.getUsersByAdminRole();
-		List<User> adminList = response.getData();
+		ApiResponse<List<AdminInfoResponseDto>> response = adminService.getUsersByAdminRole();
+		List<AdminInfoResponseDto> adminList = response.getData();
 		// then
 		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 가진 모든 계정을 조회했습니다.");
 		Assertions.assertThat(adminList).hasSize(1);
 		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
-		Assertions.assertThat(adminList.get(0).getMajor()).isEqualTo(MockConstants.MOCK_MAJOR);
+		Assertions.assertThat(adminList.get(0).getName()).isEqualTo(MockConstants.MOCK_USER_NAME);
+		Assertions.assertThat(adminList.get(0).getPhoneNumber()).isEqualTo(MockConstants.MOCK_PHONE_NUMBER);
+	}
+
+	@DisplayName("관리자 권한을 가진 모든 계정을 조회했지만 관리자가 없다면 빈 리스트를 반환한다")
+	@Test
+	void getUsersByAdminRoleWithNoAdmin() {
+		// given
+		// when
+		ApiResponse<List<AdminInfoResponseDto>> response = adminService.getUsersByAdminRole();
+		// then
+		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 가진 계정이 없습니다.");
+		Assertions.assertThat(response.getData()).isEqualTo(Collections.emptyList());
 	}
 
 	@DisplayName("관리자 권한을 갖지 않은 모든 계정을 조회한다")
