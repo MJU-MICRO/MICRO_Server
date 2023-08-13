@@ -188,16 +188,16 @@ class AdminServiceTest extends IntegrationTestSupporter {
 	@Test
 	void getUsersByAdminRole() {
 		// given
-		User user = MockFactory.createMockUser();
-		user.addRole(Role.ROLE_ADMIN);
-		userRepository.save(user);
+		User admin = MockFactory.createMockAdminUser();
+		admin.addRole(Role.ROLE_ADMIN);
+		userRepository.save(admin);
 		// when
 		ApiResponse<List<AdminInfoResponseDto>> response = adminService.getUsersByAdminRole();
 		List<AdminInfoResponseDto> adminList = response.getData();
 		// then
 		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 가진 모든 계정을 조회했습니다.");
 		Assertions.assertThat(adminList).hasSize(1);
-		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
+		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_ADMIN_USER_EMAIL);
 		Assertions.assertThat(adminList.get(0).getName()).isEqualTo(MockConstants.MOCK_USER_NAME);
 		Assertions.assertThat(adminList.get(0).getPhoneNumber()).isEqualTo(MockConstants.MOCK_PHONE_NUMBER);
 	}
@@ -221,12 +221,25 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		user.addRole(Role.ROLE_USER);
 		userRepository.save(user);
 		// when
-		ApiResponse<List<User>> response = adminService.getUsersWithoutAdminRole();
-		List<User> userList = response.getData();
+		ApiResponse<List<AdminInfoResponseDto>> response = adminService.getUsersWithoutAdminRole();
+		List<AdminInfoResponseDto> userList = response.getData();
 		// then
 		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.");
 		Assertions.assertThat(userList).hasSize(1);
 		Assertions.assertThat(userList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
-		Assertions.assertThat(userList.get(0).getMajor()).isEqualTo(MockConstants.MOCK_MAJOR);
+		Assertions.assertThat(userList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_USER_EMAIL);
+		Assertions.assertThat(userList.get(0).getName()).isEqualTo(MockConstants.MOCK_USER_NAME);
+		Assertions.assertThat(userList.get(0).getPhoneNumber()).isEqualTo(MockConstants.MOCK_PHONE_NUMBER);
+	}
+
+	@DisplayName("관리자 권한을 갖지 않은 모든 계정을 조회했지만 일반 사용자가 없다면 빈 리스트를 반환한다")
+	@Test
+	void getUsersByAdminRoleWithNoUser() {
+		// given
+		// when
+		ApiResponse<List<AdminInfoResponseDto>> response = adminService.getUsersWithoutAdminRole();
+		// then
+		Assertions.assertThat(response.getMessage()).isEqualTo("관리자 권한을 제외한 계정 정보가 없습니다.");
+		Assertions.assertThat(response.getData()).isEqualTo(Collections.emptyList());
 	}
 }
