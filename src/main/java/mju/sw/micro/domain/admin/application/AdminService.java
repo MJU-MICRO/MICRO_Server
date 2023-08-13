@@ -1,5 +1,6 @@
 package mju.sw.micro.domain.admin.application;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,20 +74,33 @@ public class AdminService {
 	public ApiResponse<List<AdminInfoResponseDto>> getUsersByAdminRole() {
 		List<User> adminList = userRepository.findAllUsersByAdminRole(Role.ROLE_ADMIN);
 		if (adminList.isEmpty()) {
-			return ApiResponse.ok("관리자 권한을 가진 계정이 없습니다.", List.of());
+			return ApiResponse.ok("관리자 권한을 가진 계정이 없습니다.", Collections.emptyList());
 		}
 		List<AdminInfoResponseDto> responseDtoList = adminList.stream()
 			.map(user -> new AdminInfoResponseDto(
 				user.getName(),
 				user.getCreatedDateTime().toLocalDate(),
 				user.getPhoneNumber(),
-				user.getEmail()))
+				user.getEmail(),
+				user.getProfileImageUrl()))
 			.toList();
 		return ApiResponse.ok("관리자 권한을 가진 모든 계정을 조회했습니다.", responseDtoList);
 	}
 
-	public ApiResponse<List<User>> getUsersWithoutAdminRole() {
-		return ApiResponse.ok("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.",
-			userRepository.findAllUsersWithoutAdminRole(Role.ROLE_ADMIN));
+	public ApiResponse<List<AdminInfoResponseDto>> getUsersWithoutAdminRole() {
+		List<User> userList = userRepository.findAllUsersWithoutAdminRole(Role.ROLE_ADMIN);
+		if (userList.isEmpty()) {
+			return ApiResponse.ok("관리자 권한을 제외한 계정 정보가 없습니다.", Collections.emptyList());
+		}
+		List<AdminInfoResponseDto> responseDtoList = userList.stream()
+			.map(user -> new AdminInfoResponseDto(
+				user.getName(),
+				user.getCreatedDateTime().toLocalDate(),
+				user.getPhoneNumber(),
+				user.getEmail(),
+				user.getProfileImageUrl()))
+			.toList();
+		return ApiResponse.ok("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.", responseDtoList);
 	}
+
 }

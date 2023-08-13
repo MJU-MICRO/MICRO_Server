@@ -12,4 +12,5 @@ public class AdminInfoResponseDto {
 	private LocalDate registrationDate;
 	private String phoneNumber;
 	private String email;
+	private String profileImageUrl;
 }
