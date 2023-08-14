@@ -9,6 +9,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import mju.sw.micro.domain.club.api.ClubRecruitmentApi;
+import mju.sw.micro.domain.club.api.ClubRecruitmentDeleteApi;
+import mju.sw.micro.domain.club.application.ClubRecruitmentDeleteService;
+import mju.sw.micro.domain.club.application.ClubRecruitmentService;
 import mju.sw.micro.domain.sample.api.SampleApi;
 import mju.sw.micro.domain.sample.application.SampleService;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
@@ -16,6 +20,8 @@ import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = {
 	SampleApi.class,
+	ClubRecruitmentApi.class,
+	ClubRecruitmentDeleteApi.class
 })
 @ActiveProfiles("test")
 public abstract class ApiTestSupporter {
@@ -30,4 +36,10 @@ public abstract class ApiTestSupporter {
 
 	@MockBean
 	protected SampleService sampleService;
+
+	@MockBean
+	protected ClubRecruitmentService clubRecruitmentService;
+
+	@MockBean
+	protected ClubRecruitmentDeleteService clubRecruitmentDeleteService;
 }

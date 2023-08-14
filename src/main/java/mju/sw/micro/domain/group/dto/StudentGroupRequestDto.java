@@ -2,7 +2,6 @@ package mju.sw.micro.domain.group.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import mju.sw.micro.domain.group.domain.Campus;
 
 import java.util.List;
 

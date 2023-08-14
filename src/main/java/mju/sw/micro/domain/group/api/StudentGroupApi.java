@@ -62,4 +62,10 @@ public class StudentGroupApi {
 	public ApiResponse<String> mandateGroupPresident(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId, @PathVariable Long userId) {
 		return studentGroupService.mandateGroupPresident(userDetails, groupId, userId);
 	}
+
+//	@Operation(summary = "학생 단체 수정")
+//	@PatchMapping("/president/group/update/{groupId}")
+//	public ApiResponse<String> updateGroup(@Valid @RequestPart("dto") StudentGroupRequestDto studentGroupRequestDto,@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId){
+//		return studentGroupService.updateGroup(studentGroupRequestDto,userDetails,groupId);
+//	}
 }
