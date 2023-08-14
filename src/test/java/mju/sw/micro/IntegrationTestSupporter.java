@@ -6,10 +6,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import mju.sw.micro.domain.club.application.ClubRecruitmentDeleteService;
-import mju.sw.micro.domain.club.application.ClubRecruitmentService;
-import mju.sw.micro.domain.club.dao.ClubRecruitmentRepository;
-import mju.sw.micro.domain.club.dao.ClubRepository;
 import mju.sw.micro.domain.user.application.AuthService;
 import mju.sw.micro.domain.user.application.UserService;
 import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
@@ -19,18 +15,6 @@ import mju.sw.micro.global.adapter.MailService;
 @SpringBootTest
 @ActiveProfiles("test")
 public abstract class IntegrationTestSupporter {
-
-	@Autowired
-	protected ClubRecruitmentService clubRecruitmentService;
-
-	@Autowired
-	protected ClubRecruitmentDeleteService clubRecruitmentdeleteService;
-
-	@Autowired
-	protected ClubRepository clubRepository;
-
-	@Autowired
-	protected ClubRecruitmentRepository recruitmentRepository;
 	@Autowired
 	protected UserRepository userRepository;
 	@Autowired
