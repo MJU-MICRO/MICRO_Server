@@ -18,8 +18,10 @@ public enum ErrorCode {
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요한 접근입니다."),
 
 	// Club
-	INVALID_CLUB_ID(HttpStatus.BAD_REQUEST, "Request Body를 통해 전달된 학생 단체의 식별자가 유효하지 않습니다."),
+	INVALID_GROUP_ID(HttpStatus.BAD_REQUEST, "Request Body를 통해 전달된 학생 단체의 식별자가 유효하지 않습니다."),
 	INVALID_CLUB_RECRUITMENT_ID(HttpStatus.BAD_REQUEST, "Request Body를 통해 전달된 학생 단체 모집 공고의 식별자가 유효하지 않습니다."),
+	UNMATCH_PRESIDENT_ID(HttpStatus.BAD_REQUEST, "모집 공고를 게시할 권한이 없습니다."),
+	INVALID_GROUP_RECRUITMENT_ID(HttpStatus.BAD_REQUEST, "요청을 통해 전달 된 학생 단체 모집 공고 식별자가 유효하지 않습니다."),
 
 	//User
 	ALREADY_SIGN_UP_EMAIL(HttpStatus.BAD_REQUEST, "이미 가입된 이메일 입니다."),
@@ -28,6 +30,7 @@ public enum ErrorCode {
 	INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),
 	TOKEN_NOT_EXPIRED(HttpStatus.BAD_REQUEST, "잘못된 토큰 정보이거나 토큰이 만료되지 않았습니다."),
 	TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다.");
+
 	// Other Domain
 	// ...
 

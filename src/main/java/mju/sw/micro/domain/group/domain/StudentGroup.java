@@ -1,13 +1,25 @@
 package mju.sw.micro.domain.group.domain;
 
-import jakarta.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import mju.sw.micro.domain.group.dto.StudentGroupRequestDto;
+import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.global.security.CustomUserDetails;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Entity
 @Table(name = "student_groups")
@@ -45,6 +57,9 @@ public class StudentGroup {
 	private String smallCategory;
 	@Column(nullable = false)
 	private String subCategory;
+	@JsonIgnore
+	@OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<GroupRecruitment> recruitmentList = new LinkedList<>();
 
 	public StudentGroup(StudentGroupRequestDto requestDto, CustomUserDetails userDetails, String imageUrl) {
 		this.presidentId = userDetails.getUserId();
@@ -67,6 +82,16 @@ public class StudentGroup {
 	}
 
 	public StudentGroup() {
+	}
+
+	public void clearRecruitments() {
+		this.recruitmentList.forEach(GroupRecruitment::clearGroup);
+		this.recruitmentList.clear();
+	}
+
+	public void addRecruitment(GroupRecruitment recruitment) {
+		this.recruitmentList.add(recruitment);
+		recruitment.setGroup(this);
 	}
 }
 

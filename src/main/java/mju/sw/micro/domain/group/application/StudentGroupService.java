@@ -1,5 +1,18 @@
 package mju.sw.micro.domain.group.application;
 
+import static mju.sw.micro.domain.user.domain.Role.*;
+import static mju.sw.micro.global.error.exception.ErrorCode.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.webjars.NotFoundException;
+
 import mju.sw.micro.domain.group.dao.StudentGroupRepository;
 import mju.sw.micro.domain.group.domain.StudentGroup;
 import mju.sw.micro.domain.group.dto.GroupSimpleResponseDto;
@@ -10,19 +23,6 @@ import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.adapter.S3Uploader;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.webjars.NotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static mju.sw.micro.domain.user.domain.Role.ROLE_PRESIDENT;
-import static mju.sw.micro.global.error.exception.ErrorCode.NOT_FOUND;
-import static mju.sw.micro.global.error.exception.ErrorCode.UNAUTHORIZED;
 
 @Service
 public class StudentGroupService {
@@ -31,13 +31,15 @@ public class StudentGroupService {
 	private final S3Uploader s3Uploader;
 
 	@Autowired
-	public StudentGroupService(StudentGroupRepository studentGroupDao, UserRepository userRepository, S3Uploader s3Uploader) {
+	public StudentGroupService(StudentGroupRepository studentGroupDao, UserRepository userRepository,
+		S3Uploader s3Uploader) {
 		this.studentGroupDao = studentGroupDao;
 		this.userRepository = userRepository;
 		this.s3Uploader = s3Uploader;
 	}
 
-	public ApiResponse<String> applyGroupInfo(StudentGroupRequestDto dto, CustomUserDetails userDetails, MultipartFile imageFile) {
+	public ApiResponse<String> applyGroupInfo(StudentGroupRequestDto dto, CustomUserDetails userDetails,
+		MultipartFile imageFile) {
 		String imageUrl = uploadImage(imageFile).getData();
 
 		StudentGroup studentGroup = new StudentGroup(dto, userDetails, imageUrl);
@@ -48,7 +50,11 @@ public class StudentGroupService {
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}
-		optionalUser.get().addRole(ROLE_PRESIDENT);
+
+		User user = optionalUser.get();
+		user.addRole(ROLE_PRESIDENT);
+		userRepository.save(user);
+
 		return ApiResponse.ok("Apply Group: SUCCESS / Add User Role: PRESIDENT");
 	}
 
@@ -88,7 +94,8 @@ public class StudentGroupService {
 		return ApiResponse.ok("승인된 학생단체 리스트를 가져왔습니다", approvedGroupInfoList);
 	}
 
-	public ApiResponse<String> updateGroupInfo(Long groupId, StudentGroupRequestDto dto, CustomUserDetails userDetails, MultipartFile imageFile) {
+	public ApiResponse<String> updateGroupInfo(Long groupId, StudentGroupRequestDto dto, CustomUserDetails userDetails,
+		MultipartFile imageFile) {
 		Optional<StudentGroup> optionalGroup = studentGroupDao.findById(groupId);
 
 		if (optionalGroup.isPresent()) {
@@ -117,9 +124,9 @@ public class StudentGroupService {
 		}
 	}
 
-
 	public ApiResponse<StudentGroupResponseDto> getDetailGroupInfo(Long groupId) {
-		StudentGroup studentGroup = studentGroupDao.findById(groupId).orElseThrow(() -> new NotFoundException("Group not found with id: " + groupId));
+		StudentGroup studentGroup = studentGroupDao.findById(groupId)
+			.orElseThrow(() -> new NotFoundException("Group not found with id: " + groupId));
 		StudentGroupResponseDto responseDto = new StudentGroupResponseDto();
 		responseDto.setId(studentGroup.getId());
 		responseDto.setPresidentId(studentGroup.getPresidentId());
@@ -165,7 +172,7 @@ public class StudentGroupService {
 			if (presidentId.equals(userDetails.getUserId())) {
 				studentGroupDao.deleteById(groupId);
 			} else {
-				return ApiResponse.withError(UNAUTHORIZED,"해당 단체를 삭제할 권한이 없습니다");
+				return ApiResponse.withError(UNAUTHORIZED, "해당 단체를 삭제할 권한이 없습니다");
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);
@@ -191,7 +198,7 @@ public class StudentGroupService {
 				studentGroupDao.save(group);
 				successor.get().addRole(ROLE_PRESIDENT);
 			} else {
-				return ApiResponse.withError(UNAUTHORIZED,"위임할 회장 권한이 없습니다");
+				return ApiResponse.withError(UNAUTHORIZED, "위임할 회장 권한이 없습니다");
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);

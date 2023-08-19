@@ -66,4 +66,5 @@ public class AuthApi {
 	public ApiResponse<RefreshTokenResponseDto> reissueJwtTokens(@Validated @RequestBody RefreshTokenRequestDto dto) {
 		return authService.reissueJwtTokens(dto);
 	}
+
 }

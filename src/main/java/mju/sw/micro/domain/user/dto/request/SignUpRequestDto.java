@@ -9,6 +9,8 @@ import lombok.Getter;
 public class SignUpRequestDto {
 
 	@NotBlank
+	String code;
+	@NotBlank
 	@Email
 	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@mju\\.ac\\.kr$", message = "이메일 도메인이 허용되지 않습니다.")
 	private String email;
@@ -26,8 +28,6 @@ public class SignUpRequestDto {
 	private String phoneNumber;
 	private String introduction;
 	private Boolean notification;
-	@NotBlank
-	String code;
 
 	public static SignUpRequestDto of(String email, String password, String name, String nickName, String studentId,
 		String major, String phoneNumber, String introduction,
