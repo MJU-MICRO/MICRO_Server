@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class UserInfoResponseDto {
+	private String email;
 	private String profileImageUrl;
 	private String name;
 	private String nickName;

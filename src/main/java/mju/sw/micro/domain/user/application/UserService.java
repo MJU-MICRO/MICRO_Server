@@ -63,6 +63,7 @@ public class UserService {
 		User user = optionalUser.get();
 		return ApiResponse.ok("회원 정보 조회 완료",
 			UserInfoResponseDto.builder()
+				.email(user.getEmail())
 				.profileImageUrl(user.getProfileImageUrl())
 				.name(user.getName())
 				.nickName(user.getNickName())
