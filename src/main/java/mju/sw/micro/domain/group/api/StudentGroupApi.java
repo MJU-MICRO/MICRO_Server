@@ -33,10 +33,16 @@ public class StudentGroupApi {
 		return studentGroupService.applyGroupInfo(dto, userDetails, imageFile);
 	}
 
-	@Operation(summary = "학생단체 리스트 조회")
-	@GetMapping("/group")
+	@Operation(summary = "전체 학생단체 리스트 조회")
+	@GetMapping("/admin/group")
 	public ApiResponse<List<GroupSimpleResponseDto>> getAllGroupInfo() {
 		return studentGroupService.getAllGroupInfo();
+	}
+
+	@Operation(summary = "승인된 학생단체 리스트 조회")
+	@GetMapping("/group")
+	public ApiResponse<List<GroupSimpleResponseDto>> getApprovedGroupInfo() {
+		return studentGroupService.getApprovedGroupInfo();
 	}
 
 	@Operation(summary = "학생단체 상세조회")
@@ -46,15 +52,25 @@ public class StudentGroupApi {
 	}
 
 	@Operation(summary = "학생단체 승인/거부")
-	@PutMapping("/admin/group/approve/{groupId}")
+	@PutMapping("/group/approve/{groupId}")
+//	@PutMapping("/admin/group/approve/{groupId}")
 	public ApiResponse<String> approveGroup(@PathVariable Long groupId) {
 		return studentGroupService.approveGroup(groupId);
 	}
 
 	@Operation(summary = "학생단체 삭제")
-	@DeleteMapping("/president/group/delete/{groupId}")
+	@DeleteMapping("/president/group/{groupId}")
 	public ApiResponse<String> deleteGroup(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId) {
 		return studentGroupService.deleteGroup(userDetails, groupId);
+	}
+
+	@Operation(summary = "학생단체 수정")
+	@PutMapping("/president/group/{groupId}")
+	public ApiResponse<String> updateGroupInfo(@PathVariable Long groupId,
+											   @Valid @RequestPart("dto") StudentGroupRequestDto dto,
+											   @AuthenticationPrincipal CustomUserDetails userDetails,
+											   @RequestPart(value = "file", required = false) MultipartFile imageFile) {
+		return studentGroupService.updateGroupInfo(groupId, dto, userDetails, imageFile);
 	}
 
 	@Operation(summary = "회장 위임")
