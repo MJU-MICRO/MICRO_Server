@@ -9,4 +9,6 @@ import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 
 public interface GroupRecruitmentRepository extends JpaRepository<GroupRecruitment, Long> {
 	List<GroupRecruitment> findByGroup(StudentGroup group);
+
+	List<GroupRecruitment> findAllByOrderByCreatedDateTimeDesc();
 }

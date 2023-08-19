@@ -1,5 +1,7 @@
 package mju.sw.micro.domain.recruitment.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ public class RecruitmentImage {
 	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
 	private GroupRecruitment recruitment;
 
 	private int file_number;

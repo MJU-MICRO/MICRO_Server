@@ -66,22 +66,30 @@ public class GroupRecruitmentService {
 		return s3Uploader.uploadFile(multipartFile).getData();
 	}
 
-	// @Transactional
-	// public ApiResponse<String> updateClubRecruitment(ClubRecruitmentUpdateServiceRequest request) {
-	// 	Optional<GroupRecruitment> optionalRecruitment = recruitmentRepository.findById(request.recruitmentId());
-	// 	if (optionalRecruitment.isEmpty()) {
-	// 		return ApiResponse.withError(ErrorCode.INVALID_CLUB_RECRUITMENT_ID);
-	// 	}
-	//
-	// 	Optional<Club> optionalClub = clubRepository.findById(request.clubId());
-	// 	if (optionalClub.isEmpty()) {
-	// 		return ApiResponse.withError(ErrorCode.INVALID_CLUB_ID);
-	// 	}
-	//
-	// 	GroupRecruitment recruitment = optionalRecruitment.get();
-	// 	recruitment.update(request);
-	// 	recruitmentRepository.save(recruitment);
-	//
-	// 	return ApiResponse.ok("학생 단체(동아리/학회) 공고 수정에 성공했습니다.");
-	// }
+	@Transactional
+	public ApiResponse<String> deleteGroupRecruitment(Long userId, Long groupId, Long recruitmentId) {
+		Optional<StudentGroup> optionalGroup = groupRepository.findById(groupId);
+
+		if (optionalGroup.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.INVALID_GROUP_ID);
+		}
+
+		StudentGroup group = optionalGroup.get();
+		if (!group.getPresidentId().equals(userId)) {
+			return ApiResponse.withError(ErrorCode.UNMATCH_PRESIDENT_ID);
+		}
+
+		Optional<GroupRecruitment> optionalRecruitment = recruitmentRepository.findById(recruitmentId);
+
+		if (optionalRecruitment.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.INVALID_GROUP_RECRUITMENT_ID);
+		}
+
+		GroupRecruitment recruitment = optionalRecruitment.get();
+		recruitment.clearImageList();
+
+		recruitmentRepository.delete(recruitment);
+		return ApiResponse.ok("학생 단체(동아리/학회) 공고 삭제에 성공했습니다.");
+	}
+
 }

@@ -3,6 +3,8 @@ package mju.sw.micro.domain.recruitment.api;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -18,11 +20,11 @@ import mju.sw.micro.domain.recruitment.dto.request.GroupRecruitmentCreateRequest
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
 
-@Tag(name = "동아리 / 학회 모집공고 API", description = "동아리 및 학회의 모집공고를 등록한다")
+@Tag(name = "동아리 / 학회 모집 공고 API", description = "동아리 및 학회의 모집 공고를 등록 및 삭제 한다")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/president")
 @RequiredArgsConstructor
-public class ClubRecruitmentApi {
+public class GroupRecruitmentApi {
 
 	private final GroupRecruitmentService groupRecruitmentService;
 
@@ -34,9 +36,10 @@ public class ClubRecruitmentApi {
 		return groupRecruitmentService.createGroupRecruitment(user.getUserId(), request.toServiceRequest(), files);
 	}
 
-	// @Operation(summary = "동아리 / 학회 모집 공고 수정 요청")
-	// @PatchMapping("/recruitment")
-	// public ApiResponse<String> updateClubRecruitment(@Valid @RequestBody ClubRecruitmentUpdateRequest request) {
-	// 	return recruitmentService.updateClubRecruitment(request.toServiceRequest());
-	// }
+	@Operation(summary = "동아리 / 학회 모집 공고 삭제 요청")
+	@DeleteMapping("/recruitment/{groupId}/{recruitmentId}")
+	public ApiResponse<String> deleteClubRecruitment(@AuthenticationPrincipal CustomUserDetails user,
+		@PathVariable Long groupId, @PathVariable Long recruitmentId) {
+		return groupRecruitmentService.deleteGroupRecruitment(user.getUserId(), groupId, recruitmentId);
+	}
 }
