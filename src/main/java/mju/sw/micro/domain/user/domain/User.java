@@ -3,15 +3,7 @@ package mju.sw.micro.domain.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +39,8 @@ public class User extends BaseEntity {
 	private String introduction;
 	private String profileImageUrl;
 	private boolean notification;
+	@ElementCollection
+	private List<String> Bookmark;
 
 	@Builder
 	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,

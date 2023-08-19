@@ -78,4 +78,17 @@ public class StudentGroupApi {
 	public ApiResponse<String> mandateGroupPresident(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId, @PathVariable Long userId) {
 		return studentGroupService.mandateGroupPresident(userDetails, groupId, userId);
 	}
+
+	@Operation(summary = "학생단체 북마크 추가 또는 삭제")
+	@PutMapping("/bookmark/{groupId}")
+	public ApiResponse<String> toggleBookmark(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long groupId) {
+		return studentGroupService.toggleBookmark(userDetails.getUserId(), groupId);
+	}
+
+	@Operation(summary = "북마크한 학생단체 리스트 조회")
+	@GetMapping("/bookmark/groups")
+	public ApiResponse<List<StudentGroupResponseDto>> getBookmarkedGroups(
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		return studentGroupService.getBookmarkedGroups(userDetails.getUserId());
+	}
 }

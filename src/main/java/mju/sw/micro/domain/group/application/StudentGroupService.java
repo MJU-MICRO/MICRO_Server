@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
@@ -100,20 +101,16 @@ public class StudentGroupService {
 
 		if (optionalGroup.isPresent()) {
 			StudentGroup group = optionalGroup.get();
-
-			// Check if the current user is the president of the group
 			if (group.getPresidentId().equals(userDetails.getUserId())) {
 				group.setIntroduction(dto.getIntroduction());
 				group.setRelationMajor(dto.getRelationMajor());
 				group.setRelatedTag(dto.getRelatedTag());
 				group.setCampus(dto.getCampus());
 				group.setSubCategory(dto.getSubCategory());
-
 				if (imageFile != null) {
 					String imageUrl = uploadImage(imageFile).getData();
 					group.setLogoImageUrl(imageUrl);
 				}
-
 				studentGroupDao.save(group);
 				return ApiResponse.ok("학생단체 정보를 수정했습니다");
 			} else {
@@ -127,25 +124,7 @@ public class StudentGroupService {
 	public ApiResponse<StudentGroupResponseDto> getDetailGroupInfo(Long groupId) {
 		StudentGroup studentGroup = studentGroupDao.findById(groupId)
 			.orElseThrow(() -> new NotFoundException("Group not found with id: " + groupId));
-		StudentGroupResponseDto responseDto = new StudentGroupResponseDto();
-		responseDto.setId(studentGroup.getId());
-		responseDto.setPresidentId(studentGroup.getPresidentId());
-		responseDto.setGroupName(studentGroup.getGroupName());
-		responseDto.setLogoImageUrl(studentGroup.getLogoImageUrl());
-		responseDto.setEstablishedYear(studentGroup.getEstablishedYear());
-		responseDto.setNumOfMember(studentGroup.getNumOfMember());
-		responseDto.setIntroduction(studentGroup.getIntroduction());
-		responseDto.setRelationMajor(studentGroup.getRelationMajor());
-		responseDto.setRelatedTag(studentGroup.getRelatedTag());
-		responseDto.setActivityTitle(studentGroup.getActivityTitle());
-		responseDto.setActivityContent(studentGroup.getActivityContent());
-		responseDto.setRecruit(studentGroup.isRecruit());
-		responseDto.setApprove(studentGroup.isApprove());
-		responseDto.setCampus(studentGroup.getCampus());
-		responseDto.setLargeCategory(studentGroup.getLargeCategory());
-		responseDto.setMediumCategory(studentGroup.getMediumCategory());
-		responseDto.setSmallCategory(studentGroup.getSmallCategory());
-		responseDto.setSubCategory(studentGroup.getSubCategory());
+		StudentGroupResponseDto responseDto = mapToStudentGroupResponseDto(studentGroup);
 		return ApiResponse.ok("학생단체의 상세정보를 가져왔습니다", responseDto);
 	}
 
@@ -206,10 +185,69 @@ public class StudentGroupService {
 		return ApiResponse.ok("회장 권한을 위임했습니다");
 	}
 
+	@Transactional
+	public ApiResponse<String> toggleBookmark(Long userId, Long groupId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		String groupIdString = String.valueOf(groupId);
+		if (user.getBookmark().contains(groupIdString)) {
+			user.getBookmark().remove(groupIdString);
+			userRepository.save(user);
+			return ApiResponse.ok("Bookmark removed successfully.");
+		} else {
+			user.getBookmark().add(groupIdString);
+			userRepository.save(user);
+			return ApiResponse.ok("Bookmark added successfully.");
+		}
+	}
+
 	private ApiResponse<String> uploadImage(MultipartFile multipartFile) {
 		if (multipartFile == null) {
 			return ApiResponse.ok("이미지가 없습니다", null);
 		}
 		return s3Uploader.uploadFile(multipartFile);
+	}
+
+	public ApiResponse<List<StudentGroupResponseDto>> getBookmarkedGroups(Long userId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		List<String> bookmarkedGroupIds = user.getBookmark();
+		List<Long> bookmarkedGroupIdLongs = bookmarkedGroupIds.stream()
+			.map(Long::valueOf)
+			.collect(Collectors.toList());
+		List<StudentGroupResponseDto> bookmarkedGroups = studentGroupDao.findAllById(bookmarkedGroupIdLongs)
+			.stream()
+			.map(this::mapToStudentGroupResponseDto)
+			.collect(Collectors.toList());
+		return ApiResponse.ok("북마크한 학생단체 리스트를 가져왔습니다", bookmarkedGroups);
+	}
+
+	private StudentGroupResponseDto mapToStudentGroupResponseDto(StudentGroup group) {
+		StudentGroupResponseDto responseDto = new StudentGroupResponseDto();
+		responseDto.setId(group.getId());
+		responseDto.setPresidentId(group.getPresidentId());
+		responseDto.setGroupName(group.getGroupName());
+		responseDto.setLogoImageUrl(group.getLogoImageUrl());
+		responseDto.setEstablishedYear(group.getEstablishedYear());
+		responseDto.setNumOfMember(group.getNumOfMember());
+		responseDto.setIntroduction(group.getIntroduction());
+		responseDto.setRelationMajor(group.getRelationMajor());
+		responseDto.setRelatedTag(group.getRelatedTag());
+		responseDto.setActivityTitle(group.getActivityTitle());
+		responseDto.setActivityContent(group.getActivityContent());
+		responseDto.setRecruit(group.isRecruit());
+		responseDto.setApprove(group.isApprove());
+		responseDto.setCampus(group.getCampus());
+		responseDto.setLargeCategory(group.getLargeCategory());
+		responseDto.setMediumCategory(group.getMediumCategory());
+		responseDto.setSmallCategory(group.getSmallCategory());
+		responseDto.setSubCategory(group.getSubCategory());
+		return responseDto;
 	}
 }
