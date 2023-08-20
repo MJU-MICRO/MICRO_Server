@@ -9,7 +9,7 @@ spring:
     properties:
       mail:
         smtp:
-          auth: truemicro
+          auth: true
           timeout: 5000
           starttls:
             enable: true
