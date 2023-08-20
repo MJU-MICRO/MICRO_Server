@@ -35,6 +35,9 @@ public enum ErrorCode {
 	TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 토큰을 찾을 수 없습니다."),
 
 	//Application
+	CONFLICT_APPLICATION(HttpStatus.CONFLICT, "You already have an application for this recruitment."),
+	FORBIDDEN_PRESIDENT(HttpStatus.FORBIDDEN, "You are not the president of any group."),
+	UNAUTHORIZED_RECRUITMENT(HttpStatus.UNAUTHORIZED, "You are not authorized to access this recruitment."),
 	INVALID_UPDATE_OPERATION(HttpStatus.BAD_REQUEST, "제출이 완료된 지원서는 수정이 불가합니다."),
 	INVALID_DELETE_OPERATION(HttpStatus.BAD_REQUEST, "제출이 완료된 지원서는 삭제가 불가합니다.");
 

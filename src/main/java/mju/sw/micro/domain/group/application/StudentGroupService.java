@@ -5,6 +5,7 @@ import static mju.sw.micro.global.error.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -218,11 +219,27 @@ public class StudentGroupService {
 		}
 		User user = optionalUser.get();
 		List<String> bookmarkedGroupIds = user.getBookmark();
-		List<Long> bookmarkedGroupIdLongs = bookmarkedGroupIds.stream()
-			.map(Long::valueOf)
-			.collect(Collectors.toList());
-		List<StudentGroupResponseDto> bookmarkedGroups = studentGroupDao.findAllById(bookmarkedGroupIdLongs)
-			.stream()
+		List<Long> validBookmarkedGroupIdLongs = new ArrayList<>();
+
+		for (String groupIdString : bookmarkedGroupIds) {
+			try {
+				Long groupIdLong = Long.valueOf(groupIdString);
+				Optional<StudentGroup> groupOptional = studentGroupDao.findById(groupIdLong);
+
+				if (groupOptional.isPresent()) {
+					validBookmarkedGroupIdLongs.add(groupIdLong);
+				} else {
+					user.getBookmark().remove(groupIdString);
+				}
+			} catch (NumberFormatException e) {
+			}
+		}
+		user.setBookmark(validBookmarkedGroupIdLongs.stream().map(Object::toString).collect(Collectors.toList()));
+		userRepository.save(user);
+
+		List<StudentGroupResponseDto> bookmarkedGroups = validBookmarkedGroupIdLongs.stream()
+			.map(groupId -> studentGroupDao.findById(groupId).orElse(null))
+			.filter(Objects::nonNull)
 			.map(this::mapToStudentGroupResponseDto)
 			.collect(Collectors.toList());
 		return ApiResponse.ok("북마크한 학생단체 리스트를 가져왔습니다", bookmarkedGroups);

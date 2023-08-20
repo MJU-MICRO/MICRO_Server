@@ -47,7 +47,7 @@ public class ApplicationService {
 		Long userId = userDetails.getUserId();
 		boolean hasExistingApplication = applicationRepository.existsByUserIdAndRecruitmentId(userId, dto.getRecruitmentId());
 		if (hasExistingApplication) {
-			return ApiResponse.withError(CONFLICT, "You already have an application for this recruitment.");
+			return ApiResponse.withError(CONFLICT_APPLICATION);
 		}
 		Application application = new Application(dto, userDetails);
 		applicationRepository.save(application);
@@ -62,7 +62,7 @@ public class ApplicationService {
 		Application application = applicationRepository.findById(applicationId)
 			.orElseThrow(() -> new RuntimeException("Application not found"));
 		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN, "You don't have permission to submit this application.");
+			return ApiResponse.withError(FORBIDDEN);
 		}
 		application.setIsSubmit(true);
 		applicationRepository.save(application);
@@ -73,7 +73,7 @@ public class ApplicationService {
 		Application application = applicationRepository.findById(applicationId)
 			.orElseThrow(() -> new RuntimeException("Application not found"));
 		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN, "You don't have permission to set pass status for this application.");
+			return ApiResponse.withError(FORBIDDEN);
 		}
 		application.setPassStatus(passStatus);
 		applicationRepository.save(application);
@@ -85,10 +85,10 @@ public class ApplicationService {
 			.orElseThrow(() -> new RuntimeException("Application not found"));
 
 		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN, "You don't have permission to update this application.");
+			return ApiResponse.withError(FORBIDDEN);
 		}
 		if (application.getIsSubmit()) {
-			return ApiResponse.withError(INVALID_UPDATE_OPERATION, "Cannot update a submitted application.");
+			return ApiResponse.withError(INVALID_UPDATE_OPERATION);
 		}
 		application.setAnswers(dto.getAnswers());
 		application.setGrade(dto.getGrade());
@@ -102,10 +102,10 @@ public class ApplicationService {
 		Application application = applicationRepository.findById(applicationId)
 			.orElseThrow(() -> new RuntimeException("Application not found"));
 		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN, "You don't have permission to delete this application.");
+			return ApiResponse.withError(FORBIDDEN);
 		}
 		if (application.getIsSubmit()) {
-			return ApiResponse.withError(INVALID_DELETE_OPERATION, "Cannot delete a submitted application.");
+			return ApiResponse.withError(INVALID_DELETE_OPERATION);
 		}
 		applicationRepository.delete(application);
 		return ApiResponse.ok("Application deleted successfully.");
@@ -123,7 +123,7 @@ public class ApplicationService {
 		Long userId = userDetails.getUserId();
 		Optional<StudentGroup> optionalStudentGroup = studentGroupRepository.findByPresidentId(userId);
 		if (optionalStudentGroup.isEmpty()) {
-			return ApiResponse.withError(FORBIDDEN, "You are not the president of any group.");
+			return ApiResponse.withError(FORBIDDEN_PRESIDENT);
 		}
 		Optional<GroupRecruitment> optionalRecruitment = groupRecruitmentRepository.findById(recruitmentId);
 		if (optionalRecruitment.isEmpty()) {
@@ -132,7 +132,7 @@ public class ApplicationService {
 		StudentGroup studentGroup = optionalStudentGroup.get();
 		GroupRecruitment recruitment = optionalRecruitment.get();
 		if (!studentGroup.getId().equals(recruitment.getGroup().getId())) {
-			return ApiResponse.withError(UNAUTHORIZED, "You are not authorized to access this recruitment.");
+			return ApiResponse.withError(UNAUTHORIZED_RECRUITMENT);
 		}
 		List<Application> applications = applicationRepository.findByRecruitmentId(recruitmentId);
 		List<ApplicationResponseDto> responseDtos = applications.stream()

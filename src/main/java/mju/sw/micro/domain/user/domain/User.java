@@ -109,4 +109,8 @@ public class User extends BaseEntity {
 		return userRoles.stream()
 			.anyMatch(userRole -> userRole.getRole().equals(Role.ROLE_ADMIN));
 	}
+
+	public void setBookmark(List<String> collect) {
+		this.Bookmark = new ArrayList<>(collect);
+	}
 }
