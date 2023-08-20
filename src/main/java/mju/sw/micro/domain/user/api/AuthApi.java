@@ -33,7 +33,7 @@ public class AuthApi {
 
 	@Operation(summary = "이메일 송신 및 인증 코드 저장")
 	@PostMapping("/email")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> sendEmailAndSaveCode(@Validated @RequestBody EmailSendRequestDto dto) {
 		return authService.sendEmailAndSaveCode(dto);
 	}

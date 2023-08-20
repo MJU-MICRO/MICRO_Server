@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import mju.sw.micro.domain.recruitment.dao.GroupRecruitmentRepository;
+import mju.sw.micro.domain.admin.application.AdminService;
 import mju.sw.micro.domain.user.application.AuthService;
 import mju.sw.micro.domain.user.application.UserService;
 import mju.sw.micro.domain.user.dao.EmailCodeRedisRepository;
@@ -34,6 +35,8 @@ public abstract class IntegrationTestSupporter {
 	protected UserService userService;
 	@Autowired
 	protected AuthService authService;
+	@Autowired
+	protected AdminService adminService;
 	@Autowired
 	protected EmailCodeRedisRepository emailCodeRedisRepository;
 	@Autowired
