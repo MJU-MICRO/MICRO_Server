@@ -114,7 +114,7 @@ public class StudentGroupService {
 				studentGroupDao.save(group);
 				return ApiResponse.ok("학생단체 정보를 수정했습니다");
 			} else {
-				return ApiResponse.withError(UNAUTHORIZED, "해당 단체를 수정할 권한이 없습니다");
+				return ApiResponse.withError(UNAUTHORIZED);
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);
@@ -151,7 +151,7 @@ public class StudentGroupService {
 			if (presidentId.equals(userDetails.getUserId())) {
 				studentGroupDao.deleteById(groupId);
 			} else {
-				return ApiResponse.withError(UNAUTHORIZED, "해당 단체를 삭제할 권한이 없습니다");
+				return ApiResponse.withError(UNAUTHORIZED);
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);
@@ -177,7 +177,7 @@ public class StudentGroupService {
 				studentGroupDao.save(group);
 				successor.get().addRole(ROLE_PRESIDENT);
 			} else {
-				return ApiResponse.withError(UNAUTHORIZED, "위임할 회장 권한이 없습니다");
+				return ApiResponse.withError(UNAUTHORIZED);
 			}
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);

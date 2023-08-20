@@ -57,8 +57,4 @@ public class ApiResponse<T> {
 	public static <T> ApiResponse<T> withError(ErrorCode errorCode) {
 		return withError(errorCode, null);
 	}
-
-	public static <T> ApiResponse<T> withError(ErrorCode errorCode, String message) {
-		return withError(errorCode, message);
-	}
 }
