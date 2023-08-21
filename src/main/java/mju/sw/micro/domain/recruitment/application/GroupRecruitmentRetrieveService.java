@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.group.dao.StudentGroupRepository;
 import mju.sw.micro.domain.group.domain.StudentGroup;
 import mju.sw.micro.domain.recruitment.dao.GroupRecruitmentRepository;
+import mju.sw.micro.domain.recruitment.dao.RecruitmentImageRepository;
 import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
+import mju.sw.micro.domain.recruitment.domain.RecruitmentImage;
 import mju.sw.micro.domain.recruitment.dto.response.DetailGroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.SimpleGroupRecruitmentResponse;
 
@@ -23,6 +25,8 @@ public class GroupRecruitmentRetrieveService {
 
 	private final GroupRecruitmentRepository recruitmentRepository;
 	private final StudentGroupRepository groupRepository;
+
+	private final RecruitmentImageRepository recruitmentImageRepository;
 
 	public List<SimpleGroupRecruitmentResponse> retrieveAllRecruitments() {
 		List<GroupRecruitment> recruitmentList = recruitmentRepository.findAllByOrderByCreatedDateTimeDesc();
@@ -39,5 +43,13 @@ public class GroupRecruitmentRetrieveService {
 		GroupRecruitment recruitment = recruitmentRepository.findById(recruitmentId)
 			.orElseThrow(() -> new NotFoundException("Recruitment not found with id: " + recruitmentId));
 		return DetailGroupRecruitmentResponse.of(recruitment);
+	}
+
+	public List<RecruitmentImage> getRecruitmentImages() {
+		return recruitmentImageRepository.findAll();
+	}
+
+	public List<GroupRecruitment> getAllRecruitment() {
+		return recruitmentRepository.findAll();
 	}
 }
