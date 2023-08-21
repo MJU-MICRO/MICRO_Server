@@ -1,4 +1,4 @@
-package mju.sw.micro.global.config;
+package mju.sw.micro.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.domain.Role;
+import mju.sw.micro.global.config.CorsConfig;
 import mju.sw.micro.global.security.MicroAccessDeniedHandler;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 import mju.sw.micro.global.security.jwt.JwtExceptionFilter;
@@ -40,11 +41,15 @@ public class WebSecurityConfig {
 			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
 				authorizeHttpRequests -> authorizeHttpRequests
+					.requestMatchers(new AntPathRequestMatcher("/api/group", "GET"))
+					.permitAll()
+					.requestMatchers(new AntPathRequestMatcher("/api/group/{groupId}", "GET"))
+					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
 					.permitAll()
-					.requestMatchers(new AntPathRequestMatcher("/api/sample/**"))
+					.requestMatchers(new AntPathRequestMatcher("/recruitments/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()
