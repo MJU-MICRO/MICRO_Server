@@ -3,6 +3,7 @@ package mju.sw.micro.domain.user.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,11 +45,14 @@ public class User extends BaseEntity {
 	private String password;
 	@Column(nullable = false)
 	private String major;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
 	private String introduction;
 	private String profileImageUrl;
 	private boolean notification;
+	@ElementCollection
+	private List<String> Bookmark;
 
 	@Builder
 	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,
@@ -85,6 +91,10 @@ public class User extends BaseEntity {
 		userRoles.add(userRole);
 	}
 
+	public void deleteRole(Role role) {
+		userRoles.removeIf(userRole -> userRole.getRole().equals(role));
+	}
+
 	public void updatePassword(String password) {
 		this.password = password;
 	}
@@ -102,5 +112,13 @@ public class User extends BaseEntity {
 
 	public void updateIntroduction(String updatedIntroduction) {
 		this.introduction = updatedIntroduction;
+	}
+
+	public boolean isAdmin() {
+		return userRoles.stream().anyMatch(userRole -> userRole.getRole().equals(Role.ROLE_ADMIN));
+	}
+
+	public void setBookmark(List<String> collect) {
+		this.Bookmark = new ArrayList<>(collect);
 	}
 }

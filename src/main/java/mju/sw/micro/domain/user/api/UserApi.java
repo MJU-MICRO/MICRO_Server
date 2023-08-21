@@ -37,7 +37,7 @@ public class UserApi {
 	 */
 	@Operation(summary = "로그아웃")
 	@PostMapping("/logout")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> logout(@Validated @RequestBody LogoutRequestDto dto,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.logout(dto, userDetails);
@@ -52,7 +52,7 @@ public class UserApi {
 
 	@Operation(summary = "회원 정보 수정")
 	@PutMapping("/my")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> modifyUserInfo(@Validated @RequestPart("dto") UserModifyRequestDto dto,
 		@RequestPart(value = "file", required = false) MultipartFile imageFile,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -61,7 +61,7 @@ public class UserApi {
 
 	@Operation(summary = "회원 탈퇴")
 	@DeleteMapping("/my")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.deleteUser(userDetails.getEmail());
 	}

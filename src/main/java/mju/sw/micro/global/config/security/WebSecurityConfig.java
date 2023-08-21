@@ -41,11 +41,15 @@ public class WebSecurityConfig {
 			.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
 			.authorizeHttpRequests(
 				authorizeHttpRequests -> authorizeHttpRequests
+					.requestMatchers(new AntPathRequestMatcher("/api/group", "GET"))
+					.permitAll()
+					.requestMatchers(new AntPathRequestMatcher("/api/group/{groupId}", "GET"))
+					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
 					.permitAll()
-					.requestMatchers(new AntPathRequestMatcher("/api/sample/**"))
+					.requestMatchers(new AntPathRequestMatcher("/recruitments/**"))
 					.permitAll()
 					.requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
 					.anonymous()

@@ -19,7 +19,7 @@ public class Application {
 	@Column(nullable = false)
 	private Long userId;
 	@Column(nullable = false)
-	private String recruitmentId;
+	private Long recruitmentId;
 	@ElementCollection
 	private List<String> answers;
 	private Boolean passStatus;
@@ -30,9 +30,8 @@ public class Application {
 
 	public Application(ApplicationRequestDto requestDto, CustomUserDetails userDetails) {
 		this.userId = userDetails.getUserId();
-//		this.recruitmentId = requestDto.recruitmentId();
+		this.recruitmentId = requestDto.getRecruitmentId();
 		this.answers = requestDto.getAnswers();
-		this.passStatus = false;
 		this.grade = requestDto.getGrade();
 		this.supportField = requestDto.getSupportField();
 		this.isAttending = requestDto.getIsAttending();
