@@ -91,5 +91,4 @@ public class GroupRecruitmentService {
 		recruitmentRepository.delete(recruitment);
 		return ApiResponse.ok("학생 단체(동아리/학회) 공고 삭제에 성공했습니다.");
 	}
-
 }
