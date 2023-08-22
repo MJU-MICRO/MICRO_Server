@@ -103,4 +103,35 @@ public class AdminService {
 		return ApiResponse.ok("관리자 권한을 갖지 않은 모든 계정을 조회했습니다.", responseDtoList);
 	}
 
+	@Transactional
+	public ApiResponse<Void> registerBanned(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		if (user.isAdmin()) {
+			return ApiResponse.withError(ErrorCode.BAD_REQUEST);
+		}
+		if (user.isBanned()) {
+			return ApiResponse.withError(ErrorCode.BAD_REQUEST);
+		}
+		user.addRole(Role.ROLE_BANNED);
+		return ApiResponse.ok("차단 권한 등록에 성공했습니다.");
+	}
+
+	@Transactional
+	public ApiResponse<Void> revokeBanned(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		if (!user.isBanned()) {
+			return ApiResponse.withError(ErrorCode.BAD_REQUEST);
+		}
+		user.deleteRole(Role.ROLE_BANNED);
+		return ApiResponse.ok("차단 권한 해지에 성공했습니다.");
+	}
+
 }
