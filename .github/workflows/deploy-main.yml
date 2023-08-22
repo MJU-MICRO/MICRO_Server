@@ -18,10 +18,10 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: kimyubi/micro_database
+          project: mju.nolmyong/micro-server
           stage: main
           yaml: |
-            name: micro
+            name: micro-server
             app: java@17
             options:
               ports: "8081"
