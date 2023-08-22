@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import mju.sw.micro.domain.admin.dto.response.AdminInfoResponseDto;
 import mju.sw.micro.domain.user.dao.UserRepository;
 import mju.sw.micro.domain.user.domain.Role;
@@ -21,7 +20,6 @@ import mju.sw.micro.global.error.exception.ErrorCode;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class AdminService {
 	private final MailService mailService;
 	private final UserRepository userRepository;

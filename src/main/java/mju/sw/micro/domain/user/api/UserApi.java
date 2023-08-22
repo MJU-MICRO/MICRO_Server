@@ -1,6 +1,5 @@
 package mju.sw.micro.domain.user.api;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +35,6 @@ public class UserApi {
 	 */
 	@Operation(summary = "로그아웃")
 	@PostMapping("/logout")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> logout(@Validated @RequestBody LogoutRequestDto dto,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.logout(dto, userDetails);
@@ -45,14 +42,12 @@ public class UserApi {
 
 	@Operation(summary = "회원 정보 조회")
 	@GetMapping("/my")
-	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<UserInfoResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.getUserInfo(userDetails.getEmail());
 	}
 
 	@Operation(summary = "회원 정보 수정")
 	@PutMapping("/my")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> modifyUserInfo(@Validated @RequestPart("dto") UserModifyRequestDto dto,
 		@RequestPart(value = "file", required = false) MultipartFile imageFile,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -61,7 +56,6 @@ public class UserApi {
 
 	@Operation(summary = "회원 탈퇴")
 	@DeleteMapping("/my")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ApiResponse<Void> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return userService.deleteUser(userDetails.getEmail());
 	}
