@@ -50,10 +50,10 @@ public class User extends BaseEntity {
 	private String profileImageUrl;
 	private boolean notification;
 	@ElementCollection
-	private List<String> Bookmark;
+	private List<String> bookmark;
 
 	@Builder
-	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,
+	public User(String name, String email, String phoneNumber, String introduction, String studentId,
 		String major, String password, boolean notification, String profileImageUrl) {
 		this.email = email;
 		this.password = password;
@@ -100,7 +100,6 @@ public class User extends BaseEntity {
 	}
 
 	public void updateUser(UserModifyRequestDto dto) {
-		this.phoneNumber = dto.getPhoneNumber();
 		this.name = dto.getName();
 		this.major = dto.getMajor();
 	}
@@ -118,6 +117,6 @@ public class User extends BaseEntity {
 	}
 
 	public void setBookmark(List<String> collect) {
-		this.Bookmark = new ArrayList<>(collect);
+		this.bookmark = new ArrayList<>(collect);
 	}
 }
