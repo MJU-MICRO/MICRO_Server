@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.dao.UserRepository;
 import mju.sw.micro.domain.user.domain.Role;
@@ -16,10 +17,10 @@ import mju.sw.micro.domain.user.domain.User;
 public class DBInitConfig {
 	private final DBInitService initService;
 
-	// @PostConstruct
-	// public void init() {
-	// 	initService.init();
-	// }
+	@PostConstruct
+	public void init() {
+		initService.init();
+	}
 
 	@Component
 	@Transactional
@@ -35,8 +36,7 @@ public class DBInitConfig {
 			try {
 				// Init Admin
 				User adminUser = User.createUser("testAdmin", "testadmin@mju.ac.kr", "010-1234-6789",
-					"반갑습니다. 테스트 관리자입니다",
-					"testadmin", "testAdminId", "데이터테크놀리지", encoder.encode(adminPw), false);
+					"반갑습니다. 테스트 관리자입니다", "testAdminId", "데이터테크놀리지", encoder.encode(adminPw), false);
 				adminUser.addRole(Role.ROLE_USER);
 				adminUser.addRole(Role.ROLE_ADMIN);
 				Field adminId = adminUser.getClass().getDeclaredField("id");

@@ -17,6 +17,7 @@ import mju.sw.micro.domain.user.domain.RefreshToken;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.domain.user.dto.request.LogoutRequestDto;
 import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
+import mju.sw.micro.domain.user.dto.request.UserPasswordRequestDto;
 import mju.sw.micro.domain.user.dto.response.UserInfoResponseDto;
 import mju.sw.micro.global.adapter.MailService;
 import mju.sw.micro.global.adapter.S3Uploader;
@@ -63,10 +64,10 @@ public class UserService {
 		User user = optionalUser.get();
 		return ApiResponse.ok("회원 정보 조회 완료",
 			UserInfoResponseDto.builder()
+				.id(user.getId())
 				.email(user.getEmail())
 				.profileImageUrl(user.getProfileImageUrl())
 				.name(user.getName())
-				.nickName(user.getNickName())
 				.major(user.getMajor())
 				.introduction(user.getIntroduction())
 				.build());
@@ -79,26 +80,30 @@ public class UserService {
 			return ApiResponse.withError(ErrorCode.NOT_FOUND);
 		}
 		User user = optionalUser.get();
-		if (!encoder.matches(dto.getOriginPassword(), user.getPassword())) {
-			return ApiResponse.withError(ErrorCode.UNAUTHORIZED);
-		}
-
-		String updatedPassword = dto.getUpdatePassword();
-		if (!StringUtils.isBlank(updatedPassword)) {
-			user.updatePassword(encoder.encode(updatedPassword));
-		}
-
-		String updatedIntroduction = dto.getIntroduction();
-		if (!StringUtils.isBlank(updatedIntroduction)) {
-			user.updateIntroduction(updatedIntroduction);
-		}
-
 		String profileImageUrl = uploadImage(imageFile).getData();
 		if (profileImageUrl != null) {
 			user.updateUserProfile(profileImageUrl);
 		}
+		String updatedIntroduction = dto.getIntroduction();
+		if (!StringUtils.isBlank(updatedIntroduction)) {
+			user.updateIntroduction(updatedIntroduction);
+		}
 		user.updateUser(dto);
 		return ApiResponse.ok("회원 정보 수정 완료");
+	}
+
+	@Transactional
+	public ApiResponse<Void> modifyUserPassword(UserPasswordRequestDto dto, String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		if (!encoder.matches(dto.getOriginPassword(), user.getPassword())) {
+			return ApiResponse.withError(ErrorCode.UNAUTHORIZED);
+		}
+		user.updatePassword(encoder.encode(dto.getUpdatePassword()));
+		return ApiResponse.ok("회원 비밀번호 변경 완료");
 	}
 
 	@Transactional
@@ -120,4 +125,5 @@ public class UserService {
 		}
 		return s3Uploader.uploadFile(multipartFile);
 	}
+
 }

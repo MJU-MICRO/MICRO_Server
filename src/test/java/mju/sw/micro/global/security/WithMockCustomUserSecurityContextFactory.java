@@ -19,7 +19,6 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
 			.phoneNumber(customUser.phoneNumber())
 			.major(customUser.major())
 			.studentId(customUser.studentId())
-			.nickName(customUser.nickName())
 			.introduction(customUser.introduction())
 			.password(customUser.password())
 			.build();
