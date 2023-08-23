@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import mju.sw.micro.IntegrationTestSupporter;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
+import mju.sw.micro.domain.user.dto.request.UserPasswordRequestDto;
 import mju.sw.micro.domain.user.dto.response.UserInfoResponseDto;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.utils.MockConstants;
@@ -18,10 +19,8 @@ import mju.sw.micro.global.utils.MockFactory;
 
 class UserServiceTest extends IntegrationTestSupporter {
 	private final String updatePassword = "testPassword";
-	private final String updatePhoneNumber = "010-9876-5432";
 	private final String updateName = "testName";
 	private final String updateMajor = "testMajor";
-	private final String updateNickName = "testNickName";
 	private final String updateIntroduction = "testIntroduction";
 
 	@AfterEach
@@ -70,14 +69,12 @@ class UserServiceTest extends IntegrationTestSupporter {
 			false);
 		userRepository.save(user);
 		//when
-		UserModifyRequestDto dto = new UserModifyRequestDto(MockConstants.MOCK_USER_PASSWORD, updatePassword,
-			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
+		UserModifyRequestDto dto = new UserModifyRequestDto(updateName, updateMajor, updateIntroduction);
 		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, user.getEmail());
 		User updatedUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL).get();
 		// then
 		Assertions.assertEquals(HttpStatus.OK, userResponse.getStatus());
 		Assertions.assertEquals("회원 정보 수정 완료", userResponse.getMessage());
-		Assertions.assertEquals(updatePhoneNumber, updatedUser.getPhoneNumber());
 		Assertions.assertEquals(updateMajor, updatedUser.getMajor());
 		Assertions.assertEquals(updateIntroduction, updatedUser.getIntroduction());
 		Assertions.assertEquals(updateName, updatedUser.getName());
@@ -93,17 +90,35 @@ class UserServiceTest extends IntegrationTestSupporter {
 			false);
 		userRepository.save(user);
 		//when
-		UserModifyRequestDto dto = new UserModifyRequestDto(MockConstants.MOCK_USER_PASSWORD, updatePassword,
-			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
+		UserModifyRequestDto dto = new UserModifyRequestDto(updateName, updateMajor, updateIntroduction);
 		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, "InvalidEmail");
 		// then
 		Assertions.assertEquals(HttpStatus.NOT_FOUND, userResponse.getStatus());
 		Assertions.assertEquals("요청한 리소스를 찾을 수 없습니다.", userResponse.getMessage());
 	}
 
-	@DisplayName("틀린 비밀번호를 입력하여 회원 정보를 수정하지 못한다.")
+	@DisplayName("회원 비밀번호를 수정한다")
 	@Test
-	void modifyUserInfoWithInvalidPassword() {
+	void modifyPassword() {
+		// given
+		String originPw = encoder.encode(MockConstants.MOCK_USER_PASSWORD);
+		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION,
+			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, originPw, false);
+		userRepository.save(user);
+		//when
+		UserPasswordRequestDto dto = new UserPasswordRequestDto(MockConstants.MOCK_USER_PASSWORD, updatePassword);
+		ApiResponse<Void> userResponse = userService.modifyUserPassword(dto, user.getEmail());
+		User updatedUser = userRepository.findByEmail(MockConstants.MOCK_USER_EMAIL).get();
+		// then
+		Assertions.assertEquals(HttpStatus.OK, userResponse.getStatus());
+		Assertions.assertEquals("회원 비밀번호 변경 완료", userResponse.getMessage());
+		Assertions.assertTrue(encoder.matches(updatePassword, updatedUser.getPassword()));
+	}
+
+	@DisplayName("틀린 비밀번호를 입력하여 회원 비밀번호를 수정하지 못한다.")
+	@Test
+	void modifyPasswordWithInvalidPassword() {
 		// given
 		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
 			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION,
@@ -111,9 +126,8 @@ class UserServiceTest extends IntegrationTestSupporter {
 			false);
 		userRepository.save(user);
 		//when
-		UserModifyRequestDto dto = new UserModifyRequestDto("InvalidPassword", updatePassword,
-			updatePhoneNumber, updateName, updateNickName, updateMajor, updateIntroduction);
-		ApiResponse<Void> userResponse = userService.modifyUserInfo(dto, null, user.getEmail());
+		UserPasswordRequestDto dto = new UserPasswordRequestDto("invalidPw", updatePassword);
+		ApiResponse<Void> userResponse = userService.modifyUserPassword(dto, user.getEmail());
 		// then
 		Assertions.assertEquals(HttpStatus.UNAUTHORIZED, userResponse.getStatus());
 		Assertions.assertEquals("인증이 필요한 접근입니다.", userResponse.getMessage());

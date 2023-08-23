@@ -24,11 +24,7 @@ public @interface WithMockCustomUser {
 
 	String studentId() default MOCK_STUDENT_ID;
 
-	String nickName() default MOCK_USER_NICKNAME;
-
 	String introduction() default MOCK_INTRODUCTION;
-
-	String interest() default MOCK_INTEREST;
 
 	String password() default "{noop}password";
 }

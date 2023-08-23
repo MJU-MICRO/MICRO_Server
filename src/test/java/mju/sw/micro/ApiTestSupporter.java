@@ -9,14 +9,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mju.sw.micro.domain.sample.api.SampleApi;
-import mju.sw.micro.domain.sample.application.SampleService;
 import mju.sw.micro.global.security.jwt.JwtAuthenticationFilter;
 
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(controllers = {
-	SampleApi.class,
-})
+@WebMvcTest()
 @ActiveProfiles("test")
 public abstract class ApiTestSupporter {
 	@Autowired
@@ -27,7 +23,4 @@ public abstract class ApiTestSupporter {
 
 	@Autowired
 	protected ObjectMapper objectMapper;
-
-	@MockBean
-	protected SampleService sampleService;
 }
