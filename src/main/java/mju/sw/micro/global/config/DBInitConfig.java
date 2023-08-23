@@ -35,8 +35,7 @@ public class DBInitConfig {
 			try {
 				// Init Admin
 				User adminUser = User.createUser("testAdmin", "testadmin@mju.ac.kr", "010-1234-6789",
-					"반갑습니다. 테스트 관리자입니다",
-					"testadmin", "testAdminId", "데이터테크놀리지", encoder.encode(adminPw), false);
+					"반갑습니다. 테스트 관리자입니다", "testAdminId", "데이터테크놀리지", encoder.encode(adminPw), false);
 				adminUser.addRole(Role.ROLE_USER);
 				adminUser.addRole(Role.ROLE_ADMIN);
 				Field adminId = adminUser.getClass().getDeclaredField("id");

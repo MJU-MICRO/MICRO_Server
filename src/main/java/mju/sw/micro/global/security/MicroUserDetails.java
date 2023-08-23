@@ -7,8 +7,6 @@ public interface MicroUserDetails extends Serializable {
 
 	String getMajor();
 
-	String getNickName();
-
 	String getIntroduction();
 
 	String getPhoneNumber();

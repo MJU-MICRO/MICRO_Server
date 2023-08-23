@@ -38,8 +38,6 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private String phoneNumber;
 	@Column(nullable = false, unique = true)
-	private String nickName;
-	@Column(nullable = false, unique = true)
 	private String studentId;
 	@Column(nullable = false)
 	private String password;
@@ -60,7 +58,6 @@ public class User extends BaseEntity {
 		this.email = email;
 		this.password = password;
 		this.name = name;
-		this.nickName = nickName;
 		this.studentId = studentId;
 		this.major = major;
 		this.phoneNumber = phoneNumber;
@@ -69,14 +66,13 @@ public class User extends BaseEntity {
 		this.profileImageUrl = profileImageUrl;
 	}
 
-	public static User createUser(String name, String email, String phoneNumber, String introduction, String nickName,
+	public static User createUser(String name, String email, String phoneNumber, String introduction,
 		String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)
 			.phoneNumber(phoneNumber)
 			.introduction(introduction)
-			.nickName(nickName)
 			.studentId(studentId)
 			.major(major)
 			.password(password)
@@ -106,7 +102,6 @@ public class User extends BaseEntity {
 	public void updateUser(UserModifyRequestDto dto) {
 		this.phoneNumber = dto.getPhoneNumber();
 		this.name = dto.getName();
-		this.nickName = dto.getNickName();
 		this.major = dto.getMajor();
 	}
 
