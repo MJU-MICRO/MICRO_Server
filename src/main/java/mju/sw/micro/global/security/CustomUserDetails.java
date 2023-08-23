@@ -30,11 +30,6 @@ public record CustomUserDetails(User user) implements UserDetails, MicroUserDeta
 	}
 
 	@Override
-	public String getNickName() {
-		return user.getNickName();
-	}
-
-	@Override
 	public String getIntroduction() {
 		return user.getIntroduction();
 	}

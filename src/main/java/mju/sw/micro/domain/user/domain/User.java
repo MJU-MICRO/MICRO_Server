@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,8 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,8 +38,6 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private String phoneNumber;
 	@Column(nullable = false, unique = true)
-	private String nickName;
-	@Column(nullable = false, unique = true)
 	private String studentId;
 	@Column(nullable = false)
 	private String password;
@@ -52,15 +50,14 @@ public class User extends BaseEntity {
 	private String profileImageUrl;
 	private boolean notification;
 	@ElementCollection
-	private List<String> Bookmark;
+	private List<String> bookmark;
 
 	@Builder
-	public User(String name, String email, String phoneNumber, String introduction, String nickName, String studentId,
+	public User(String name, String email, String phoneNumber, String introduction, String studentId,
 		String major, String password, boolean notification, String profileImageUrl) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
-		this.nickName = nickName;
 		this.studentId = studentId;
 		this.major = major;
 		this.phoneNumber = phoneNumber;
@@ -69,14 +66,13 @@ public class User extends BaseEntity {
 		this.profileImageUrl = profileImageUrl;
 	}
 
-	public static User createUser(String name, String email, String phoneNumber, String introduction, String nickName,
+	public static User createUser(String name, String email, String phoneNumber, String introduction,
 		String studentId, String major, String password, boolean notification) {
 		return User.builder()
 			.name(name)
 			.email(email)
 			.phoneNumber(phoneNumber)
 			.introduction(introduction)
-			.nickName(nickName)
 			.studentId(studentId)
 			.major(major)
 			.password(password)
@@ -104,9 +100,7 @@ public class User extends BaseEntity {
 	}
 
 	public void updateUser(UserModifyRequestDto dto) {
-		this.phoneNumber = dto.getPhoneNumber();
 		this.name = dto.getName();
-		this.nickName = dto.getNickName();
 		this.major = dto.getMajor();
 	}
 
@@ -118,7 +112,11 @@ public class User extends BaseEntity {
 		return userRoles.stream().anyMatch(userRole -> userRole.getRole().equals(Role.ROLE_ADMIN));
 	}
 
+	public boolean isBanned() {
+		return userRoles.stream().anyMatch(userRole -> userRole.getRole().equals(Role.ROLE_BANNED));
+	}
+
 	public void setBookmark(List<String> collect) {
-		this.Bookmark = new ArrayList<>(collect);
+		this.bookmark = new ArrayList<>(collect);
 	}
 }
