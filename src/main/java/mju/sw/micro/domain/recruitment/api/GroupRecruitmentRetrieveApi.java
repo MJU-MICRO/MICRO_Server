@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.recruitment.application.GroupRecruitmentRetrieveService;
-import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.domain.recruitment.domain.RecruitmentImage;
 import mju.sw.micro.domain.recruitment.dto.response.DetailGroupRecruitmentResponse;
+import mju.sw.micro.domain.recruitment.dto.response.GroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.SimpleGroupRecruitmentResponse;
 import mju.sw.micro.global.common.response.ApiResponse;
 
@@ -46,7 +46,7 @@ public class GroupRecruitmentRetrieveApi {
 
 	@Operation(summary = "동아리 / 학회 모집 공고 전체 목록 조회(ERD)")
 	@GetMapping("/recruitments")
-	public ApiResponse<List<GroupRecruitment>> getAllRecruitment() {
+	public ApiResponse<List<GroupRecruitmentResponse>> getAllRecruitment() {
 		return ApiResponse.ok(groupRecruitmentRetrieveService.getAllRecruitment());
 	}
 
