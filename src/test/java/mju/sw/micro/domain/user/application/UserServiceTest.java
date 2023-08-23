@@ -42,7 +42,6 @@ class UserServiceTest extends IntegrationTestSupporter {
 
 		Assertions.assertNull(user.getProfileImageUrl(), userInfoResponseDto.getProfileImageUrl());
 		Assertions.assertEquals(user.getName(), userInfoResponseDto.getName());
-		Assertions.assertEquals(user.getNickName(), userInfoResponseDto.getNickName());
 		Assertions.assertEquals(user.getMajor(), userInfoResponseDto.getMajor());
 		Assertions.assertEquals(user.getIntroduction(), userInfoResponseDto.getIntroduction());
 
@@ -66,7 +65,7 @@ class UserServiceTest extends IntegrationTestSupporter {
 	void modifyUserInfo() {
 		// given
 		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
-			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION,
 			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
 			false);
 		userRepository.save(user);
@@ -80,7 +79,6 @@ class UserServiceTest extends IntegrationTestSupporter {
 		Assertions.assertEquals("회원 정보 수정 완료", userResponse.getMessage());
 		Assertions.assertEquals(updatePhoneNumber, updatedUser.getPhoneNumber());
 		Assertions.assertEquals(updateMajor, updatedUser.getMajor());
-		Assertions.assertEquals(updateNickName, updatedUser.getNickName());
 		Assertions.assertEquals(updateIntroduction, updatedUser.getIntroduction());
 		Assertions.assertEquals(updateName, updatedUser.getName());
 	}
@@ -90,7 +88,7 @@ class UserServiceTest extends IntegrationTestSupporter {
 	void modifyUserInfoWithInvalidEmail() {
 		// given
 		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
-			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION,
 			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
 			false);
 		userRepository.save(user);
@@ -108,7 +106,7 @@ class UserServiceTest extends IntegrationTestSupporter {
 	void modifyUserInfoWithInvalidPassword() {
 		// given
 		User user = User.createUser(MockConstants.MOCK_USER_NAME, MockConstants.MOCK_USER_EMAIL,
-			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION, MockConstants.MOCK_USER_NICKNAME,
+			MockConstants.MOCK_PHONE_NUMBER, MockConstants.MOCK_INTRODUCTION,
 			MockConstants.MOCK_STUDENT_ID, MockConstants.MOCK_MAJOR, encoder.encode(MockConstants.MOCK_USER_PASSWORD),
 			false);
 		userRepository.save(user);

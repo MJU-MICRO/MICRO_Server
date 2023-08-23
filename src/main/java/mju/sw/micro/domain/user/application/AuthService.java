@@ -81,7 +81,6 @@ public class AuthService {
 			.email(dto.getEmail())
 			.password(encoder.encode(dto.getPassword()))
 			.name(dto.getName())
-			.nickName(dto.getNickName())
 			.studentId(dto.getStudentId())
 			.major(dto.getMajor())
 			.phoneNumber(dto.getPhoneNumber())
