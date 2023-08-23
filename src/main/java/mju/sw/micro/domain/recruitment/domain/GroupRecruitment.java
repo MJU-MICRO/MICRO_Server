@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
+import mju.sw.micro.domain.application.domain.Application;
 import mju.sw.micro.domain.group.domain.StudentGroup;
 
 @Entity
@@ -42,6 +45,10 @@ public class GroupRecruitment extends BaseEntity {
 	@OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE,
 		orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<RecruitmentImage> imageList = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "recruitment", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private List<Application> applications = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private StudentGroup group;
@@ -75,5 +82,10 @@ public class GroupRecruitment extends BaseEntity {
 	public void addImage(RecruitmentImage image) {
 		this.imageList.add(image);
 		image.setRecruitment(this);
+	}
+
+	public void addApplication(Application application) {
+		applications.add(application);
+		application.associateGroupRecruitment(this);
 	}
 }
