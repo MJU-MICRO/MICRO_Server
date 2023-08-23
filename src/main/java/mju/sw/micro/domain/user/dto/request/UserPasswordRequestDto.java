@@ -6,10 +6,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserModifyRequestDto {
+public class UserPasswordRequestDto {
 	@NotBlank
-	private String name;
+	private String originPassword;
 	@NotBlank
-	private String major;
-	private String introduction;
+	private String updatePassword;
 }
