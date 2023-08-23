@@ -1,5 +1,15 @@
 package mju.sw.micro.domain.application.application;
 
+import static mju.sw.micro.global.error.exception.ErrorCode.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import mju.sw.micro.domain.application.dao.ApplicationRepository;
 import mju.sw.micro.domain.application.domain.Application;
 import mju.sw.micro.domain.application.dto.ApplicationRequestDto;
@@ -12,16 +22,9 @@ import mju.sw.micro.domain.user.dao.UserRepository;
 import mju.sw.micro.domain.user.domain.User;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static mju.sw.micro.global.error.exception.ErrorCode.*;
 
 @Service
+@Transactional
 public class ApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final GroupRecruitmentRepository groupRecruitmentRepository;
@@ -30,9 +33,9 @@ public class ApplicationService {
 
 	@Autowired
 	public ApplicationService(ApplicationRepository studentGroupDao,
-							  UserRepository userRepository,
-							  GroupRecruitmentRepository groupRecruitmentRepository,
-							  StudentGroupRepository studentGroupRepository) {
+		UserRepository userRepository,
+		GroupRecruitmentRepository groupRecruitmentRepository,
+		StudentGroupRepository studentGroupRepository) {
 		this.applicationRepository = studentGroupDao;
 		this.userRepository = userRepository;
 		this.groupRecruitmentRepository = groupRecruitmentRepository;
@@ -44,66 +47,44 @@ public class ApplicationService {
 		if (optionalRecruitment.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}
-		Long userId = userDetails.getUserId();
-		boolean hasExistingApplication = applicationRepository.existsByUserIdAndRecruitmentId(userId, dto.getRecruitmentId());
-		if (hasExistingApplication) {
-			return ApiResponse.withError(CONFLICT_APPLICATION);
-		}
-		Application application = new Application(dto, userDetails);
-		applicationRepository.save(application);
-		Optional<User> optionalUser = userRepository.findById(userId);
+		Optional<User> optionalUser = userRepository.findById(userDetails.getUserId());
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}
+		GroupRecruitment groupRecruitment = optionalRecruitment.get();
+		User user = optionalUser.get();
+
+		Application application = new Application(dto);
+		groupRecruitment.addApplication(application);
+		user.addApplication(application);
+		applicationRepository.save(application);
 		return ApiResponse.ok("Application saved successfully.");
 	}
 
 	public ApiResponse<String> submitApplication(Long applicationId, CustomUserDetails userDetails) {
-		Application application = applicationRepository.findById(applicationId)
-			.orElseThrow(() -> new RuntimeException("Application not found"));
-		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN);
-		}
-		application.setIsSubmit(true);
-		applicationRepository.save(application);
+		Application application = validateApplication(applicationId, userDetails).getData();
+		application.updateIsSubmit(true);
 		return ApiResponse.ok("Application submitted successfully.");
 	}
 
 	public ApiResponse<String> setPassStatus(Long applicationId, Boolean passStatus, CustomUserDetails userDetails) {
-		Application application = applicationRepository.findById(applicationId)
-			.orElseThrow(() -> new RuntimeException("Application not found"));
-		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN);
-		}
-		application.setPassStatus(passStatus);
-		applicationRepository.save(application);
+		Application application = validateApplication(applicationId, userDetails).getData();
+		application.updatePassStatus(passStatus);
 		return ApiResponse.ok("Pass status set successfully.");
 	}
 
-	public ApiResponse<String> updateApplication(Long applicationId, ApplicationRequestDto dto, CustomUserDetails userDetails) {
-		Application application = applicationRepository.findById(applicationId)
-			.orElseThrow(() -> new RuntimeException("Application not found"));
-
-		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN);
-		}
+	public ApiResponse<String> updateApplication(Long applicationId, ApplicationRequestDto dto,
+		CustomUserDetails userDetails) {
+		Application application = validateApplication(applicationId, userDetails).getData();
 		if (application.getIsSubmit()) {
 			return ApiResponse.withError(INVALID_UPDATE_OPERATION);
 		}
-		application.setAnswers(dto.getAnswers());
-		application.setGrade(dto.getGrade());
-		application.setSupportField(dto.getSupportField());
-		application.setIsAttending(dto.getIsAttending());
-		applicationRepository.save(application);
+		application.updateApplication(dto);
 		return ApiResponse.ok("Application updated successfully.");
 	}
 
 	public ApiResponse<String> deleteApplication(Long applicationId, CustomUserDetails userDetails) {
-		Application application = applicationRepository.findById(applicationId)
-			.orElseThrow(() -> new RuntimeException("Application not found"));
-		if (!application.getUserId().equals(userDetails.getUserId())) {
-			return ApiResponse.withError(FORBIDDEN);
-		}
+		Application application = validateApplication(applicationId, userDetails).getData();
 		if (application.getIsSubmit()) {
 			return ApiResponse.withError(INVALID_DELETE_OPERATION);
 		}
@@ -119,7 +100,8 @@ public class ApplicationService {
 		return ApiResponse.ok(responseDtos);
 	}
 
-	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(CustomUserDetails userDetails,  Long recruitmentId) {
+	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(CustomUserDetails userDetails,
+		Long recruitmentId) {
 		Long userId = userDetails.getUserId();
 		Optional<StudentGroup> optionalStudentGroup = studentGroupRepository.findByPresidentId(userId);
 		if (optionalStudentGroup.isEmpty()) {
@@ -139,5 +121,17 @@ public class ApplicationService {
 			.map(ApplicationResponseDto::fromApplication)
 			.collect(Collectors.toList());
 		return ApiResponse.ok(responseDtos);
+	}
+
+	private ApiResponse<Application> validateApplication(Long applicationId, CustomUserDetails userDetails) {
+		Optional<Application> optionalApplication = applicationRepository.findById(applicationId);
+		if (optionalApplication.isEmpty()) {
+			return ApiResponse.withError(NOT_FOUND);
+		}
+		Application application = optionalApplication.get();
+		if (!application.getUser().getId().equals(userDetails.getUserId())) {
+			return ApiResponse.withError(FORBIDDEN);
+		}
+		return ApiResponse.ok("Validation success.", application);
 	}
 }

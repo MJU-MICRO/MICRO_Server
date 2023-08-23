@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mju.sw.micro.domain.BaseEntity;
+import mju.sw.micro.domain.application.domain.Application;
 import mju.sw.micro.domain.user.dto.request.UserModifyRequestDto;
 
 @Entity
@@ -46,6 +47,9 @@ public class User extends BaseEntity {
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private List<Application> applications = new ArrayList<>();
 	private String introduction;
 	private String profileImageUrl;
 	private boolean notification;
@@ -85,6 +89,11 @@ public class User extends BaseEntity {
 		UserRole userRole = new UserRole();
 		userRole.associate(this, role);
 		userRoles.add(userRole);
+	}
+
+	public void addApplication(Application application) {
+		applications.add(application);
+		application.associateUser(this);
 	}
 
 	public void deleteRole(Role role) {

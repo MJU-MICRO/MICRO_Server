@@ -1,11 +1,11 @@
 package mju.sw.micro.domain.application.dto;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import mju.sw.micro.domain.application.domain.Application;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,8 +24,8 @@ public class ApplicationResponseDto {
 	public static ApplicationResponseDto fromApplication(Application application) {
 		ApplicationResponseDto dto = new ApplicationResponseDto();
 		dto.setId(application.getId());
-		dto.setRecruitmentId(application.getRecruitmentId());
-		dto.setUserId(application.getUserId());
+		dto.setRecruitmentId(application.getRecruitment().getId());
+		dto.setUserId(application.getUser().getId());
 		dto.setAnswers(application.getAnswers());
 		dto.setPassStatus(application.getPassStatus());
 		dto.setGrade(application.getGrade());
