@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.user.dao.UserRepository;
 import mju.sw.micro.domain.user.domain.Role;
@@ -16,10 +17,10 @@ import mju.sw.micro.domain.user.domain.User;
 public class DBInitConfig {
 	private final DBInitService initService;
 
-	// @PostConstruct
-	// public void init() {
-	// 	initService.init();
-	// }
+	@PostConstruct
+	public void init() {
+		initService.init();
+	}
 
 	@Component
 	@Transactional
