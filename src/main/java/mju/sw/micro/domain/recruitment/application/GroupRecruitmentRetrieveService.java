@@ -16,6 +16,7 @@ import mju.sw.micro.domain.recruitment.dao.RecruitmentImageRepository;
 import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.domain.recruitment.domain.RecruitmentImage;
 import mju.sw.micro.domain.recruitment.dto.response.DetailGroupRecruitmentResponse;
+import mju.sw.micro.domain.recruitment.dto.response.GroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.SimpleGroupRecruitmentResponse;
 
 @Service
@@ -49,7 +50,13 @@ public class GroupRecruitmentRetrieveService {
 		return recruitmentImageRepository.findAll();
 	}
 
-	public List<GroupRecruitment> getAllRecruitment() {
-		return recruitmentRepository.findAll();
+	public List<GroupRecruitmentResponse> getAllRecruitment() {
+		List<GroupRecruitment> recruitmentList = recruitmentRepository.findAll();
+		List<GroupRecruitmentResponse> response = new ArrayList<>();
+
+		for (GroupRecruitment recruitment : recruitmentList) {
+			response.add(GroupRecruitmentResponse.of(recruitment));
+		}
+		return response;
 	}
 }
