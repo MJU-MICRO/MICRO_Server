@@ -32,12 +32,24 @@ public record GroupRecruitmentCreateRequest(
 	LocalDateTime startDateTime,
 	LocalDateTime endDateTime,
 	@Schema(description = "사진에 대한 설명이 없는 경우 빈 문자열로 채워서 files의 길이와 fileDescriptions의 길이를 동일하게 맞춰 주세요.")
-	List<String> fileDescriptions
+	List<String> fileDescriptions,
 
+	@Schema(description = "활동 장소")
+	@NotBlank(message = "활동 내용은 필수 값입니다.")
+	String activePlace,
+
+	@Schema(description = "제출 여부")
+	boolean isSubmit,
+
+	@Schema(description = "질문")
+	List<String> questions,
+
+	@Schema(description = "글자 수 제한")
+	List<Integer> characterLimit
 ) {
 
 	public GroupRecruitmentCreateServiceRequest toServiceRequest() {
 		return new GroupRecruitmentCreateServiceRequest(groupId, title, description, content, fields, activityPeriod,
-			startDateTime, endDateTime, fileDescriptions);
+			startDateTime, endDateTime, fileDescriptions, activePlace, isSubmit, questions, characterLimit);
 	}
 }
