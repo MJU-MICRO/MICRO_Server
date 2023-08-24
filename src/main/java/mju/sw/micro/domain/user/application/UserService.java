@@ -70,6 +70,7 @@ public class UserService {
 				.name(user.getName())
 				.major(user.getMajor())
 				.introduction(user.getIntroduction())
+				.phoneNumber(user.getPhoneNumber())
 				.build());
 	}
 

@@ -10,9 +10,9 @@ public class UserInfoResponseDto {
 	private String email;
 	private String profileImageUrl;
 	private String name;
-	private String nickName;
 	private String major;
 	private String introduction;
+	private String phoneNumber;
 }
 
 
