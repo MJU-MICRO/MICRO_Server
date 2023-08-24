@@ -18,5 +18,8 @@ public class GroupSimpleResponseDto {
 	private boolean isRecruit;
 	private boolean isApprove;
 	private String campus;
+	private String largeCategory;
+	private String mediumCategory;
+	private String smallCategory;
 	private String subCategory;
 }
