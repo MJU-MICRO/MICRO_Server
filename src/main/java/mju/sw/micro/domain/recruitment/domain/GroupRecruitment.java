@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -46,9 +47,20 @@ public class GroupRecruitment extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private StudentGroup group;
 
+	private boolean isSubmit;
+
+	private String activePlace;
+
+	@ElementCollection
+	private List<String> questions = new ArrayList<>();
+
+	@ElementCollection
+	private List<Integer> characterLimit = new ArrayList<>();
+
 	@Builder
 	public GroupRecruitment(LocalDateTime startDateTime, LocalDateTime endDateTime, String title, String description,
-		String content, String fields, ActivityPeriod activityPeriod, List<RecruitmentImage> imageList) {
+		String content, String fields, ActivityPeriod activityPeriod, List<RecruitmentImage> imageList,
+		String activePlace, boolean isSubmit, List<String> questions, List<Integer> characterLimit) {
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 		this.title = title;
@@ -57,6 +69,10 @@ public class GroupRecruitment extends BaseEntity {
 		this.fields = fields;
 		this.activityPeriod = activityPeriod;
 		this.imageList = imageList;
+		this.activePlace = activePlace;
+		this.questions = questions;
+		this.characterLimit = characterLimit;
+		this.isSubmit = isSubmit;
 	}
 
 	public void clearGroup() {

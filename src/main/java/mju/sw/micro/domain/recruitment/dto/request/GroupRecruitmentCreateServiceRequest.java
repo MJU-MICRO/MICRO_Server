@@ -15,7 +15,11 @@ public record GroupRecruitmentCreateServiceRequest(
 	ActivityPeriod activityPeriod,
 	LocalDateTime startDateTime,
 	LocalDateTime endDateTime,
-	List<String> fileDescriptions) {
+	List<String> fileDescriptions,
+	String activePlace,
+	boolean isSubmit,
+	List<String> questions,
+	List<Integer> characterLimit) {
 
 	public GroupRecruitment toEntity() {
 		return GroupRecruitment.builder()
@@ -26,6 +30,9 @@ public record GroupRecruitmentCreateServiceRequest(
 			.activityPeriod(activityPeriod)
 			.startDateTime(startDateTime)
 			.endDateTime(endDateTime)
+			.isSubmit(isSubmit)
+			.questions(questions)
+			.characterLimit(characterLimit)
 			.build();
 	}
 }
