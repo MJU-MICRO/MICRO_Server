@@ -38,7 +38,6 @@ public class GroupRecruitment extends BaseEntity {
 	private String title;
 	private String description;
 	private String content;
-	private String fields;
 
 	@Enumerated(EnumType.STRING)
 	private ActivityPeriod activityPeriod;
@@ -57,7 +56,8 @@ public class GroupRecruitment extends BaseEntity {
 	private boolean isSubmit;
 
 	private String activePlace;
-
+	@ElementCollection
+	private List<String> applicationFields = new ArrayList<>();
 	@ElementCollection
 	private List<String> questions = new ArrayList<>();
 
@@ -66,17 +66,18 @@ public class GroupRecruitment extends BaseEntity {
 
 	@Builder
 	public GroupRecruitment(LocalDateTime startDateTime, LocalDateTime endDateTime, String title, String description,
-		String content, String fields, ActivityPeriod activityPeriod, List<RecruitmentImage> imageList,
-		String activePlace, boolean isSubmit, List<String> questions, List<Integer> characterLimit) {
+		String content, ActivityPeriod activityPeriod, List<RecruitmentImage> imageList,
+		String activePlace, boolean isSubmit, List<String> applicationFields, List<String> questions,
+		List<Integer> characterLimit) {
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 		this.title = title;
 		this.description = description;
 		this.content = content;
-		this.fields = fields;
 		this.activityPeriod = activityPeriod;
 		this.imageList = imageList;
 		this.activePlace = activePlace;
+		this.applicationFields = applicationFields;
 		this.questions = questions;
 		this.characterLimit = characterLimit;
 		this.isSubmit = isSubmit;

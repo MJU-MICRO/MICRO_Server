@@ -11,7 +11,7 @@ public record GroupRecruitmentCreateServiceRequest(
 	String title,
 	String description,
 	String content,
-	String fields,
+	List<String> applicationFields,
 	ActivityPeriod activityPeriod,
 	LocalDateTime startDateTime,
 	LocalDateTime endDateTime,
@@ -26,7 +26,7 @@ public record GroupRecruitmentCreateServiceRequest(
 			.title(title)
 			.description(description)
 			.content(content)
-			.fields(fields)
+			.applicationFields(applicationFields)
 			.activityPeriod(activityPeriod)
 			.startDateTime(startDateTime)
 			.endDateTime(endDateTime)

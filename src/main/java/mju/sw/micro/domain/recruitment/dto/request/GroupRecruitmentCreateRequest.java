@@ -25,9 +25,9 @@ public record GroupRecruitmentCreateRequest(
 	@NotBlank(message = "활동 내용은 필수 값입니다.")
 	String content,
 
-	@Schema(description = "관심 분야(콤마로 구분해서 넘겨주세요)")
+	@Schema(description = "관심 분야")
 	@NotBlank(message = "관심 분야를 하나 이상 설정해주세요.")
-	String fields,
+	List<String> applicationFields,
 	ActivityPeriod activityPeriod,
 	LocalDateTime startDateTime,
 	LocalDateTime endDateTime,
@@ -49,7 +49,8 @@ public record GroupRecruitmentCreateRequest(
 ) {
 
 	public GroupRecruitmentCreateServiceRequest toServiceRequest() {
-		return new GroupRecruitmentCreateServiceRequest(groupId, title, description, content, fields, activityPeriod,
+		return new GroupRecruitmentCreateServiceRequest(groupId, title, description, content, applicationFields,
+			activityPeriod,
 			startDateTime, endDateTime, fileDescriptions, activePlace, isSubmit, questions, characterLimit);
 	}
 }

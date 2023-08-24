@@ -20,7 +20,7 @@ public class GroupRecruitmentResponse {
 	private String title;
 	private String description;
 	private String content;
-	private String fields;
+	private List<String> applicationFields;
 	private ActivityPeriod activePeriod;
 	private List<String> recruitmentImageUrl;
 	private List<String> captions;
@@ -33,7 +33,7 @@ public class GroupRecruitmentResponse {
 
 	@Builder
 	public GroupRecruitmentResponse(Long recruitmentId, LocalDateTime startDateTime, LocalDateTime endDateTime,
-		String title, String description, String content, String fields, ActivityPeriod activePeriod,
+		String title, String description, String content, List<String> applicationFields, ActivityPeriod activePeriod,
 		List<String> recruitmentImageUrl, List<String> captions, String activePlace, boolean isSubmit,
 		List<String> questions, List<Integer> characterLimit, Long groupId) {
 		this.recruitmentId = recruitmentId;
@@ -42,7 +42,7 @@ public class GroupRecruitmentResponse {
 		this.title = title;
 		this.description = description;
 		this.content = content;
-		this.fields = fields;
+		this.applicationFields = applicationFields;
 		this.activePeriod = activePeriod;
 		this.recruitmentImageUrl = recruitmentImageUrl;
 		this.captions = captions;
@@ -69,7 +69,7 @@ public class GroupRecruitmentResponse {
 			.title(recruitment.getTitle())
 			.description(recruitment.getDescription())
 			.content(recruitment.getContent())
-			.fields(recruitment.getFields())
+			.applicationFields(recruitment.getApplicationFields())
 			.activePeriod(recruitment.getActivityPeriod())
 			.recruitmentImageUrl(recruitmentImageUrl)
 			.captions(captions)
