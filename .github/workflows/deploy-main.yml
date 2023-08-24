@@ -47,9 +47,9 @@ jobs:
                 - name: MICRO_JWT_SECRET_KEY
                   value: ${{ secrets.MICRO_JWT_SECRET_KEY}}
                 - name: MAIL_USERNAME
-                  value: ${{ secrets.MAIL.USERNAME}}
+                  value: ${{ secrets.MAIL_USERNAME}}
                 - name: MAIL_PASSWORD
-                  value: ${{ secrets.MAIL.PASSWORD}}
+                  value: ${{ secrets.MAIL_PASSWORD}}
                 - name: AWS_S3_ACCESS_KEY
                   value: ${{ secrets.AWS_S3_ACCESS_KEY}}
                 - name: AWS_S3_SECRET_KEY
