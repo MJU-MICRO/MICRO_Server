@@ -71,6 +71,8 @@ public class UserService {
 				.major(user.getMajor())
 				.introduction(user.getIntroduction())
 				.phoneNumber(user.getPhoneNumber())
+				.studentId(user.getStudentId())
+				.notification(user.isNotification())
 				.build());
 	}
 

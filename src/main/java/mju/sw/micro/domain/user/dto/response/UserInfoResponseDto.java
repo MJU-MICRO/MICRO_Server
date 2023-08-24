@@ -13,6 +13,9 @@ public class UserInfoResponseDto {
 	private String major;
 	private String introduction;
 	private String phoneNumber;
+	private String studentId;
+	private boolean notification;
+
 }
 
 
