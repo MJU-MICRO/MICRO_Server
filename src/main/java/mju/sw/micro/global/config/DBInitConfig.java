@@ -19,7 +19,7 @@ public class DBInitConfig {
 
 	@PostConstruct
 	public void init() {
-		initService.init();
+		// initService.init();
 	}
 
 	@Component

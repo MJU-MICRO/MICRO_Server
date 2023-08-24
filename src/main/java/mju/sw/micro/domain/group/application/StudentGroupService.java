@@ -72,6 +72,7 @@ public class StudentGroupService {
 		responseDto.setApprove(group.isApprove());
 		responseDto.setCampus(group.getCampus());
 		responseDto.setSubCategory(group.getSubCategory());
+		responseDto.setPresidentId(group.getPresidentId());
 		return responseDto;
 	}
 

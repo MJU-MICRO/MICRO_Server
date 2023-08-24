@@ -1,14 +1,15 @@
 package mju.sw.micro.domain.group.dto;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
 public class GroupSimpleResponseDto {
 	private Long id;
+	private Long presidentId;
 	private String groupName;
 	private String logoImageUrl;
 	private String introduction;
