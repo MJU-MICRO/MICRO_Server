@@ -24,7 +24,6 @@ public class AdminService {
 	private final MailService mailService;
 	private final UserRepository userRepository;
 
-	@Transactional
 	public ApiResponse<Boolean> verifyAdmin(String email) {
 		Optional<User> optionalUser = userRepository.findByEmail(email);
 		if (optionalUser.isEmpty()) {
