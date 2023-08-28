@@ -38,6 +38,12 @@ public class ApplicationService {
 			return ApiResponse.withError(NOT_FOUND);
 		}
 		Optional<User> optionalUser = userRepository.findById(userDetails.getUserId());
+		Long userId = userDetails.getUserId();
+		boolean hasExistingApplication = applicationRepository.existsByUserIdAndRecruitmentId(userId,
+			dto.getRecruitmentId());
+		if (hasExistingApplication) {
+			return ApiResponse.withError(CONFLICT_APPLICATION);
+		}
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}

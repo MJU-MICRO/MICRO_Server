@@ -62,6 +62,8 @@ jobs:
                   value: ${{ secrets.AWS_S3_PATH}}
                 - name: ORIGIN_URL
                   value: ${{ secrets.ORIGIN_URL}}
+                - name: TZ
+                  value: Asia/Seoul
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
