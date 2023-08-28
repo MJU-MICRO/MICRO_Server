@@ -15,7 +15,6 @@ import mju.sw.micro.domain.recruitment.dao.GroupRecruitmentRepository;
 import mju.sw.micro.domain.recruitment.dao.RecruitmentImageRepository;
 import mju.sw.micro.domain.recruitment.domain.GroupRecruitment;
 import mju.sw.micro.domain.recruitment.domain.RecruitmentImage;
-import mju.sw.micro.domain.recruitment.dto.response.DetailGroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.GroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.SimpleGroupRecruitmentResponse;
 
@@ -40,10 +39,10 @@ public class GroupRecruitmentRetrieveService {
 		return response;
 	}
 
-	public DetailGroupRecruitmentResponse retrieveRecruitment(Long recruitmentId) {
+	public GroupRecruitmentResponse retrieveRecruitment(Long recruitmentId) {
 		GroupRecruitment recruitment = recruitmentRepository.findById(recruitmentId)
 			.orElseThrow(() -> new NotFoundException("Recruitment not found with id: " + recruitmentId));
-		return DetailGroupRecruitmentResponse.of(recruitment);
+		return GroupRecruitmentResponse.of(recruitment);
 	}
 
 	public List<RecruitmentImage> getRecruitmentImages() {
@@ -53,7 +52,6 @@ public class GroupRecruitmentRetrieveService {
 	public List<GroupRecruitmentResponse> getAllRecruitment() {
 		List<GroupRecruitment> recruitmentList = recruitmentRepository.findAll();
 		List<GroupRecruitmentResponse> response = new ArrayList<>();
-
 		for (GroupRecruitment recruitment : recruitmentList) {
 			response.add(GroupRecruitmentResponse.of(recruitment));
 		}

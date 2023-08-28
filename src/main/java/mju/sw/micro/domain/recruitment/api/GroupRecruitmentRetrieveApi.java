@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.recruitment.application.GroupRecruitmentRetrieveService;
 import mju.sw.micro.domain.recruitment.domain.RecruitmentImage;
-import mju.sw.micro.domain.recruitment.dto.response.DetailGroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.GroupRecruitmentResponse;
 import mju.sw.micro.domain.recruitment.dto.response.SimpleGroupRecruitmentResponse;
 import mju.sw.micro.global.common.response.ApiResponse;
@@ -33,12 +32,12 @@ public class GroupRecruitmentRetrieveApi {
 
 	@Operation(summary = "특정 동아리 / 학회 모집 공고 상세 조회 요청")
 	@GetMapping("/api/recruitment/{recruitmentId}")
-	public ApiResponse<DetailGroupRecruitmentResponse> retrieveAllRecruitments(@PathVariable Long recruitmentId) {
+	public ApiResponse<GroupRecruitmentResponse> retrieveAllRecruitments(@PathVariable Long recruitmentId) {
 		return ApiResponse.ok("학생 단체(동아리/학회) 공고 상세 조회에 성공했습니다.",
 			groupRecruitmentRetrieveService.retrieveRecruitment(recruitmentId));
 	}
 
-	@Operation(summary = "동아리 / 학회 모집 공고 삭제 요청")
+	@Operation(summary = "동아리 / 학회 모집 공고 이미지 조회")
 	@GetMapping("/recruitments/images")
 	public ApiResponse<List<RecruitmentImage>> getRecruitmentImages() {
 		return ApiResponse.ok(groupRecruitmentRetrieveService.getRecruitmentImages());
