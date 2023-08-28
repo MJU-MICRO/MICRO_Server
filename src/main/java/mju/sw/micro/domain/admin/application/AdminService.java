@@ -25,6 +25,16 @@ public class AdminService {
 	private final UserRepository userRepository;
 
 	@Transactional
+	public ApiResponse<Boolean> verifyAdmin(String email) {
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+		if (optionalUser.isEmpty()) {
+			return ApiResponse.withError(ErrorCode.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		return ApiResponse.ok(user.isAdmin());
+	}
+
+	@Transactional
 	public ApiResponse<Void> registerAdmin(String email) {
 		Optional<User> optionalUser = userRepository.findByEmail(email);
 		if (optionalUser.isEmpty()) {
