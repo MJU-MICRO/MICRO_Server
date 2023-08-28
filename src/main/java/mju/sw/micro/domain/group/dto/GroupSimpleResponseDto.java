@@ -22,4 +22,7 @@ public class GroupSimpleResponseDto {
 	private String mediumCategory;
 	private String smallCategory;
 	private String subCategory;
+	private String numOfMember;
+	private int establishedYear;
+
 }

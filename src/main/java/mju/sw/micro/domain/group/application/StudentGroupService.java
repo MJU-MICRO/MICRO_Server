@@ -76,6 +76,8 @@ public class StudentGroupService {
 		responseDto.setMediumCategory(group.getMediumCategory());
 		responseDto.setLargeCategory(group.getLargeCategory());
 		responseDto.setPresidentId(group.getPresidentId());
+		responseDto.setNumOfMember(group.getNumOfMember());
+		responseDto.setEstablishedYear(group.getEstablishedYear());
 		return responseDto;
 	}
 
