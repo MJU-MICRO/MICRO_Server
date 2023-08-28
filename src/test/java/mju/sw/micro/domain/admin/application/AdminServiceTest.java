@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import mju.sw.micro.IntegrationTestSupporter;
 import mju.sw.micro.domain.admin.dto.response.AdminInfoResponseDto;
@@ -18,11 +18,8 @@ import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.utils.MockConstants;
 import mju.sw.micro.global.utils.MockFactory;
 
+@Transactional
 class AdminServiceTest extends IntegrationTestSupporter {
-	@BeforeEach
-	void tearDownBefore() {
-		userRepository.deleteAll();
-	}
 
 	@DisplayName("관리자 권한을 등록한다")
 	@Test
@@ -199,7 +196,7 @@ class AdminServiceTest extends IntegrationTestSupporter {
 		Assertions.assertThat(adminList).hasSize(1);
 		Assertions.assertThat(adminList.get(0).getEmail()).isEqualTo(MockConstants.MOCK_ADMIN_USER_EMAIL);
 		Assertions.assertThat(adminList.get(0).getName()).isEqualTo(MockConstants.MOCK_USER_NAME);
-		Assertions.assertThat(adminList.get(0).getPhoneNumber()).isEqualTo(MockConstants.MOCK_PHONE_NUMBER);
+		Assertions.assertThat(adminList.get(0).getPhoneNumber()).isEqualTo(MockConstants.MOCK_ADMIN_PHONE_NUMBER);
 	}
 
 	@DisplayName("관리자 권한을 가진 모든 계정을 조회했지만 관리자가 없다면 빈 리스트를 반환한다")

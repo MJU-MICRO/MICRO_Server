@@ -12,7 +12,7 @@ public class MockFactory {
 	}
 
 	public static User createMockAdminUser() {
-		return User.createUser(MOCK_USER_NAME, MOCK_ADMIN_USER_EMAIL, MOCK_PHONE_NUMBER,
+		return User.createUser(MOCK_USER_NAME, MOCK_ADMIN_USER_EMAIL, MOCK_ADMIN_PHONE_NUMBER,
 			MOCK_INTRODUCTION, MOCK_ADMIN_STUDENT_ID, MOCK_MAJOR,
 			MOCK_USER_PASSWORD, false);
 	}
