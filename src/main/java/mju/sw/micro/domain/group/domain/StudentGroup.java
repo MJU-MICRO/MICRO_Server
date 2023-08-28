@@ -93,5 +93,9 @@ public class StudentGroup {
 		this.recruitmentList.add(recruitment);
 		recruitment.setGroup(this);
 	}
+
+	public void updateIsRecruit(boolean isRecruit) {
+		this.isRecruit = isRecruit;
+	}
 }
 

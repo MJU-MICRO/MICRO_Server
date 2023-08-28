@@ -1,10 +1,14 @@
 package mju.sw.micro.domain.group.dao;
 
-import mju.sw.micro.domain.group.domain.StudentGroup;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import mju.sw.micro.domain.group.domain.StudentGroup;
 
 public interface StudentGroupRepository extends JpaRepository<StudentGroup, Long> {
 	Optional<StudentGroup> findByPresidentId(Long userId);
+
+	List<StudentGroup> findByIsRecruitTrue();
 }
