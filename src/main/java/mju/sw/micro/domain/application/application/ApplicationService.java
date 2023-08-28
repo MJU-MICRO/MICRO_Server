@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.application.dao.ApplicationRepository;
 import mju.sw.micro.domain.application.domain.Application;
 import mju.sw.micro.domain.application.dto.ApplicationRequestDto;
@@ -24,23 +24,13 @@ import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class ApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final GroupRecruitmentRepository groupRecruitmentRepository;
 	private final UserRepository userRepository;
 	private final StudentGroupRepository studentGroupRepository;
-
-	@Autowired
-	public ApplicationService(ApplicationRepository studentGroupDao,
-		UserRepository userRepository,
-		GroupRecruitmentRepository groupRecruitmentRepository,
-		StudentGroupRepository studentGroupRepository) {
-		this.applicationRepository = studentGroupDao;
-		this.userRepository = userRepository;
-		this.groupRecruitmentRepository = groupRecruitmentRepository;
-		this.studentGroupRepository = studentGroupRepository;
-	}
 
 	public ApiResponse<String> saveApplication(ApplicationRequestDto dto, CustomUserDetails userDetails) {
 		Optional<GroupRecruitment> optionalRecruitment = groupRecruitmentRepository.findById(dto.getRecruitmentId());

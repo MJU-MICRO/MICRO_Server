@@ -1,19 +1,23 @@
 package mju.sw.micro.domain.application.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @Data
 public class ApplicationRequestDto {
-	@NotBlank
+	@NotNull
 	private Long recruitmentId;
-	private List<String> answers;
+	@NotBlank
 	private String grade;
-	private String supportField;
+	@NotNull
 	private Boolean isAttending;
+	@NotNull
 	private Boolean isSubmit;
+	private List<String> answers;
+	private String supportField;
 }
