@@ -157,6 +157,16 @@ public class StudentGroupService {
 		return ApiResponse.ok("승인 상태를 변경했습니다");
 	}
 
+	public ApiResponse<String> deleteGroupByAdmin(Long groupId) {
+		Optional<StudentGroup> studentGroup = studentGroupDao.findById(groupId);
+		if (studentGroup.isPresent()) {
+			studentGroupDao.deleteById(groupId);
+		} else {
+			return ApiResponse.withError(NOT_FOUND);
+		}
+		return ApiResponse.ok("[관리자] 해당 단체를 삭제했습니다");
+	}
+
 	public ApiResponse<String> deleteGroup(CustomUserDetails userDetails, Long groupId) {
 		Optional<User> optionalUser = userRepository.findById(userDetails.getUserId());
 		if (optionalUser.isEmpty()) {
@@ -173,7 +183,7 @@ public class StudentGroupService {
 		} else {
 			throw new NotFoundException("Group not found with id: " + groupId);
 		}
-		return ApiResponse.ok("해당 단체를 삭제했습니다");
+		return ApiResponse.ok("[회장] 해당 단체를 삭제했습니다");
 	}
 
 	public ApiResponse<String> mandateGroupPresident(CustomUserDetails userDetails, Long groupId, Long userId) {
