@@ -40,13 +40,24 @@ public class ApplicationService {
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}
-		Optional<Application> optionalApplication = applicationRepository.findByUserIdAndRecruitmentId(
-			userDetails.getUserId(), dto.getRecruitmentId());
-		if (optionalApplication.isPresent() && Boolean.TRUE.equals((optionalApplication.get().getIsSubmit()))) {
-			return ApiResponse.withError(CONFLICT_APPLICATION);
-		}
 		GroupRecruitment groupRecruitment = optionalRecruitment.get();
 		User user = optionalUser.get();
+
+		if (groupRecruitment.getGroup().getPresidentId().equals(userDetails.getUserId())) {
+			return ApiResponse.withError(BAD_REQUEST);
+		}
+
+		List<Application> applicationList = applicationRepository.findByUserIdAndRecruitmentId(
+			userDetails.getUserId(), dto.getRecruitmentId());
+
+		if (!applicationList.isEmpty()) {
+			Optional<Application> firstSubmitted = applicationList.stream()
+				.filter(Application::getIsSubmit)
+				.findFirst();
+			if (firstSubmitted.isPresent()) {
+				return ApiResponse.withError(CONFLICT_APPLICATION);
+			}
+		}
 
 		Application application = new Application(dto);
 		groupRecruitment.addApplication(application);

@@ -1,10 +1,9 @@
 package mju.sw.micro.domain.group.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import mju.sw.micro.domain.group.domain.Campus;
-
-import java.util.List;
 
 @Getter
 public class StudentGroupRequestDto {
