@@ -1,6 +1,7 @@
 package mju.sw.micro.domain.application.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,5 +12,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
 	List<Application> findByRecruitmentId(Long recruitmentId);
 
-	boolean existsByUserIdAndRecruitmentId(Long userId, Long recruitmentId);
+	Optional<Application> findByUserIdAndRecruitmentId(Long userId, Long recruitmentId);
 }
