@@ -102,6 +102,15 @@ public class StudentGroupService {
 		return ApiResponse.ok("승인된 학생단체 리스트를 가져왔습니다", approvedGroupInfoList);
 	}
 
+	public ApiResponse<List<GroupSimpleResponseDto>> getGroupInfoByPresident(CustomUserDetails userDetails) {
+		List<StudentGroup> groups = studentGroupDao.findAllByPresidentId(userDetails.getUserId());
+		List<GroupSimpleResponseDto> presidentGroupInfoList = groups.stream()
+			.filter(StudentGroup::isApprove)
+			.map(this::mapToGroupSimpleResponseDto)
+			.toList();
+		return ApiResponse.ok("회장 학생단체 리스트를 가져왔습니다", presidentGroupInfoList);
+	}
+
 	public ApiResponse<String> updateGroupInfo(Long groupId, StudentGroupRequestDto dto, CustomUserDetails userDetails,
 		MultipartFile imageFile) {
 		Optional<StudentGroup> optionalGroup = studentGroupDao.findById(groupId);
@@ -273,4 +282,5 @@ public class StudentGroupService {
 		responseDto.setSubCategory(group.getSubCategory());
 		return responseDto;
 	}
+
 }
