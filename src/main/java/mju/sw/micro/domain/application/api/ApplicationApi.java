@@ -38,7 +38,7 @@ public class ApplicationApi {
 		return applicationService.saveApplication(dto, userDetails);
 	}
 
-	@Operation(summary = "신청서 제출")
+	@Operation(summary = "임시 저장한 신청서 제출")
 	@PutMapping("/application/submit/{applicationId}")
 	public ApiResponse<String> submitApplication(@PathVariable Long applicationId,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -53,7 +53,7 @@ public class ApplicationApi {
 		return applicationService.setPassStatus(applicationId, passStatus, userDetails);
 	}
 
-	@Operation(summary = "신청서 수정")
+	@Operation(summary = "임시 저장한 신청서 수정")
 	@PutMapping("/application/update/{applicationId}")
 	public ApiResponse<String> updateApplication(@PathVariable Long applicationId,
 		@Valid @RequestBody ApplicationRequestDto dto,
@@ -61,18 +61,25 @@ public class ApplicationApi {
 		return applicationService.updateApplication(applicationId, dto, userDetails);
 	}
 
-	@Operation(summary = "신청서 삭제")
+	@Operation(summary = "임시 저장한 신청서 삭제")
 	@DeleteMapping("/application/delete/{applicationId}")
 	public ApiResponse<String> deleteApplication(@PathVariable Long applicationId,
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return applicationService.deleteApplication(applicationId, userDetails);
 	}
 
-	@Operation(summary = "지원자가 작성한 신청서 리스트 조회")
+	@Operation(summary = "지원자가 제출한 신청서 리스트 조회")
 	@GetMapping("/application/userList")
 	public ApiResponse<List<ApplicationResponseDto>> getUserApplications(
 		@AuthenticationPrincipal CustomUserDetails userDetails) {
 		return applicationService.getUserApplications(userDetails);
+	}
+
+	@Operation(summary = "지원자가 임시 저장한 신청서 리스트 조회")
+	@GetMapping("/application/tempList")
+	public ApiResponse<List<ApplicationResponseDto>> getTemporalApplications(
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		return applicationService.getTemporalApplications(userDetails);
 	}
 
 	@Operation(summary = "회장이 확인할 신청서 리스트 조회")
