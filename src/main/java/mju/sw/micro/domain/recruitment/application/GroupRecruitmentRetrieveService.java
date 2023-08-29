@@ -39,6 +39,15 @@ public class GroupRecruitmentRetrieveService {
 		return response;
 	}
 
+	public List<GroupRecruitmentResponse> retrieveAllRecruitmentsByPresident(Long groupId) {
+		List<GroupRecruitment> recruitmentList = recruitmentRepository.findByGroupId(groupId);
+		List<GroupRecruitmentResponse> response = new ArrayList<>();
+		for (GroupRecruitment recruitment : recruitmentList) {
+			response.add(GroupRecruitmentResponse.of(recruitment));
+		}
+		return response;
+	}
+
 	public GroupRecruitmentResponse retrieveRecruitment(Long recruitmentId) {
 		GroupRecruitment recruitment = recruitmentRepository.findById(recruitmentId)
 			.orElseThrow(() -> new NotFoundException("Recruitment not found with id: " + recruitmentId));
@@ -57,4 +66,5 @@ public class GroupRecruitmentRetrieveService {
 		}
 		return response;
 	}
+
 }
