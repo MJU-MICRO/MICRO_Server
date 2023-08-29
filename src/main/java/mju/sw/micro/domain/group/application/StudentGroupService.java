@@ -27,6 +27,7 @@ import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
 
 @Service
+@Transactional
 public class StudentGroupService {
 	private final StudentGroupRepository studentGroupDao;
 	private final UserRepository userRepository;
@@ -180,6 +181,7 @@ public class StudentGroupService {
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
 		}
+		User user = optionalUser.get();
 		Optional<StudentGroup> studentGroup = studentGroupDao.findById(groupId);
 		if (studentGroup.isPresent()) {
 			Long presidentId = studentGroup.get().getPresidentId();
@@ -192,6 +194,7 @@ public class StudentGroupService {
 				group.setPresidentId(userId);
 				studentGroupDao.save(group);
 				successor.get().addRole(ROLE_PRESIDENT);
+				user.deleteRole(ROLE_PRESIDENT);
 			} else {
 				return ApiResponse.withError(UNAUTHORIZED);
 			}
@@ -201,7 +204,6 @@ public class StudentGroupService {
 		return ApiResponse.ok("회장 권한을 위임했습니다");
 	}
 
-	@Transactional
 	public ApiResponse<String> toggleBookmark(Long userId, Long groupId) {
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if (optionalUser.isEmpty()) {
