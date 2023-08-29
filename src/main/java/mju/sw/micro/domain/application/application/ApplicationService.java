@@ -38,14 +38,13 @@ public class ApplicationService {
 			return ApiResponse.withError(NOT_FOUND);
 		}
 		Optional<User> optionalUser = userRepository.findById(userDetails.getUserId());
-		Long userId = userDetails.getUserId();
-		boolean hasExistingApplication = applicationRepository.existsByUserIdAndRecruitmentId(userId,
-			dto.getRecruitmentId());
-		if (hasExistingApplication) {
-			return ApiResponse.withError(CONFLICT_APPLICATION);
-		}
 		if (optionalUser.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
+		}
+		Optional<Application> optionalApplication = applicationRepository.findByUserIdAndRecruitmentId(
+			userDetails.getUserId(), dto.getRecruitmentId());
+		if (optionalApplication.isPresent() && Boolean.TRUE.equals((optionalApplication.get().getIsSubmit()))) {
+			return ApiResponse.withError(CONFLICT_APPLICATION);
 		}
 		GroupRecruitment groupRecruitment = optionalRecruitment.get();
 		User user = optionalUser.get();
