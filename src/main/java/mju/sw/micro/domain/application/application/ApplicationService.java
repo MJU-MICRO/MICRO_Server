@@ -91,8 +91,18 @@ public class ApplicationService {
 	public ApiResponse<List<ApplicationResponseDto>> getUserApplications(CustomUserDetails userDetails) {
 		List<Application> applications = applicationRepository.findByUserId(userDetails.getUserId());
 		List<ApplicationResponseDto> responseDtos = applications.stream()
+			.filter(Application::getIsSubmit)
 			.map(ApplicationResponseDto::fromApplication)
-			.collect(Collectors.toList());
+			.toList();
+		return ApiResponse.ok(responseDtos);
+	}
+
+	public ApiResponse<List<ApplicationResponseDto>> getTemporalApplications(CustomUserDetails userDetails) {
+		List<Application> applications = applicationRepository.findByUserId(userDetails.getUserId());
+		List<ApplicationResponseDto> responseDtos = applications.stream()
+			.filter(application -> !application.getIsSubmit())
+			.map(ApplicationResponseDto::fromApplication)
+			.toList();
 		return ApiResponse.ok(responseDtos);
 	}
 
