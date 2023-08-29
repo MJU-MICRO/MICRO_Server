@@ -130,6 +130,7 @@ public class ApplicationService {
 		}
 		List<Application> applications = applicationRepository.findByRecruitmentId(recruitmentId);
 		List<ApplicationResponseDto> responseDtos = applications.stream()
+			.filter(Application::getIsSubmit)
 			.map(ApplicationResponseDto::fromApplication)
 			.toList();
 		return ApiResponse.ok(responseDtos);
