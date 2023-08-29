@@ -4,7 +4,6 @@ import static mju.sw.micro.global.error.exception.ErrorCode.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,12 +105,20 @@ public class ApplicationService {
 	}
 
 	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(CustomUserDetails userDetails,
-		Long recruitmentId) {
+		Long recruitmentId, Long groupId) {
 		Long userId = userDetails.getUserId();
-		Optional<StudentGroup> optionalStudentGroup = studentGroupRepository.findByPresidentId(userId);
-		if (optionalStudentGroup.isEmpty()) {
+		List<StudentGroup> groupList = studentGroupRepository.findAllByPresidentId(userId);
+		if (groupList.isEmpty()) {
 			return ApiResponse.withError(FORBIDDEN_PRESIDENT);
 		}
+		Optional<StudentGroup> optionalStudentGroup = groupList.stream()
+			.filter(studentGroup -> studentGroup.getId().equals(groupId))
+			.findFirst();
+
+		if (optionalStudentGroup.isEmpty()) {
+			return ApiResponse.withError(BAD_REQUEST);
+		}
+
 		Optional<GroupRecruitment> optionalRecruitment = groupRecruitmentRepository.findById(recruitmentId);
 		if (optionalRecruitment.isEmpty()) {
 			return ApiResponse.withError(NOT_FOUND);
@@ -124,7 +131,7 @@ public class ApplicationService {
 		List<Application> applications = applicationRepository.findByRecruitmentId(recruitmentId);
 		List<ApplicationResponseDto> responseDtos = applications.stream()
 			.map(ApplicationResponseDto::fromApplication)
-			.collect(Collectors.toList());
+			.toList();
 		return ApiResponse.ok(responseDtos);
 	}
 

@@ -66,6 +66,13 @@ public class StudentGroupApi {
 		return studentGroupService.approveGroup(groupId);
 	}
 
+	@Operation(summary = "회장 단체 조회")
+	@GetMapping("/president/group")
+	public ApiResponse<List<GroupSimpleResponseDto>> getGroupInfoByPresident(
+		@AuthenticationPrincipal CustomUserDetails userDetails) {
+		return studentGroupService.getGroupInfoByPresident(userDetails);
+	}
+
 	@Operation(summary = "학생단체 삭제")
 	@DeleteMapping("/president/group/{groupId}")
 	public ApiResponse<String> deleteGroup(@AuthenticationPrincipal CustomUserDetails userDetails,

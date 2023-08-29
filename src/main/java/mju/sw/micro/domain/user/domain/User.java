@@ -86,9 +86,21 @@ public class User extends BaseEntity {
 	}
 
 	public void addRole(Role role) {
+		if (validateRole(role))
+			return;
+
 		UserRole userRole = new UserRole();
 		userRole.associate(this, role);
 		userRoles.add(userRole);
+	}
+
+	private boolean validateRole(Role role) {
+		for (UserRole userRole : userRoles) {
+			if (userRole.getRole().equals(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void addApplication(Application application) {

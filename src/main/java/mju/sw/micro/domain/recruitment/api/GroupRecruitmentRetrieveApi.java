@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,13 @@ public class GroupRecruitmentRetrieveApi {
 		<List<SimpleGroupRecruitmentResponse>> retrieveAllRecruitments() {
 		return ApiResponse.ok("학생 단체(동아리/학회) 공고 전체 목록 조회에 성공했습니다.",
 			groupRecruitmentRetrieveService.retrieveAllRecruitments());
+	}
+
+	@Operation(summary = "회장 모집 공고 목록 조회 ")
+	@GetMapping("/api/president/recruitment")
+	public ApiResponse<List<GroupRecruitmentResponse>> retrieveAllRecruitmentsByPresident(@RequestParam Long groupId) {
+		return ApiResponse.ok("회장 공고 전체 목록 조회에 성공했습니다.",
+			groupRecruitmentRetrieveService.retrieveAllRecruitmentsByPresident(groupId));
 	}
 
 	@Operation(summary = "특정 동아리 / 학회 모집 공고 상세 조회 요청")

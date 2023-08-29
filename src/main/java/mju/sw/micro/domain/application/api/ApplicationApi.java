@@ -85,7 +85,7 @@ public class ApplicationApi {
 	@Operation(summary = "회장이 확인할 신청서 리스트 조회")
 	@GetMapping("/president/application/list")
 	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(@RequestParam Long recruitmentId,
-		@AuthenticationPrincipal CustomUserDetails userDetails) {
-		return applicationService.getPresidentApplications(userDetails, recruitmentId);
+		@RequestParam Long groupId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+		return applicationService.getPresidentApplications(userDetails, recruitmentId, groupId);
 	}
 }
