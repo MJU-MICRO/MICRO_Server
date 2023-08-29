@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import mju.sw.micro.domain.application.application.ApplicationService;
 import mju.sw.micro.domain.application.dto.ApplicationRequestDto;
 import mju.sw.micro.domain.application.dto.ApplicationResponseDto;
+import mju.sw.micro.domain.application.dto.PresidentApplicationResponseDto;
 import mju.sw.micro.global.common.response.ApiResponse;
 import mju.sw.micro.global.security.CustomUserDetails;
 
@@ -84,7 +85,7 @@ public class ApplicationApi {
 
 	@Operation(summary = "회장이 확인할 신청서 리스트 조회")
 	@GetMapping("/president/application/list")
-	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(@RequestParam Long recruitmentId,
+	public ApiResponse<List<PresidentApplicationResponseDto>> getPresidentApplications(@RequestParam Long recruitmentId,
 		@RequestParam Long groupId, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		return applicationService.getPresidentApplications(userDetails, recruitmentId, groupId);
 	}

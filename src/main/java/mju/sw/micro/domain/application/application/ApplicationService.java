@@ -13,6 +13,7 @@ import mju.sw.micro.domain.application.dao.ApplicationRepository;
 import mju.sw.micro.domain.application.domain.Application;
 import mju.sw.micro.domain.application.dto.ApplicationRequestDto;
 import mju.sw.micro.domain.application.dto.ApplicationResponseDto;
+import mju.sw.micro.domain.application.dto.PresidentApplicationResponseDto;
 import mju.sw.micro.domain.group.dao.StudentGroupRepository;
 import mju.sw.micro.domain.group.domain.StudentGroup;
 import mju.sw.micro.domain.recruitment.dao.GroupRecruitmentRepository;
@@ -115,7 +116,7 @@ public class ApplicationService {
 		return ApiResponse.ok(responseDtos);
 	}
 
-	public ApiResponse<List<ApplicationResponseDto>> getPresidentApplications(CustomUserDetails userDetails,
+	public ApiResponse<List<PresidentApplicationResponseDto>> getPresidentApplications(CustomUserDetails userDetails,
 		Long recruitmentId, Long groupId) {
 		Long userId = userDetails.getUserId();
 		List<StudentGroup> groupList = studentGroupRepository.findAllByPresidentId(userId);
@@ -140,9 +141,9 @@ public class ApplicationService {
 			return ApiResponse.withError(UNAUTHORIZED_RECRUITMENT);
 		}
 		List<Application> applications = applicationRepository.findByRecruitmentId(recruitmentId);
-		List<ApplicationResponseDto> responseDtos = applications.stream()
+		List<PresidentApplicationResponseDto> responseDtos = applications.stream()
 			.filter(Application::getIsSubmit)
-			.map(ApplicationResponseDto::fromApplication)
+			.map(PresidentApplicationResponseDto::fromApplication)
 			.toList();
 		return ApiResponse.ok(responseDtos);
 	}
